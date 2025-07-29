@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+'use client';
 import { Roboto, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { SessionProvider } from "next-auth/react";
 
 
 export const robotoSans = Roboto({
@@ -15,11 +16,6 @@ export const EB_GaramondSans = EB_Garamond({
   subsets: ["latin"],
   display: "swap",
 });
-
-export const metadata: Metadata = {
-  title: "Needlon",
-  description: "A fashionable clothing tailoring service",
-};
 
 export default function RootLayout({
   children,
@@ -36,7 +32,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <SessionProvider>{children}</SessionProvider>
           </ThemeProvider>
         </body>
       </html>
