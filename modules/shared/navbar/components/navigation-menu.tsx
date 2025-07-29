@@ -38,19 +38,27 @@ const Navigationmenu = ({ navigateTrigger, subNevigator, link }: props) => {
             <>
               <NavigationMenuTrigger>{navigateTrigger}</NavigationMenuTrigger>
               <NavigationMenuContent className="w-[400px]">
-                <ul className="grid w-[300px] gap-4">
-                  <li>
-                    {subNevigator?.map((item, index) => (
-                      <NavigationMenuLink key={index} asChild>
-                        <Link href={item.link || "#"}>
-                          <div className="font-medium">{item.name}</div>
-                          <div className="text-muted-foreground">
-                            {item?.description}
-                          </div>
-                        </Link>
-                      </NavigationMenuLink>
-                    ))}
+                <ul className="grid gap-2 group md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                  <li className="row-span-3">
+                    <NavigationMenuLink asChild>
+                      <Link
+                        className="from-muted/50 to-muted flex h-full w-full flex-col justify-end rounded-md bg-linear-to-b p-6 no-underline outline-hidden select-none focus:shadow-md"
+                        href={subNevigator?.[0]?.link || link}
+                      >
+                        <div className="mt-4 mb-2 text-lg font-medium">
+                          {subNevigator?.[0]?.name || "Needlon"}
+                        </div>
+                        <p className="text-muted-foreground text-sm leading-tight">
+                          {subNevigator?.[0]?.description || "No description available"}
+                        </p>
+                      </Link>
+                    </NavigationMenuLink>
                   </li>
+                  {subNevigator?.slice(1).map((item, index) => (
+                    <ListItem key={index} href={item?.link || '#'} title={item?.name}>
+                      {item?.description || "No description available"}
+                    </ListItem>
+                  ))}
                 </ul>
               </NavigationMenuContent>
             </>
@@ -62,3 +70,29 @@ const Navigationmenu = ({ navigateTrigger, subNevigator, link }: props) => {
 };
 
 export default Navigationmenu;
+
+const ListItem = ({
+  href,
+  title,
+  children,
+}: {
+  href: string;
+  title: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <Link
+          className="block rounded-md p-3 no-underline outline-hidden select-none focus:bg-accent focus:text-accent-foreground"
+          href={href}
+        >
+          <div className="font-medium">{title}</div>
+          <p className="text-muted-foreground text-sm leading-tight">
+            {children}
+          </p>
+        </Link>
+      </NavigationMenuLink>
+    </li>
+  );
+};

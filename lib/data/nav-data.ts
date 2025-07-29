@@ -21,11 +21,11 @@ export const items = [
     ],
   },
   {
-    name: "Ready to Wear",
-    link: "/ready-to-wear",
+    name: "For Men's",
+    link: "/ready-to-wear-mens",
     subNevigator: [
       {
-        name: "Shirts",
+        name: "Shirts for Men's",
         description: "Stylish shirts for every occasion",
         link: "/ready-to-wear/shirts",
       },
@@ -36,8 +36,40 @@ export const items = [
       },
       {
         name: "Outerwear",
-        description: "Jackets and coats for all seasons",
+        description: "Jackets, coats and Sapari for all seasons",
         link: "/ready-to-wear/outerwear",
+      },
+      {
+        name: "Kurtas",
+        description:
+          "Stylish & Traditional kurtas and Khan-Dress for festive occasions",
+        link: "/ready-to-wear/kurtas",
+      },
+    ],
+  },
+  {
+    name: "For Women",
+    link: "/ready-to-wear-womens",
+    subNevigator: [
+      {
+        name: "Office Wear",
+        description: "Formal Shirts & pants for Women's",
+        link: "/ready-to-wear/blouses",
+      },
+      {
+        name: "Suits for Women",
+        description: "Elegant suits for every occasion",
+        link: "/ready-to-wear/suits",
+      },
+      {
+        name: "Lahengas & Blouses",
+        description: "Stylish Lahenga and blouse to complement your outfits",
+        link: "/ready-to-wear/lahengas",
+      },
+      {
+        name: "Outerwear",
+        description: "Ladies-jackets, Ladies-coats for all seasons",
+        link: "/ready-to-wear/outwear",
       },
     ],
   },
@@ -46,23 +78,28 @@ export const items = [
     link: "/services",
     subNevigator: [
       {
-        name: "Tailoring",
-        description: "Custom tailoring services",
-        link: "/services/tailoring",
+        name: "Men's Tailoring",
+        description: "Tailoring services for men's suits, shirts, and more",
+        link: "/services/tailoring/mens",
       },
       {
-        name: "Alterations",
-        description: "Clothing alterations",
+        name: "Women's Tailoring",
+        description: "Custom fits for women's dresses, blouses, and formalwear",
+        link: "/services/tailoring/womens",
+      },
+      {
+        name: "Wedding & Occasion Wear",
+        description: "Tailored outfits for weddings and special occasions",
+        link: "/services/tailoring/wedding-occasion",
+      },
+      {
+        name: "Alterations & Fittings",
+        description: "Clothing alterations for a perfect fit and adjustments",
         link: "/services/alterations",
-      },
-      {
-        name: "Styling",
-        description: "Personal styling services",
-        link: "/services/styling",
       },
     ],
   },
-  {
+   {
     name: "Our World",
     link: "/our-world",
     subNevigator: [
@@ -72,35 +109,14 @@ export const items = [
         link: "/our-world/sustainability",
       },
       {
-        name: "Craftsmanship",
-        description: "The art of our craftsmanship",
+        name: "Our Story",
+        description: "The art of our story and craftsmanship",
         link: "/our-world/craftsmanship",
       },
       {
         name: "Heritage",
         description: "Our brand's heritage and story",
         link: "/our-world/heritage",
-      },
-    ],
-  },
-  {
-    name: "Collection",
-    link: "/collection",
-    subNevigator: [
-      {
-        name: "Spring/Summer",
-        description: "Explore our Spring/Summer collection",
-        link: "/collection/spring-summer",
-      },
-      {
-        name: "Autumn/Winter",
-        description: "Discover our Autumn/Winter collection",
-        link: "/collection/autumn-winter",
-      },
-      {
-        name: "Capsule",
-        description: "Limited edition capsule collections",
-        link: "/collection/capsule",
       },
     ],
   },
