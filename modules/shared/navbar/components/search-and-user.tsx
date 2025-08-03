@@ -3,10 +3,17 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { ModeToggle } from "./theme-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { User } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const SearchAndUser = () => {
   const { data: session } = useSession();
+
   return (
     <div className="flex items-center space-x-4">
       <div className="bg-black/10 backdrop-blur-md rounded-md flex items-center">
@@ -16,18 +23,43 @@ const SearchAndUser = () => {
         />
       </div>
       <ModeToggle />
-      {session?.user?.image ? (
-        <Avatar className="rounded-full cursor-pointer w-[35.5px] h-[35.5px]">
-          <AvatarImage
-            src={"https://avatars.githubusercontent.com/u/12345678?v=4"}
-            alt="User Avatar"
-          />
-          <AvatarFallback className="bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full" />
-        </Avatar>
+      {session?.user ? (
+        <Popover>
+          <PopoverTrigger>
+            <Avatar
+              // onClick={() => signOut()}
+              className="rounded-full cursor-pointer w-[37px] h-[37px]"
+            >
+              <AvatarImage
+                src={
+                  session?.user.image ||
+                  "https://avatars.githubusercontent.com/u/12345678?v=4"
+                }
+                alt="User Avatar"
+              />
+              <AvatarFallback className="bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full" />
+            </Avatar>
+          </PopoverTrigger>
+          <PopoverContent className="mr-4">
+            <div className="p-4">
+              <p className="text-sm font-semibold">{session.user.name}</p>
+              <p className="text-xs text-gray-500">{session.user.email}</p>
+              <button
+                onClick={() => signOut()}
+                className="mt-2 text-sm text-blue-600 hover:underline"
+              >
+                Sign Out
+              </button>
+            </div>
+          </PopoverContent>
+        </Popover>
       ) : (
-        <Avatar onClick={()=> signIn("google")} className="rounded-full cursor-pointer w-[35.5px] h-[35.5px]">
+        <Avatar
+          onClick={() => signIn()}
+          className="rounded-full cursor-pointer w-[38px] h-[38px]"
+        >
           <AvatarFallback className="bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full">
-            U
+            <User className="w-5 h-5" />
           </AvatarFallback>
         </Avatar>
       )}
