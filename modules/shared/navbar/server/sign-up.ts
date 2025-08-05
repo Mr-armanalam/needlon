@@ -3,6 +3,7 @@
 
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
+import { bcryptCompare } from "@/lib/bcrypt";
 import { and, eq } from "drizzle-orm";
 
 export const getSignUp = async ({
@@ -59,15 +60,27 @@ export const isRegistered = async ({
     return;
   }
   try {
+    // const validemail = bcryptCompare(email,)
     const [user] = await db
+      .select({ email: usersTable.email })
+      .from(usersTable)
+      .where(eq(usersTable.email, email));
+
+    if (!user) {
+      throw new Error("User not found, please Sign Up first!");
+    }
+
+    const [validUser] = await db
       .select({ email: usersTable.email, password: usersTable.password })
       .from(usersTable)
       .where(
         and(eq(usersTable.email, email), eq(usersTable.password, password))
       );
-    if (!user) {
-      throw new Error("User not found");
+
+    if (!validUser) {
+      throw new Error("Email or Password is not correct");
     }
+
     return;
   } catch (error: any) {
     console.log(error.message);

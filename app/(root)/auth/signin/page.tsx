@@ -108,10 +108,12 @@ const SignIn = () => {
         await isRegistered({
           email,
           password,
-        }).catch(() => {
+        }).catch((error) => {
+          console.log(error);
+          
           form.setError("email", {
             type: "manual",
-            message: "Email or password is not correct.",
+            message: error?.message ?? error,
           });
           return;
         });
@@ -165,7 +167,6 @@ const SignIn = () => {
         })
         return false;
       });
-      // setIsOtp(true);
     }
 
     if (email && password && pin) {
@@ -174,6 +175,10 @@ const SignIn = () => {
       if (!serverotp || !serverotp.value) return;
       const decryptedServerOtp = await bcryptCompare(pin, serverotp.value);
       if (!decryptedServerOtp) {
+        form.setError('pin', {
+          type: 'manual',
+          message: 'otp verification failed'
+        })
         throw new Error('otp verification failed')
       }
       

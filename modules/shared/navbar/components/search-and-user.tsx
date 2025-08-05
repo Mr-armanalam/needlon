@@ -10,6 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import UserSection from "../user-ui/user-section";
 
 const SearchAndUser = () => {
   const { data: session } = useSession();
@@ -40,17 +41,8 @@ const SearchAndUser = () => {
               <AvatarFallback className="bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full" />
             </Avatar>
           </PopoverTrigger>
-          <PopoverContent className="mr-4">
-            <div className="p-4">
-              <p className="text-sm font-semibold">{session.user.name}</p>
-              <p className="text-xs text-gray-500">{session.user.email}</p>
-              <button
-                onClick={() => signOut()}
-                className="mt-2 text-sm text-blue-600 hover:underline"
-              >
-                Sign Out
-              </button>
-            </div>
+          <PopoverContent className="mr-6 w-fit">
+            <UserSection signOut={signOut} />
           </PopoverContent>
         </Popover>
       ) : (
