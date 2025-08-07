@@ -6,13 +6,13 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 
 
-export const robotoSans = Roboto({
+ const robotoSans = Roboto({
   variable: "--font-Inter-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
-export const EB_GaramondSans = EB_Garamond({
+ const EB_GaramondSans = EB_Garamond({
   variable: "--font-EB-Garamond-sans",
   subsets: ["latin"],
   display: "swap",
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
      <html lang="en" suppressHydrationWarning>
         <head />
-        <body className={`${robotoSans.variable} ${EB_GaramondSans.variable} font-sans`}>
+        <body className={`${robotoSans.className} ${EB_GaramondSans.className} font-sans`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

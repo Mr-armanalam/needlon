@@ -1,16 +1,10 @@
-// app/auth/error/page.tsx or pages/auth/error.tsx
-"use client"; // if using app router
-import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import AuthErrorClient from "./auth-error-client";
 
-export default function AuthError() {
-  const searchParams = useSearchParams();
-  const error = searchParams.get("error");
-
+export default function AuthErrorPage() {
   return (
-    <div className="text-red-500">
-      {error === "User already exists"
-        ? "This email is already registered. Please sign in."
-        : "An error occurred during sign in."}
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthErrorClient />
+    </Suspense>
   );
 }
