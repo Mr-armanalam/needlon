@@ -63,8 +63,8 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+      clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
