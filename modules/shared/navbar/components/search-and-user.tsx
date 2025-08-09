@@ -33,7 +33,7 @@ const SearchAndUser = () => {
             >
               <AvatarImage
                 src={
-                  session?.user.image ||
+                  session?.user.image ??
                   "https://avatars.githubusercontent.com/u/12345678?v=4"
                 }
                 alt="User Avatar"

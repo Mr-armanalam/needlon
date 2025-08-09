@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
      <html lang="en" suppressHydrationWarning>
         <head />
-        <body className={`${robotoSans.className} ${EB_GaramondSans.className} font-sans`}>
+        <body className={`${robotoSans.variable} ${EB_GaramondSans.variable} font-sans`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

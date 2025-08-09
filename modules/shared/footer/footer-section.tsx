@@ -1,8 +1,11 @@
 import React from 'react'
+import FooterView from './ui/footer-view'
 
 const FooterSection = () => {
   return (
-    <div>FooterSection</div>
+    <footer className='flex flex-col h-[370px]'>
+      <FooterView />
+    </footer>
   )
 }
 
