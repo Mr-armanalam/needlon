@@ -1,11 +1,12 @@
 import React from "react";
 import HeroSection from "../section/hero-section";
 import HomePremRecomLike from "../ui/home-prem-recom-like";
+import DescriptionSection from "../section/description-section";
+import SeasonSection from "../section/season-section";
 
 const item = [
   {heading: 'Premium Items'},
   {heading: 'You may like'},
-  {heading: 'Recommended Items'}
 ]
 
 const HomeView = () => {
@@ -16,8 +17,10 @@ const HomeView = () => {
         {item.map(({heading}, i) => (
           <HomePremRecomLike key={i} heading={heading} />
         ))}
+        <SeasonSection />
+        <HomePremRecomLike heading="Recommended Items" />
       </div>
-
+        <DescriptionSection />
     </div>
   );
 };
