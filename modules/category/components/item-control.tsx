@@ -20,7 +20,14 @@ const ItemControl = ({ sort, category, setFilterOpen }: param) => {
 
   return (
     <div className="flex justify-between items-center mb-6">
-      <div></div> {/* Left side empty for grid toggle if needed */}
+      <div className="flex gap-4">
+        <Button className="rounded-full border-gray-900 cursor-pointer" variant={"outline"}>
+          Cutton <span className="text-lg">×</span>
+        </Button>
+        <Button className="rounded-full cursor-pointer" variant={"default"}>
+          Clear 
+        </Button>
+      </div>
       <div className="flex gap-4">
         <Select
           value={sort}
