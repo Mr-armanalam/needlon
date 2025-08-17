@@ -1,4 +1,5 @@
-import { useRouter } from "next/navigation";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import {
   Select,
@@ -17,16 +18,69 @@ type param = {
 
 const ItemControl = ({ sort, category, setFilterOpen }: param) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const params: Record<string, string[]> = {};
+  searchParams.forEach((value, key) => {
+    params[key] = value.split(",");
+  });
+
+  const removeFilter = (type: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams.toString());
+    let values = newParams.get(type)?.split(",") || [];
+    values = values.filter((v) => v !== value);
+    if (values.length > 0) {
+      newParams.set(type, values.join(","));
+    } else {
+      newParams.delete(type);
+    }
+    router.push(`${pathname}?${newParams.toString()}`);
+  };
+
+  const clearAll = () => {
+    router.push(pathname);
+  };
 
   return (
     <div className="flex justify-between items-center mb-6">
       <div className="flex gap-4">
-        <Button className="rounded-full border-gray-900 cursor-pointer" variant={"outline"}>
-          Cutton <span className="text-lg">×</span>
-        </Button>
-        <Button className="rounded-full cursor-pointer" variant={"default"}>
-          Clear 
-        </Button>
+        {Object.entries(params)
+          .flatMap(([type, values]) => values.map((value) => ({ type, value })))
+          .slice(0, 5)
+          .map((filter, i) => (
+            <Button
+              key={i}
+              className="rounded-full border-gray-900 cursor-pointer"
+              variant={"outline"}
+            >
+              {filter?.value}{" "}
+              <span
+                onClick={() => removeFilter(filter.type, filter.value)}
+                className="text-lg"
+              >
+                ×
+              </span>
+            </Button>
+          ))}
+          {Object.entries(params).flatMap(([_, values]) => values).length > 5 && (
+            <Button
+              onClick={() => setFilterOpen(true)}
+              className="rounded-full text-xl pb-5 cursor-pointer"
+              variant={"default"}
+            >
+              . . .
+            </Button>
+          )}
+        {Object.keys(params).length > 0 && (
+          <Button
+            onClick={clearAll}
+            className="rounded-full cursor-pointer"
+            variant={"default"}
+          >
+            Clear
+          </Button>
+        )}
       </div>
       <div className="flex gap-4">
         <Select

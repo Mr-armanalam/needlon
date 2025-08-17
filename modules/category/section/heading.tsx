@@ -10,7 +10,7 @@ const Heading = () => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="my-8">
+    <div className="my-2">
       <h1 className="text-5xl font-garamond font-semibold uppercase">
         {data.name}
       </h1>
