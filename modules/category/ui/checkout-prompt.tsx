@@ -7,17 +7,19 @@ export interface CartItem {
   price: number;
   size: string;
   image: string;
+  modalImage?: string[] | null;
   quantity: number;
 }
+
 
 const CheckoutPrompt = ({
   setCart,
   setOpen,
   cart,
 }: {
-  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
-  setOpen: (open: boolean) => void;
   cart: CartItem[];
+  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const removeFromCart = (id: number, size: string) => {
     setCart(prev =>

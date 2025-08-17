@@ -5,18 +5,22 @@ import Heading from "../section/heading";
 import ItemControl from "../components/item-control";
 import FilterDrawer from "../ui/filter-drawer";
 import Products from "../ui/product";
-import CheckoutPrompt, { CartItem } from "../ui/checkout-prompt";
+import CheckoutPrompt from "../ui/checkout-prompt";
+import type { CartItem as HookCartItem } from "@/hooks/cart-hooks";
+import { useCart } from "@/hooks/cart-hooks";
+import { useSession } from "next-auth/react";
 
 const CategoryView = () => {
+  const { data: session } = useSession();
   const params = useParams<{ category: string }>();
   const searchParams = useSearchParams();
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { cart, setCart } = useCart(session?.user.id);
 
   const handleAddToCart = (
-    product: Omit<CartItem, "size" | "quantity">,
+    product: Omit<HookCartItem, "size" | "quantity">,
     size: string
   ) => {
     setCart((prev) => {
@@ -66,3 +70,15 @@ const CategoryView = () => {
 };
 
 export default CategoryView;
+
+// pseudo-code inside your login success handler
+// const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+// await fetch("/api/cart/merge", {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json" },
+//   body: JSON.stringify({ userId, localCart }),
+// });
+
+// // clear local cart
+// localStorage.removeItem("cart");
