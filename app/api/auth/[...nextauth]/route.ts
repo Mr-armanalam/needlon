@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/db";
-import { usersTable } from "@/db/schema";
 import { and, DrizzleError, eq } from "drizzle-orm";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -9,6 +8,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 
 // Extend NextAuth types to include 'id' on User and Session
 import type { DefaultSession, DefaultUser } from "next-auth";
+import { usersTable } from "@/db/schema/users";
 
 declare module "next-auth" {
   interface Session {

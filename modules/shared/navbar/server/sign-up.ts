@@ -2,8 +2,8 @@
 "use server";
 
 import { db } from "@/db";
-import { usersTable } from "@/db/schema";
-import { bcryptCompare } from "@/lib/bcrypt";
+import { usersTable } from "@/db/schema/users";
+// import { bcryptCompare } from "@/lib/bcrypt";
 import { and, eq } from "drizzle-orm";
 
 export const getSignUp = async ({

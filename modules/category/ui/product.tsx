@@ -10,6 +10,8 @@ type Product = {
   image: string;
   modalImage?: string[] | null;
   sizes: string[];
+  category: string;
+  catType: string;
 };
 
 type ProductGridProps = {
@@ -24,6 +26,9 @@ const products: Product[] = Array.from({ length: 6 }).map((_, i) => ({
   name: "Hyderabadi shirts for men",
   price: 300,
   image: "/images/image3.png",
+  modalImage: ["/images/image2.png", "/images/image1.png"],
+  category: "Mens",
+  catType: "Shirts",
   sizes: ["S", "M", "L", "XL"],
 }));
 

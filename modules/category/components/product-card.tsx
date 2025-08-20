@@ -7,12 +7,15 @@ type Product = {
   name: string;
   price: number;
   image: string;
-  modalImage?:string[] | null;
+  modalImage?: string[] | null;
   sizes: string[];
 };
 
 interface ProductCardProps extends Product {
-  onAddToCart: (product: Pick<Product, "id" | "name" | "price" | "image">, size: string) => void;
+  onAddToCart: (
+    product: Pick<Product, "id" | "name" | "price" | "image">,
+    size: string
+  ) => void;
   wishlist: number[];
   toggleWishlist: (id: number) => void;
 }
@@ -21,25 +24,50 @@ const ProductCard = ({
   id,
   name,
   image,
+  modalImage,
   price,
   sizes,
   onAddToCart,
   toggleWishlist,
   wishlist,
 }: ProductCardProps) => {
-  const [selectedSizeById, setSelectedSizeById] = useState<Record<number, string | null>>({});
+  const [selectedSizeById, setSelectedSizeById] = useState<
+    Record<number, string | null>
+  >({});
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, width } = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - left;
+
+    if (x < width / 2) {
+      setHoverSide("left");
+    } else {
+      setHoverSide("right");
+    }
+  };
 
   return (
     <div key={id}>
       <div
         onMouseEnter={() => setHoveredId(id)}
-        onMouseLeave={() => setHoveredId(null)}
+        onMouseLeave={() => {
+          setHoveredId(null);
+          setHoverSide(null);
+        }}
+        onMouseMove={handleMouseMove}
         className="bg-stone-100 group relative py-16"
       >
         <div className="relative w-full h-80">
           <Image
-            src={image}
+            src={
+              hoveredId
+                ? hoverSide === "left"
+                  ? modalImage?.[0] ?? image
+                  : modalImage?.[1] ?? image
+                : image
+            }
             alt={name}
             fill
             sizes="(min-width: 768px) 25vw, 50vw"

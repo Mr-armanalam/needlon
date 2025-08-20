@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/db";
-import { usersTable } from "@/db/schema";
+import { usersTable } from "@/db/schema/users";
 import { bcryptHash } from "@/lib/bcrypt";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
