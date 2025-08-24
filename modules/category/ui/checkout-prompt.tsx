@@ -44,14 +44,14 @@ const CheckoutPrompt = ({
 
       <div className="mt-4 max-h-[68vh] font-garamond no-scrollbar overflow-y-auto space-y-4">
         {cart.map((item) => (
-          <div key={`${item.id}-${item.size}`} className="flex border-y bg-stone-100 p-8 gap-3 pb-2">
+          <div key={`${item.id}-${item.size}`} className="flex border-y border-stone-300 bg-[#EAEAEA] p-8 gap-3 pb-2">
             <div className="relative w-[60px] h-[100px]">
               <Image fill src={item.image} alt={item.name} className="object-cover" />
             </div>
             <div className="flex-1">
               <p className="font-semibold">{item.name}</p>
               <p className="text-muted-foreground">
-                ${item.price.toFixed(2)} × {item.quantity}
+                ${Number(item.price)?.toFixed(2)} × {item.quantity}
               </p>
               <p className="text-sm mt-2">Size: {item.size}</p>
               <p className="text-sm">Quantity: {item.quantity}</p>

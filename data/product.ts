@@ -1,4 +1,4 @@
-const productData = [
+ const productData = [
   {
   id: 1,
   name: "Hyderabadi shirts for men",

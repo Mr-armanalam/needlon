@@ -19,6 +19,7 @@ type ProductGridProps = {
     product: { id: number; name: string; price: number; image: string },
     size: string
   ) => void;
+  productData: Product[];
 };
 
 const products: Product[] = Array.from({ length: 6 }).map((_, i) => ({
@@ -32,7 +33,7 @@ const products: Product[] = Array.from({ length: 6 }).map((_, i) => ({
   sizes: ["S", "M", "L", "XL"],
 }));
 
-const Products = ({ onAddToCart }: ProductGridProps) => {
+const Products = ({ onAddToCart, productData }: ProductGridProps) => {
   const [wishlist, setWishlist] = useState<number[]>([]);
 
   // Load wishlist from localStorage on mount
@@ -51,7 +52,7 @@ const Products = ({ onAddToCart }: ProductGridProps) => {
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-0.5">
-      {products.map((product, i) => (
+      {productData.map((product, i) => (
         <ProductCard
           toggleWishlist={toggleWishlist}
           onAddToCart={onAddToCart}

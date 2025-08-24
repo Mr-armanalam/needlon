@@ -18,7 +18,7 @@ export const wishlistItems = pgTable("wishlist_items", {
   CatType: text("category_type"),
   name: text("name").notNull(),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
-  size: text("size"),
+  sizes: text("sizes").array(),
   image: text("image"),
   modalImage: text("modal_image").array(), // ✅ Postgres text[]
   createdAt: timestamp("created_at").defaultNow().notNull(),

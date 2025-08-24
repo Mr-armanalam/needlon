@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Heading from "../section/heading";
 import ItemControl from "../components/item-control";
@@ -10,9 +10,25 @@ import type { CartItem as HookCartItem } from "@/hooks/cart-hooks";
 import { useCart } from "@/hooks/cart-hooks";
 import { useSession } from "next-auth/react";
 
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  modalImage?: string[] | null;
+  sizes: string[];
+  category: string;
+  catType: string;
+};
+
 const CategoryView = () => {
   const { data: session } = useSession();
-  const params = useParams<{ category: string }>();
+  const { categories, category } = useParams<{
+    category: string;
+    categories: string;
+  }>();
+  const [products, setProducts] = useState<Product[]>([]);
+
   const searchParams = useSearchParams();
 
   const [filterOpen, setFilterOpen] = useState(false);
@@ -36,25 +52,37 @@ const CategoryView = () => {
   };
 
   const sort = searchParams.get("sort") || "featured";
+  const material = searchParams.get("material");
+
+  const productData = useCallback(async () => {
+    await fetch(
+      `/api/products?category=${categories}&subcategory=${category}&sort=${sort}${
+        material ? `&material=${material}` : ""
+      }`,
+      { cache: "no-store" } // always fresh
+    )
+      .then(async (res) => await res.json())
+      .then(setProducts);
+  }, [categories, category, material, sort]);
 
   // (your fetch stays the same)
-  // const [products, setProducts] = useState<Product[]>([]);
-  //   useEffect(() => {
-  //     fetch(`/api/products?category=${params.category}&sort=${sort}`)
-  //       .then((res) => res.json())
-  //       .then(setProducts);
-  //   }, [params.category, sort]);
+  useEffect(() => {
+    productData();
+  }, [category, sort, productData]);
+
+  console.log(products);
+  
 
   return (
     <div className="px-6 py-8">
       <Heading />
       <ItemControl
         sort={sort}
-        category={params?.category}
+        category={category}
         setFilterOpen={setFilterOpen}
       />
 
-      <Products onAddToCart={handleAddToCart} />
+      <Products onAddToCart={handleAddToCart} productData={products} />
 
       {open && (
         <CheckoutPrompt cart={cart} setCart={setCart} setOpen={setOpen} />
@@ -62,7 +90,7 @@ const CategoryView = () => {
 
       <FilterDrawer
         filterOpen={filterOpen}
-        category={params?.category}
+        category={category}
         setFilterOpen={setFilterOpen}
       />
     </div>

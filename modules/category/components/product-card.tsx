@@ -47,6 +47,7 @@ const ProductCard = ({
       setHoverSide("right");
     }
   };
+  
 
   return (
     <div key={id}>
@@ -57,9 +58,9 @@ const ProductCard = ({
           setHoverSide(null);
         }}
         onMouseMove={handleMouseMove}
-        className="bg-stone-100 group relative py-16"
+        className="bg-[#EAEAEA] group relative "
       >
-        <div className="relative w-full h-80">
+        <div className="relative w-full h-[400px]">
           <Image
             src={
               hoveredId
@@ -71,7 +72,7 @@ const ProductCard = ({
             alt={name}
             fill
             sizes="(min-width: 768px) 25vw, 50vw"
-            className="object-contain"
+            className="object-fill"
           />
         </div>
 

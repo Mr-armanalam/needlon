@@ -22,54 +22,54 @@ export const items = [
   },
   {
     name: "For Men's",
-    link: "/ready-to-wear-mens",
+    link: "/items-for-men",
     subNevigator: [
       {
         name: "Shirts for Men's",
         description: "Stylish shirts for every occasion",
-        link: "/ready-to-wear/shirts",
+        link: "/items-for-men/shirts",
       },
       {
         name: "Pants",
         description: "Comfortable and fashionable pants",
-        link: "/ready-to-wear/pants",
+        link: "/items-for-men/pants",
       },
       {
         name: "Outerwear",
         description: "Jackets, coats and Sapari for all seasons",
-        link: "/ready-to-wear/outerwear",
+        link: "/items-for-men/outerwears",
       },
       {
         name: "Kurtas",
         description:
           "Stylish & Traditional kurtas and Khan-Dress for festive occasions",
-        link: "/ready-to-wear/kurtas",
+        link: "/items-for-men/kurtas",
       },
     ],
   },
   {
     name: "For Women",
-    link: "/ready-to-wear-womens",
+    link: "/items-for-women",
     subNevigator: [
       {
         name: "Office Wear",
         description: "Formal Shirts & pants for Women's",
-        link: "/ready-to-wear/blouses",
+        link: "/items-for-women/blouses",
       },
       {
         name: "Suits for Women",
         description: "Elegant suits for every occasion",
-        link: "/ready-to-wear/suits",
+        link: "/items-for-women/suits",
       },
       {
         name: "Lahengas & Blouses",
         description: "Stylish Lahenga and blouse to complement your outfits",
-        link: "/ready-to-wear/lahengas",
+        link: "/items-for-women/lahengas",
       },
       {
         name: "Outerwear",
         description: "Ladies-jackets, Ladies-coats for all seasons",
-        link: "/ready-to-wear/outwear",
+        link: "/items-for-women/outwear",
       },
     ],
   },
