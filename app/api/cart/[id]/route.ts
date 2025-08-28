@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
 
@@ -30,3 +30,4 @@ export async function DELETE(
 
   return NextResponse.json({ success: true });
 }
+

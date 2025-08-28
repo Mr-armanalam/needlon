@@ -14,32 +14,36 @@ export interface CartItem {
 export function useCart(userId?: string) {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  // Load cart
   useEffect(() => {
-    if (userId) {
-      // fetch from DB
-      fetch(`/api/cart?userId=${userId}`)
-        .then((res) => res.json())
-        .then((data) => setCart(data));
-    } else {
-      // load from localStorage
-      const local = localStorage.getItem("cart");
-      if (local) setCart(JSON.parse(local));
-    }
+    const handleGetCart = async () => {
+      if (userId) {
+        const res = await fetch(`/api/cart?userId=${userId}`);
+        const data = await res.json();
+        setCart(data);
+      } else {
+        const local = localStorage.getItem("cart");
+        if (local) setCart(JSON.parse(local));
+      }
+    };
+
+    handleGetCart();
   }, [userId]);
 
-  // Sync changes
-  useEffect(() => {
+ useEffect(() => {
+  const handleStoreCart = async () => {
     if (userId) {
-      fetch(`/api/cart?userId=${userId}`, {
+       await fetch(`/api/cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cart),
+        body: JSON.stringify({ cartItem: cart.at(-1), userId }),
       });
     } else {
       localStorage.setItem("cart", JSON.stringify(cart));
     }
-  }, [cart, userId]);
+  };
+
+  if (cart.length > 0) handleStoreCart();
+}, [cart, userId]);
 
   return { cart, setCart };
 }

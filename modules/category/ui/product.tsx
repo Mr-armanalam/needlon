@@ -22,21 +22,10 @@ type ProductGridProps = {
   productData: Product[];
 };
 
-const products: Product[] = Array.from({ length: 6 }).map((_, i) => ({
-  id: i + 1,
-  name: "Hyderabadi shirts for men",
-  price: 300,
-  image: "/images/image3.png",
-  modalImage: ["/images/image2.png", "/images/image1.png"],
-  category: "Mens",
-  catType: "Shirts",
-  sizes: ["S", "M", "L", "XL"],
-}));
-
 const Products = ({ onAddToCart, productData }: ProductGridProps) => {
   const [wishlist, setWishlist] = useState<number[]>([]);
 
-  // Load wishlist from localStorage on mount
+
   useEffect(() => {
     const stored = localStorage.getItem("wishlist");
     if (stored) setWishlist(JSON.parse(stored));
@@ -66,3 +55,16 @@ const Products = ({ onAddToCart, productData }: ProductGridProps) => {
 };
 
 export default Products;
+
+
+
+// const products: Product[] = Array.from({ length: 6 }).map((_, i) => ({
+//   id: i + 1,
+//   name: "Hyderabadi shirts for men",
+//   price: 300,
+//   image: "/images/image3.png",
+//   modalImage: ["/images/image2.png", "/images/image1.png"],
+//   category: "Mens",
+//   catType: "Shirts",
+//   sizes: ["S", "M", "L", "XL"],
+// }));

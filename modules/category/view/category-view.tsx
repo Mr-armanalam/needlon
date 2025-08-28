@@ -65,13 +65,9 @@ const CategoryView = () => {
       .then(setProducts);
   }, [categories, category, material, sort]);
 
-  // (your fetch stays the same)
   useEffect(() => {
     productData();
-  }, [category, sort, productData]);
-
-  console.log(products);
-  
+  }, [category, sort, productData]);  
 
   return (
     <div className="px-6 py-8">

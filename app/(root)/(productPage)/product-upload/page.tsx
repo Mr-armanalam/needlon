@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { UploadCloud, Image as ImageIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
