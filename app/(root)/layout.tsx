@@ -1,24 +1,26 @@
+"use client";
+import { CartProvider } from "@/hooks/cart-context";
 import FooterSection from "@/modules/shared/footer/footer-section";
 import NavbarSection from "@/modules/shared/navbar/navbar-section";
-import { Metadata } from "next";
+import { useSession } from "next-auth/react";
+// import { Metadata } from "next";
 import React from "react";
 
+// export const metadata: Metadata = {
+//   title: "Needlon",
+//   description: "A fashionable clothing tailoring service",
+// };
 
-export const metadata: Metadata = {
-  title: "Needlon",
-  description: "A fashionable clothing tailoring service",
-};
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  const { data: session } = useSession();
 
-const layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <>
+    <CartProvider userId={session?.user.id}>
       <NavbarSection />
-      <div className="flex flex-col min-h-screen flex-1">
-        {children}
-      </div>
+      <div className="flex flex-col min-h-screen flex-1">{children}</div>
       <FooterSection />
-    </>
+    </CartProvider>
   );
 };
 
-export default layout;
+export default Layout;

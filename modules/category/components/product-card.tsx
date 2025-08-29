@@ -3,21 +3,24 @@ import Image from "next/image";
 import React, { useState } from "react";
 
 type Product = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes: string[];
+  sizes?: string[];
+  category?: string;
+  catType?: string;
 };
+
 
 interface ProductCardProps extends Product {
   onAddToCart: (
-    product: Pick<Product, "id" | "name" | "price" | "image">,
+    product: Product,
     size: string
   ) => void;
-  wishlist: number[];
-  toggleWishlist: (id: number) => void;
+  wishlist: string[];
+  toggleWishlist: (id: string) => void;
 }
 
 const ProductCard = ({
@@ -32,9 +35,9 @@ const ProductCard = ({
   wishlist,
 }: ProductCardProps) => {
   const [selectedSizeById, setSelectedSizeById] = useState<
-    Record<number, string | null>
+    Record<string, string | null>
   >({});
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -76,7 +79,7 @@ const ProductCard = ({
           />
         </div>
 
-        {hoveredId === id && sizes.length > 0 && (
+        {hoveredId === id && Array.isArray(sizes) && sizes.length > 0 && (
           <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2 bg-white/80 py-2">
             {sizes.map((size) => (
               <button

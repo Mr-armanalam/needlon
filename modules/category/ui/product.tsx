@@ -4,26 +4,26 @@ import React, { useEffect, useState } from "react";
 import ProductCard from "../components/product-card";
 
 type Product = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes: string[];
-  category: string;
-  catType: string;
+  sizes?: string[];
+  category?: string;
+  catType?: string;
 };
 
 type ProductGridProps = {
   onAddToCart: (
-    product: { id: number; name: string; price: number; image: string },
+    product: Product,
     size: string
   ) => void;
   productData: Product[];
 };
 
 const Products = ({ onAddToCart, productData }: ProductGridProps) => {
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>([]);
 
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Products = ({ onAddToCart, productData }: ProductGridProps) => {
     if (stored) setWishlist(JSON.parse(stored));
   }, []);
 
-  const toggleWishlist = (id: number) => {
+  const toggleWishlist = (id: string) => {
     const updated = wishlist.includes(id)
       ? wishlist.filter((x) => x !== id)
       : [...wishlist, id];
