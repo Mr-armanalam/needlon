@@ -6,8 +6,9 @@ import { productItems } from "@/db/schema/product-items";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const {id} = await params;
   const { quantity } = await req.json();
 
   if (!quantity || quantity < 1) {
@@ -17,7 +18,7 @@ export async function PATCH(
   const updated = await db
     .update(cartItems)
     .set({ quantity })
-    .where(eq(cartItems.id, params.id))
+    .where(eq(cartItems.id, id))
     .returning(); // so we get the updated row back
 
   return NextResponse.json(updated[0] ?? null);
@@ -25,16 +26,17 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  await db.delete(cartItems).where(eq(cartItems.id, params.id));
+  const {id} = await params;
+  await db.delete(cartItems).where(eq(cartItems.id, id));
 
   return NextResponse.json({ success: true });
 }
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
   const cartItem = await db
