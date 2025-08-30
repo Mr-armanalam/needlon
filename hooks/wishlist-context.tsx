@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 export interface WishlistItem {
-  id?: string; // wishlist record id
+  id?: string;
   userId?: string;
   productId: string;
   size?: string;

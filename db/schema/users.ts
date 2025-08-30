@@ -6,7 +6,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { cartItems } from "./cart-items";
-import { wishlistItems } from "./wishlist-items";
+import { wishListItems } from "./wishlist-items";
 
 export const usersTable = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -20,5 +20,5 @@ export const usersTable = pgTable("users", {
 
 export const usersRelations = relations(usersTable, ({ many }) => ({
   cartItems: many(cartItems),
-  wishlistItems: many(wishlistItems),
+  wishlistItems: many(wishListItems),
 }));
