@@ -4,45 +4,64 @@ import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
 
 export async function POST(req: NextRequest) {
-  const { userId, cartItem } = await req.json();
-  console.log(cartItem);
-  
+  const { userId, cartItem, addQuantity = 0, removeQuantity = 0 } = await req.json();
 
-  if (!userId) {
+  if (!userId || !cartItem?.productId ) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
-  }
+  }  
 
-  const existingCart = await db
+  const [existingCart] = await db
     .select()
     .from(cartItems)
     .where(
       and(
+        eq(cartItems.productId, cartItem.productId), // ✅ use productId
         eq(cartItems.userId, userId),
-        eq(cartItems.productId, cartItem.id),
         eq(cartItems.size, cartItem.size)
       )
     )
     .limit(1);
 
-  if (existingCart.length > 0) {
-    const updated = await db
-      .update(cartItems)
-      .set({ quantity: existingCart[0].quantity + cartItem.quantity })
-      .where(eq(cartItems.id, existingCart[0].id))
+  if (!existingCart) {
+    const [created] = await db
+      .insert(cartItems)
+      .values({
+        userId,
+        productId: cartItem.productId, // ✅ real product id
+        size: cartItem.size,
+        quantity: cartItem.quantity ?? 1,
+      })
       .returning();
 
-    return NextResponse.json(updated[0]);
+    return NextResponse.json({ created });
   }
 
-  const [created] = await db
-    .insert(cartItems)
-    .values({
-      userId,
-      productId : cartItem.id,
-      size: cartItem.size,
-      quantity : cartItem.quantity,
-    })
+  // update existing row
+  const newQuantity =
+    existingCart.quantity + addQuantity - removeQuantity;
+
+  if (newQuantity <= 0) {
+    await db.delete(cartItems).where(eq(cartItems.id, existingCart.id));
+    return NextResponse.json({ deleted: true });
+  }
+
+  const [updated] = await db
+    .update(cartItems)
+    .set({ quantity: newQuantity })
+    .where(eq(cartItems.id, existingCart.id))
     .returning();
 
-  return NextResponse.json(created);
+  return NextResponse.json({ updated });
 }
+
+
+export const GET = async (req: NextRequest) => {
+  const { userId } = await req.json();
+
+  const [cartItem] = await db
+    .select()
+    .from(cartItems)
+    .where(eq(cartItems.userId, userId));
+
+  return NextResponse.json(cartItem);
+};

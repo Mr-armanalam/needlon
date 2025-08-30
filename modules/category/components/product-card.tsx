@@ -1,23 +1,25 @@
+import { useWishlist } from "@/hooks/wishlist-context";
 import { StarIcon } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 
 type Product = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes: string[];
+  sizes?: string[];
+  category?: string;
+  catType?: string;
 };
+
 
 interface ProductCardProps extends Product {
   onAddToCart: (
-    product: Pick<Product, "id" | "name" | "price" | "image">,
+    product: Product,
     size: string
   ) => void;
-  wishlist: number[];
-  toggleWishlist: (id: number) => void;
 }
 
 const ProductCard = ({
@@ -28,13 +30,13 @@ const ProductCard = ({
   price,
   sizes,
   onAddToCart,
-  toggleWishlist,
-  wishlist,
 }: ProductCardProps) => {
   const [selectedSizeById, setSelectedSizeById] = useState<
-    Record<number, string | null>
+    Record<string, string | null>
   >({});
-  const [hoveredId, setHoveredId] = useState<number | null>(null);
+   const { wishlist, toggleWishlist } = useWishlist();
+
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -76,7 +78,7 @@ const ProductCard = ({
           />
         </div>
 
-        {hoveredId === id && sizes.length > 0 && (
+        {hoveredId === id && Array.isArray(sizes) && sizes.length > 0 && (
           <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2 bg-white/80 py-2">
             {sizes.map((size) => (
               <button
@@ -98,16 +100,16 @@ const ProductCard = ({
         )}
 
         <button
-          onClick={() => toggleWishlist(id)}
+          onClick={() => toggleWishlist({ productId: id, size: sizes?.at(0) })}
           aria-label="Toggle wishlist"
           className={`hidden group-hover:flex absolute right-6 top-6 text-white rounded-full hover:bg-black p-2 ${
-            wishlist.includes(id) ? "bg-black" : "bg-zinc-400"
+            wishlist.some((w) => w.productId === id)  ? "bg-black" : "bg-zinc-400"
           }`}
         >
           <StarIcon
             size={16}
             className={
-              wishlist.includes(id) ? "fill-orange-400 text-orange-400" : ""
+             wishlist.some((w) => w.productId === id) ? "fill-orange-400 text-orange-400" : ""
             }
           />
         </button>

@@ -87,8 +87,6 @@ const handler = NextAuth({
         .from(usersTable)
         .where(eq(usersTable?.email, user.email));
 
-      console.log(user, account);
-
       if (!existingUser) {
         const [newUser] = await db
           .insert(usersTable)

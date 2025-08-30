@@ -6,23 +6,20 @@ import ItemControl from "../components/item-control";
 import FilterDrawer from "../ui/filter-drawer";
 import Products from "../ui/product";
 import CheckoutPrompt from "../ui/checkout-prompt";
-import type { CartItem as HookCartItem } from "@/hooks/cart-hooks";
-import { useCart } from "@/hooks/cart-hooks";
-import { useSession } from "next-auth/react";
+import { useCart } from "@/hooks/cart-context";
 
 type Product = {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes: string[];
-  category: string;
-  catType: string;
+  sizes?: string[];
+  category?: string;
+  catType?: string;
 };
 
 const CategoryView = () => {
-  const { data: session } = useSession();
   const { categories, category } = useParams<{
     category: string;
     categories: string;
@@ -33,21 +30,19 @@ const CategoryView = () => {
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const { cart, setCart } = useCart(session?.user.id);
 
-  const handleAddToCart = (
-    product: Omit<HookCartItem, "size" | "quantity">,
-    size: string
-  ) => {
-    setCart((prev) => {
-      const idx = prev.findIndex((p) => p.id === product.id && p.size === size);
-      if (idx !== -1) {
-        const copy = [...prev];
-        copy[idx] = { ...copy[idx], quantity: copy[idx].quantity + 1 };
-        return copy;
-      }
-      return [...prev, { ...product, size, quantity: 1 }];
-    });
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (product: Product, size: string) => {
+    addToCart(
+      {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+      },
+      size
+    );
     setOpen(true);
   };
 
@@ -67,7 +62,7 @@ const CategoryView = () => {
 
   useEffect(() => {
     productData();
-  }, [category, sort, productData]);  
+  }, [category, sort, productData]);
 
   return (
     <div className="px-6 py-8">
@@ -80,9 +75,7 @@ const CategoryView = () => {
 
       <Products onAddToCart={handleAddToCart} productData={products} />
 
-      {open && (
-        <CheckoutPrompt cart={cart} setCart={setCart} setOpen={setOpen} />
-      )}
+      {open && <CheckoutPrompt setOpen={setOpen} />}
 
       <FilterDrawer
         filterOpen={filterOpen}
