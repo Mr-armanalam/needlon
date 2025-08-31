@@ -21,7 +21,6 @@ export const wishListItems = pgTable("wishlist_items", {
     .references(() => productItems.id, { onDelete: "cascade" }),
   quantity: integer("quantity").notNull().default(1),
   size: text("size"),
-  status: clothesStatusEnum("status").notNull().default("received"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
