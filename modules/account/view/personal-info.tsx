@@ -1,13 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { registerPersonalinfo } from "../server/register-personal-Info";
 import { useSession } from "next-auth/react";
-import { getPersonalinfo } from "../server/get-personal-Info";
 import { toast } from "sonner";
 import NameInfo from "../components/name-info";
 import GenderInfo from "../components/gender-info";
 import Emailinfo from "../components/email-info";
 import PhoneInfo from "../components/phone-info";
+import { getPersonalinfo, registerPersonalinfo } from "../server/personal-Info-controller";
 
 const PersonalInfo = () => {
   const { data: session } = useSession();
@@ -67,7 +66,7 @@ const PersonalInfo = () => {
   }, [session?.user?.id]);
 
   return (
-    <form>
+    <form method="POST">
       {/* TODO: MAKE SECURE FORM GET URL */}
       <NameInfo
         editSection={editSection}

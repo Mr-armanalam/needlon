@@ -8,6 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { cartItems } from "./cart-items";
 import { wishListItems } from "./wishlist-items";
+import { userAddress } from "./user-address";
 
 
 export const genderType = pgEnum("gender", [
@@ -31,4 +32,5 @@ export const usersTable = pgTable("users", {
 export const usersRelations = relations(usersTable, ({ many }) => ({
   cartItems: many(cartItems),
   wishlistItems: many(wishListItems),
+  useAddress: many(userAddress)
 }));
