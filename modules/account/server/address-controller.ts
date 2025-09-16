@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/db";
 import { userAddress } from "@/db/schema/user-address";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import z, { success } from "zod";
 import { FormSchema } from "../ui/add-new-address";
 
@@ -30,16 +30,30 @@ export const getAllUserAddress = async (userId: string) => {
 type props = {
   data: z.infer<typeof FormSchema>;
   userId: string;
+  editingAddressId: string;
 };
 
-export const registerAddress = async ({ data, userId }: props) => {
+export const registerAddress = async ({
+  data,
+  userId,
+  editingAddressId,
+}: props) => {
   try {
     if (!userId) return { success: false };
 
-    await db.insert(userAddress).values({
-      ...data,
-      userId,
-    });
+    if (editingAddressId) {
+      await db.update(userAddress).set({
+        ...data,
+      }).where(and(
+        eq(userAddress.userId, userId),
+        eq(userAddress.id, editingAddressId)
+      ))
+    } else {
+      await db.insert(userAddress).values({
+        ...data,
+        userId,
+      });
+    }
 
     return { success: true };
   } catch (error) {
@@ -59,24 +73,21 @@ export const deleteAddress = async ({ id, userId }: deleteEditeProps) => {
 
     await db.delete(userAddress).where(eq(userAddress.id, id));
 
-    return {success: true};
+    return { success: true };
   } catch (error) {
     console.log(error);
-    return { success: false, error}
+    return { success: false, error };
   }
 };
 export const editeAddress = async ({ id, userId }: deleteEditeProps) => {
   try {
     if (!userId) return;
 
-    await db.update(userAddress).set({
-      
-    })
-    .where(eq(userAddress.id, id));
+    await db.update(userAddress).set({}).where(eq(userAddress.id, id));
 
-    return {success: true};
+    return { success: true };
   } catch (error) {
     console.log(error);
-    return { success: false, error}
+    return { success: false, error };
   }
 };

@@ -14,8 +14,8 @@ export const userAddress = pgTable("user_address", {
   address: text("address").notNull(),
   city: text("city").notNull(),
   state: text("state").notNull(),
-  landmark: text("landmark"),
-  alternate_phone: text("alternate_phone"),
+  landmark: text("landmark").notNull(),
+  alternate_phone: text("alternate_phone").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

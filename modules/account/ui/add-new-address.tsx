@@ -10,7 +10,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { number, z } from "zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -60,11 +60,23 @@ export const FormSchema = z.object({
   alternate_phone: z.string(),
 });
 
-type props = {
-  setIsAddressSaved: (address: boolean) => void;
-}
+type AddressFormData = z.infer<typeof FormSchema> & { id?: string };
 
-const AddNewAddress = ({setIsAddressSaved}:props) => {
+type Props = {
+  setrealTimeAddressStatus: (saved: boolean) => void;
+  editingAddress?: AddressFormData | null;
+  clearEditing?: () => void;
+  accordionValue: string | undefined;
+  setAccordionValue: (state: string | undefined) => void;
+};
+
+const AddNewAddress = ({
+  setrealTimeAddressStatus,
+  editingAddress,
+  clearEditing,
+  setAccordionValue,
+  accordionValue,
+}: Props) => {
   const { data: session } = useSession();
   const [allState, setAllState] = useState<
     { name: string; state_code: string }[]
@@ -84,13 +96,41 @@ const AddNewAddress = ({setIsAddressSaved}:props) => {
     },
   });
 
+  const clearAddressForm = () => {
+    form.reset();
+    clearEditing?.();
+    setAccordionValue(undefined);
+  };
+
+  useEffect(() => {
+    if (editingAddress) {
+      form.reset(editingAddress);
+      setAccordionValue("item-1");
+    } else {
+      setAccordionValue(undefined);
+      form.reset();
+    }
+  }, [editingAddress, setAccordionValue, form]);
+
+  useEffect(() => {
+    if (editingAddress) {
+      form.reset(editingAddress);
+    }
+  }, [editingAddress, form]);
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = await registerAddress({ data, userId: session?.user.id ?? "" });
+    const res = await registerAddress({
+      data,
+      userId: session?.user.id ?? "",
+      editingAddressId: editingAddress?.id ?? "",
+    });
 
     if (res.success) {
       toast("Your address is successfully saved");
       form.reset();
-      setIsAddressSaved(true);
+      setrealTimeAddressStatus(true);
+      setAccordionValue(undefined); // close after save
+      clearAddressForm();
     } else {
       toast("Something is wrong, please try later");
     }
@@ -119,8 +159,10 @@ const AddNewAddress = ({setIsAddressSaved}:props) => {
       className="border bg-stone-100 rounded-xs px-3"
       type="single"
       collapsible
+      value={accordionValue} // ✅ controlled
+      onValueChange={setAccordionValue} // ✅ sync open/close
     >
-      <AccordionItem value="item-1">
+      <AccordionItem value={`item-1`}>
         <AccordionTrigger className="justify-start cursor-pointer text-blue-700 hover:no-underline flex items-center gap-x-2">
           <PlusIcon size={18} className="font-bold" />
           <h2 className=" font-semibold">ADD NEW ADDRESS</h2>
@@ -289,12 +331,22 @@ const AddNewAddress = ({setIsAddressSaved}:props) => {
                   </FormItem>
                 )}
               />
-              <Button
-                className="col-span-1 rounded-xs cursor-pointer w-fit"
-                type="submit"
-              >
-                Submit
-              </Button>
+              <div className="col-span-1 flex gap-x-4">
+                <Button
+                  className=" rounded-xs cursor-pointer w-fit"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+                <Button
+                  onClick={clearAddressForm}
+                  className=" rounded-xs cursor-pointer w-fit"
+                  type="button"
+                  variant={"outline"}
+                >
+                  Clear
+                </Button>
+              </div>
             </form>
           </Form>
         </AccordionContent>
