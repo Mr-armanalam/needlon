@@ -1,40 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
 import { productItems } from "@/db/schema/product-items";
 
-// export async function PATCH(
-//   req: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) {
-//   const { id } = await params;
-//   const { quantity } = await req.json();
 
-//   if (!quantity || quantity < 1) {
-//     return NextResponse.json({ error: "Invalid quantity" }, { status: 400 });
-//   }
-
-//   const updated = await db
-//     .update(cartItems)
-//     .set({ quantity })
-//     .where(eq(cartItems.id, id))
-//     .returning(); // so we get the updated row back
-
-//   return NextResponse.json(updated[0] ?? null);
-// }
-
-// export async function DELETE(
-//   req: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) {
-//   const { id } = await params;
-//   await db.delete(cartItems).where(eq(cartItems.id, id));
-
-//   return NextResponse.json({ success: true });
-// }
-
-export async function GET({ params }: { params: Promise<{ id: string }> }) {
+export async function GET( req: Request,
+  { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const cartItem = await db

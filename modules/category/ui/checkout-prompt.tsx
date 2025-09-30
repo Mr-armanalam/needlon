@@ -14,6 +14,9 @@ const CheckoutPrompt = ({
     0
   );
 
+  console.log(cart,'cart');
+  
+
   return (
     <div className="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-4 overflow-y-auto">
       <div className="flex justify-between items-center">
