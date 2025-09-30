@@ -34,7 +34,10 @@ const ProductCard = ({
   const [selectedSizeById, setSelectedSizeById] = useState<
     Record<string, string | null>
   >({});
-   const { wishlist, toggleWishlist } = useWishlist();
+   const { wishlist,guestWishlist, toggleWishlist } = useWishlist();
+
+   const wishlistItems = wishlist.length > 0 ? wishlist : guestWishlist;
+
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
@@ -103,13 +106,13 @@ const ProductCard = ({
           onClick={() => toggleWishlist({ productId: id, size: sizes?.at(0) })}
           aria-label="Toggle wishlist"
           className={`hidden group-hover:flex absolute right-6 top-6 text-white rounded-full hover:bg-black p-2 ${
-            wishlist.some((w) => w.productId === id)  ? "bg-black" : "bg-zinc-400"
+            wishlistItems?.some((w) => w.productId === id)  ? "bg-black" : "bg-zinc-400"
           }`}
         >
           <StarIcon
             size={16}
             className={
-             wishlist.some((w) => w.productId === id) ? "fill-orange-400 text-orange-400" : ""
+             wishlistItems.some((w) => w.productId === id) ? "fill-orange-400 text-orange-400" : ""
             }
           />
         </button>

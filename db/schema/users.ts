@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
+  pgEnum,
   pgTable,
   text,
   timestamp,
@@ -7,6 +8,14 @@ import {
 } from "drizzle-orm/pg-core";
 import { cartItems } from "./cart-items";
 import { wishListItems } from "./wishlist-items";
+import { userAddress } from "./user-address";
+
+
+export const genderType = pgEnum("gender", [
+  "male",
+  "female"
+]);
+
 
 export const usersTable = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -14,6 +23,8 @@ export const usersTable = pgTable("users", {
   email: text("email").notNull().unique(),
   password: text("password"),
   imageUrl: text("image_url"),
+  number: text('mobile_number'),
+  gender: genderType('gender').notNull().default('male'),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -21,4 +32,5 @@ export const usersTable = pgTable("users", {
 export const usersRelations = relations(usersTable, ({ many }) => ({
   cartItems: many(cartItems),
   wishlistItems: many(wishListItems),
+  useAddress: many(userAddress)
 }));
