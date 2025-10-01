@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       })
       .returning();
 
-    return NextResponse.json({ created });
+    return NextResponse.json({ created }, { status: 200 });
   }
 
   // update existing row
@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
   if (newQuantity <= 0) {
     await db.delete(cartItems).where(eq(cartItems.id, existingCart.id));
-    return NextResponse.json({ deleted: true });
+    return NextResponse.json({ deleted: true }, { status: 200 });
   }
 
   const [updated] = await db
@@ -63,5 +63,5 @@ export const GET = async (req: NextRequest) => {
     .from(cartItems)
     .where(eq(cartItems.userId, userId));
 
-  return NextResponse.json(cartItem);
+  return NextResponse.json(cartItem, { status: 200 });
 };

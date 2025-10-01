@@ -4,7 +4,7 @@ import { useWishlist } from "@/hooks/wishlist-context";
 import Image from "next/image";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { Delete, DeleteIcon, Trash2Icon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { useCart } from "@/hooks/cart-context";
 
 const WishlistView = () => {
@@ -27,7 +27,7 @@ const WishlistView = () => {
   return (
     <div className="">
       <div className="px-3 font-semibold text-2xl font-garamond pb-7">
-        Wishlist Items
+        Wishlist Items ({wishlistItems.length})
       </div>
       {/* <NoUserAddress Icon = {BaggageClaimIcon} description='No any wishlist items saved' /> */}
 
@@ -54,12 +54,12 @@ const WishlistView = () => {
                   onClick={() =>
                     addToCart(
                       {
-                        id: item.id,
+                        id: item.productId,
                         name: item.name,
                         price: Number(item.price),
                         image: item.image ?? "",
                       },
-                      item.size ?? ""
+                      item.size ?? "s"
                     )
                   }
                   className="text-xs cursor-pointer rounded-full mt-3"

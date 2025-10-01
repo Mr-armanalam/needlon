@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export interface CartItem {
   id: string;
@@ -89,6 +90,12 @@ export const CartProvider = ({
           cartItem: { productId: product.id, size, quantity: 1 },
           addQuantity: 1,
         }),
+      }).then(async(data) => await data.json() ).then((result) => {
+        
+        console.log(result);
+        if (result.created) {
+          toast("Item added to the cart" )
+        }
       });
       await refreshCart();
     }

@@ -32,7 +32,7 @@ export const accountNavData = [
   },
   {
     label: 'cart',
-    url: "/account/cart",
+    url: "/cart",
     icon: <ShoppingBagIcon size={15} />,
     name: "Your Cart",
     description: "Some items, which you want to order",
