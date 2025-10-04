@@ -9,7 +9,7 @@ const CartAndWishList = () => {
         <Link href={`/account/wishlist`}  className="flex cursor-pointer items-center space-x-2">
           <Heart className="w-4 h-4" />
         </Link>
-        <Link href={'/account/cart'} className="relative cursor-pointer">
+        <Link href={'/cart'} className="relative cursor-pointer">
           <span className="absolute -top-2.5 -right-2 bg-red-500 text-white text-xs rounded-full px-1">
             3
           </span>

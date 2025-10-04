@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>
+    <div className='lg:px-20 bg-zinc-100 h-[100vh]'>
       <CartView />
     </div>
   )
