@@ -23,6 +23,7 @@ const WishlistView = () => {
           image: null,
           updatedAt: new Date(),
         }));
+        
 
   return (
     <div className="">
@@ -32,7 +33,7 @@ const WishlistView = () => {
       {/* <NoUserAddress Icon = {BaggageClaimIcon} description='No any wishlist items saved' /> */}
 
       {wishlistItems.length != 0 &&
-        wishlistItems.map((item, index) => (
+        wishlistItems?.map((item, index) => (
           <div
             key={index}
             className={`border-y no-scrollbar gap-x-8  border-stone-200 mb-1.5 flex`}

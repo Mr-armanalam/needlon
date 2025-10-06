@@ -1,5 +1,6 @@
 "use client";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 /**
  * Type returned by server (logged-in user wishlist)
@@ -42,6 +43,21 @@ export const WishlistProvider = ({
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
   const [guestWishlist, setGuestWishlist] = useState<LocalWishlistItem[]>([]);
 
+   const refreshWishlist = useCallback( async () => {
+    if (!userId) return;
+    try {
+      const res = await fetch(`/api/wishlist/${userId}`,{cache: 'no-cache'});
+      console.log(res);
+
+      if (res.ok) {
+        const data: WishlistItem[] = await res.json();
+        setWishlist(data);
+      }
+    } catch (err) {
+      console.error("Failed to fetch wishlist:", err);
+    }
+  }, [userId]);
+
   // Load initial wishlist
   useEffect(() => {
     const init = async () => {
@@ -53,7 +69,7 @@ export const WishlistProvider = ({
       }
     };
     init();
-  }, [userId]);
+  }, [userId, refreshWishlist]);
 
   // Sync guest wishlist to localStorage
   useEffect(() => {
@@ -63,18 +79,7 @@ export const WishlistProvider = ({
   }, [guestWishlist, userId]);
 
   // Refresh wishlist from DB
-  const refreshWishlist = async () => {
-    if (!userId) return;
-    try {
-      const res = await fetch(`/api/wishlist/${userId}`);
-      if (res.ok) {
-        const data: WishlistItem[] = await res.json();
-        setWishlist(data);
-      }
-    } catch (err) {
-      console.error("Failed to fetch wishlist:", err);
-    }
-  };
+ 
 
   // Toggle wishlist item
   const toggleWishlist = async (item: { productId: string; size?: string }) => {
@@ -90,14 +95,14 @@ export const WishlistProvider = ({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, ...item, action: "remove" }),
-        });
+        }).then(() => toast('Item removed from wishlist'));
       } else {
         // Add
         await fetch(`/api/wishlist`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, ...item, action: "add" }),
-        });
+        }).then(() => toast('Item add to wishlist'));
       }
       await refreshWishlist();
     } else {
@@ -108,7 +113,9 @@ export const WishlistProvider = ({
 
       if (exists) {
         setGuestWishlist((prev) =>
-          prev.filter((w) => !(w.productId === item.productId && w.size === item.size))
+          prev.filter(
+            (w) => !(w.productId === item.productId && w.size === item.size)
+          )
         );
       } else {
         setGuestWishlist((prev) => [...prev, item]);
