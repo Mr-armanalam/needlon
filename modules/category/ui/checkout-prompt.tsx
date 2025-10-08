@@ -1,20 +1,27 @@
-import { useCart } from "@/hooks/cart-context";
+'use client'
+import { fetchCart, removeFromCart } from "@/features/cart-slice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect } from "react";
 
 const CheckoutPrompt = ({
   setOpen,
 }: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { removeFromCart, cart } = useCart();
+  const {data: session} = useSession();
+  const cart = useAppSelector((state) => state.cart.cart);
+  const dispatch = useAppDispatch()
 
   const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
 
-  console.log(cart,'cart');
+  useEffect(() => {
+    dispatch(fetchCart(session?.user.id ?? ''));
+  }, [dispatch, session]);
   
 
   return (
@@ -49,7 +56,15 @@ const CheckoutPrompt = ({
               <p className="text-sm">Quantity: {item.quantity}</p>
               <button
                 className="text-red-500 cursor-pointer text-xs mt-1"
-                onClick={() => removeFromCart(item?.productId ?? "", item.size)}
+                onClick={() =>
+                  dispatch(
+                    removeFromCart({
+                      userId: session?.user.id,
+                      productId: item.productId ?? '',
+                      size: item.size,
+                    })
+                  )
+                }
               >
                 Remove one
               </button>

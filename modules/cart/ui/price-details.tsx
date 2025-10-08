@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CartItem } from "@/hooks/cart-context";
+import { CartItem } from "@/features/cart-slice";
 import React from "react";
 
 const PriceDetails = ({cart}:{cart: CartItem[]}) => {

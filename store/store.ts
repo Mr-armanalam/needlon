@@ -2,10 +2,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import counterReducer from "../features/counterSlice"; // example slice
+import cartReducer from '../features/cart-slice'
+import wishlistReducer from '../features/wishlist-slice'
 
 export const store = configureStore({
   reducer: {
+    wishlist: wishlistReducer,
     counter: counterReducer,
+    cart: cartReducer
   },
 });
 

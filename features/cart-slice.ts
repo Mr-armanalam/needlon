@@ -10,6 +10,7 @@ export interface CartItem {
   name: string;
   price: number;
   image: string;
+  updatedAt?: Date ;
 }
 
 interface CartState {
@@ -37,7 +38,7 @@ export const addToCart = createAsyncThunk(
   async (
     { userId, product, size }: { userId?: string; product: CartItem; size: string },
     { dispatch }
-  ) => {
+  ) => {    
     if (userId) {
       const res = await fetch(`/api/cart`, {
         method: "POST",

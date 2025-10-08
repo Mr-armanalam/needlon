@@ -1,17 +1,16 @@
 import React from "react";
 import CartItems from "../components/cart-items";
-import { CartItem } from "@/hooks/cart-context";
 import { ChooseAddress } from "../components/choose-address";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import { increment } from "@/features/counterSlice";
+import { CartItem } from "@/features/cart-slice";
 
 type props = {
   cart: CartItem[];
-  removeFromCart: (id: string, size: string) => Promise<void>;
 };
 
-const CartProduct = ({ removeFromCart, cart }: props) => {
+const CartProduct = ({ cart }: props) => {
    const dispatch = useAppDispatch();
   const count = useAppSelector((state) => state.counter.value);
   return (
@@ -36,7 +35,6 @@ const CartProduct = ({ removeFromCart, cart }: props) => {
             size={item.size}
             price={item.price}
             updatedAt={item.updatedAt}
-            removeFromCart={removeFromCart}
           />
         ))}
       </div>

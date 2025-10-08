@@ -1,8 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useWishlist } from "@/hooks/wishlist-context";
+import { removeFromCart } from "@/features/cart-slice";
+import { toggleWishlist } from "@/features/wishlist-slice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { format } from "date-fns";
 import { Trash2Icon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 
@@ -13,7 +16,6 @@ type cartItemProps = {
   size: string;
   price: number;
   updatedAt?: Date;
-  removeFromCart: (id: string, size: string) => Promise<void>;
 };
 
 const CartItems = ({
@@ -23,9 +25,13 @@ const CartItems = ({
   size = "s",
   price = 400,
   updatedAt = new Date(),
-  removeFromCart,
 }: cartItemProps) => {
-  const { toggleWishlist, wishlist } = useWishlist();
+  
+  const {wishlist, } = useAppSelector(state => state.wishlist);
+  const {data: session} = useSession();
+  const userId = session?.user.id;
+
+  const dispatch = useAppDispatch();
 
   return (
     <div
@@ -45,17 +51,19 @@ const CartItems = ({
           <Button
             disabled={!!wishlist.find((item) => item.productId === productId)}
             onClick={() =>
-              toggleWishlist({
+              dispatch(toggleWishlist({
+                userId: userId ?? '',
                 productId,
-                size: size ?? "",
-              })
+                size: size,
+                exists: !!wishlist.find((item) => item.productId === productId),
+              }))
             }
             className="text-xs cursor-pointer rounded-full mt-3"
           >
             Save for later
           </Button>
           <Button
-            onClick={() => removeFromCart(productId, size)}
+            onClick={() => dispatch(removeFromCart({userId, productId ,size}))}
             variant={"outline"}
             className="text-xs cursor-pointer rounded-full mt-3"
           >

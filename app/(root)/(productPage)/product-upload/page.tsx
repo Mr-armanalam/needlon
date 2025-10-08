@@ -56,7 +56,7 @@ export default function ProductUpload() {
       }
     }
 
-    console.log(mainUrl, modalUrls, 'modalurl');
+    // console.log(mainUrl, modalUrls, 'modalurl');
     
 
     // ---------- Insert into Postgres via API ----------

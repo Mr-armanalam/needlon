@@ -6,7 +6,9 @@ import ItemControl from "../components/item-control";
 import FilterDrawer from "../ui/filter-drawer";
 import Products from "../ui/product";
 import CheckoutPrompt from "../ui/checkout-prompt";
-import { useCart } from "@/hooks/cart-context";
+import { useSession } from "next-auth/react";
+import { addToCart, fetchCart } from "@/features/cart-slice";
+import { useAppDispatch } from "@/store/store";
 
 type Product = {
   id: string;
@@ -30,19 +32,18 @@ const CategoryView = () => {
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
-
-  const { addToCart } = useCart();
+  const {data: session} = useSession();
+  const dispatch = useAppDispatch();
 
   const handleAddToCart = (product: Product, size: string) => {
-    addToCart(
-      {
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-      },
-      size
-    );
+    dispatch(
+      addToCart({
+        userId: session?.user.id,
+        product: { ...product, size, quantity: 1 },
+        size,
+      })
+    )
+    dispatch(fetchCart(session?.user.id?? ''))
     setOpen(true);
   };
 
