@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import AddNewAddress from "../ui/add-new-address";
 import { useSession } from "next-auth/react";
@@ -10,75 +11,58 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { deleteAddress, getAllUserAddress } from "../server/address-controller";
 import NoUserAddress from "../shared/no-user-address";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { deleteAddress, fetchAddresses } from "@/features/address-slice";
+
 
 const AddressView = () => {
-  const [allUserAddress, setAllUserAddress] = useState<
-    (typeof userAddress.$inferSelect)[]
-  >([]);
+  const dispatch = useAppDispatch();
+  const { data: session } = useSession();
+
+  const { addresses, loading, error } = useAppSelector(
+    (state) => state.addresses
+  );
+
   const [editingAddress, setEditingAddress] = useState<
     typeof userAddress.$inferSelect | null
   >(null);
-  const [realTimeAddressStatus, setrealTimeAddressStatus] = useState(false);
   const [accordionValue, setAccordionValue] = useState<string | undefined>(
     undefined
   );
 
-  const { data: session } = useSession();
+  // ✅ Fetch addresses when session loads
+  useEffect(() => {
+    if (session?.user.id) {
+      dispatch(fetchAddresses(session.user.id));
+    }
+  }, [dispatch, session?.user.id]);
 
-  const onDeleteAddress = async ({
-    id,
-    userId,
-  }: {
-    id: string;
-    userId: string;
-  }) => {
-    if (!userId) return;
-    const result = await deleteAddress({ id, userId });
-
-    if (result?.success) {
-      toast.success("Address is deleted successfully !");
-      setrealTimeAddressStatus(true);
-    } else {
-      console.log(result?.error);
-      toast.error("something went wrong!");
+  // ✅ Handle delete
+  const onDeleteAddress = async (id: string) => {
+    try {
+      await dispatch(deleteAddress(id)).unwrap();
+      toast.success("Address deleted successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete address");
     }
   };
 
+  // ✅ Handle edit
   const onEditAddress = (addr: typeof userAddress.$inferSelect) => {
     if (!session?.user.id) return;
     setAccordionValue("item-1");
     setEditingAddress(addr);
   };
 
-  useEffect(() => {
-    if (!session?.user.id) return; // ✅ avoid running with empty id
-
-    let mounted = true; // ✅ handle unmount safety
-    (async () => {
-      const res = await getAllUserAddress(session.user.id);
-      if (mounted) {
-        if (res.success) {
-          setAllUserAddress(res.addresses); // ✅ matches backend shape
-        } else {
-          toast.error(res.message ?? "Something went wrong");
-        }
-      }
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [session?.user.id, realTimeAddressStatus]);
-
   return (
     <div>
       <h1 className="text-xl mb-6 text-stone-800 font-garamond font-semibold">
         Manage Address
       </h1>
+
       <AddNewAddress
-        setrealTimeAddressStatus={setrealTimeAddressStatus}
         accordionValue={accordionValue}
         setAccordionValue={setAccordionValue}
         editingAddress={
@@ -92,26 +76,31 @@ const AddressView = () => {
                 city: editingAddress.city,
                 state: editingAddress.state,
                 id: editingAddress.id,
-                landmark: editingAddress.landmark ?? "", // ✅ force string
-                alternate_phone: editingAddress.alternate_phone ?? "", // ✅ force string
+                landmark: editingAddress.landmark ?? "",
+                alternate_phone: editingAddress.alternate_phone ?? "",
               }
             : null
         }
         clearEditing={() => setEditingAddress(null)}
       />
+
       <div className="mt-6">
-        {allUserAddress.length === 0 ? (
+        {loading ? (
+          <p className="text-sm text-stone-500">Loading addresses...</p>
+        ) : error ? (
+          <p className="text-red-600 text-sm">{error}</p>
+        ) : addresses.length === 0 ? (
           <NoUserAddress Icon={HomeIcon} description="No address saved" />
         ) : (
           <div className="border border-stone-200 rounded-xs">
-            {allUserAddress.map((addr) => (
+            {addresses.map((addr) => (
               <div
                 className="border-b relative border-stone-200 rounded-xs py-5 px-8"
                 key={addr.id}
               >
                 <HoverCard>
                   <HoverCardTrigger className="absolute cursor-pointer right-4">
-                    <EllipsisVertical size={17} className="" />
+                    <EllipsisVertical size={17} />
                   </HoverCardTrigger>
                   <HoverCardContent
                     align="end"
@@ -124,25 +113,21 @@ const AddressView = () => {
                       Edit
                     </div>
                     <div
-                      onClick={() =>
-                        onDeleteAddress({
-                          id: addr.id,
-                          userId: session?.user.id ?? "",
-                        })
-                      }
+                      onClick={() => onDeleteAddress(addr.id)}
                       className="hover:bg-stone-100 cursor-pointer px-2.5 py-1.5 rounded"
                     >
                       Delete
                     </div>
                   </HoverCardContent>
                 </HoverCard>
+
                 <p className="font-semibold mb-2">
                   {addr.name}&nbsp; &nbsp;{addr.phone}&nbsp; &nbsp;
                   {addr?.alternate_phone}
                 </p>
                 <p className="text-sm max-w-[500px]">
-                  {addr.address}, {addr.city}, {addr.landmark}, {addr.locality},{" "}
-                  {addr.state} - {addr.pincode}
+                  {addr.address}, {addr.city}, {addr.landmark},{" "}
+                  {addr.locality}, {addr.state} - {addr.pincode}
                 </p>
               </div>
             ))}
@@ -154,3 +139,4 @@ const AddressView = () => {
 };
 
 export default AddressView;
+

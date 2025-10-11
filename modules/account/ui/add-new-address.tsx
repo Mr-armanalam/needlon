@@ -30,40 +30,25 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
-import { registerAddress } from "../server/address-controller";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { addOrUpdateAddress, fetchAddresses } from "@/features/address-slice";
 
+// ✅ Zod schema
 export const FormSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  phone: z.string().min(10, {
-    message: "Number must be at least 10 characters.",
-  }),
-  pincode: z.string().min(6, {
-    message: "Pincode must be at least 6 numbers.",
-  }),
-  locality: z.string().min(2, {
-    message: "Locality must be at least 2 characters.",
-  }),
-  address: z.string().min(2, {
-    message: "Address must be at least 2 characters.",
-  }),
-  city: z.string().min(2, {
-    message: "City name must be at least 2 characters.",
-  }),
-  state: z.string().min(2, {
-    message: "State must be at least 2 characters.",
-  }),
-  landmark: z.string().min(2, {
-    message: "Landmark must be at least 2 characters.",
-  }),
-  alternate_phone: z.string(),
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  phone: z.string().min(10, { message: "Number must be at least 10 digits." }),
+  pincode: z.string().min(6, { message: "Pincode must be 6 digits." }),
+  locality: z.string().min(2, { message: "Locality must be at least 2 characters." }),
+  address: z.string().min(2, { message: "Address must be at least 2 characters." }),
+  city: z.string().min(2, { message: "City name must be at least 2 characters." }),
+  state: z.string().min(2, { message: "State must be at least 2 characters." }),
+  landmark: z.string().min(2, { message: "Landmark must be at least 2 characters." }),
+  alternate_phone: z.string().optional(),
 });
 
 type AddressFormData = z.infer<typeof FormSchema> & { id?: string };
 
 type Props = {
-  setrealTimeAddressStatus: (saved: boolean) => void;
   editingAddress?: AddressFormData | null;
   clearEditing?: () => void;
   accordionValue: string | undefined;
@@ -71,16 +56,17 @@ type Props = {
 };
 
 const AddNewAddress = ({
-  setrealTimeAddressStatus,
   editingAddress,
   clearEditing,
   setAccordionValue,
   accordionValue,
 }: Props) => {
   const { data: session } = useSession();
-  const [allState, setAllState] = useState<
-    { name: string; state_code: string }[]
-  >([]);
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.addresses);
+
+  const [allState, setAllState] = useState<{ name: string; state_code: string }[]>([]);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -96,61 +82,57 @@ const AddNewAddress = ({
     },
   });
 
+  // ✅ Reset and close accordion
   const clearAddressForm = () => {
     form.reset();
     clearEditing?.();
     setAccordionValue(undefined);
   };
 
+  // ✅ Pre-fill form if editing
   useEffect(() => {
     if (editingAddress) {
       form.reset(editingAddress);
       setAccordionValue("item-1");
     } else {
+      form.reset();
       setAccordionValue(undefined);
-      form.reset();
     }
-  }, [editingAddress, setAccordionValue, form]);
+  }, [editingAddress, form, setAccordionValue]);
 
-  useEffect(() => {
-    if (editingAddress) {
-      form.reset(editingAddress);
-    }
-  }, [editingAddress, form]);
+  // ✅ Handle form submission
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    const userId = session?.user.id;
+    if (!userId) return toast.error("You must be logged in to save address.");
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const res = await registerAddress({
-      data,
-      userId: session?.user.id ?? "",
-      editingAddressId: editingAddress?.id ?? "",
-    });
+    try {
+      await dispatch(
+        addOrUpdateAddress({
+          userId,
+          data: { ...data, alternate_phone: data.alternate_phone ?? "", userId },
+          editingAddressId: editingAddress?.id,
+        })
+      ).unwrap();
 
-    if (res.success) {
-      toast("Your address is successfully saved");
-      form.reset();
-      setrealTimeAddressStatus(true);
-      setAccordionValue(undefined); // close after save
+      toast.success("Address saved successfully!");
+      dispatch(fetchAddresses(userId));
       clearAddressForm();
-    } else {
-      toast("Something is wrong, please try later");
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong while saving the address.");
     }
-  }
+  };
 
+  // ✅ Fetch Indian states
   useEffect(() => {
     (async () => {
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/states",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ country: "India" }),
-        }
-      );
-
+      const res = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country: "India" }),
+      });
       const { data } = await res.json();
-      setAllState(data?.states);
+      setAllState(data?.states ?? []);
     })();
   }, []);
 
@@ -159,86 +141,50 @@ const AddNewAddress = ({
       className="border bg-stone-100 rounded-xs px-3"
       type="single"
       collapsible
-      value={accordionValue} // ✅ controlled
-      onValueChange={setAccordionValue} // ✅ sync open/close
+      value={accordionValue}
+      onValueChange={setAccordionValue}
     >
-      <AccordionItem value={`item-1`}>
+      <AccordionItem value="item-1">
         <AccordionTrigger className="justify-start cursor-pointer text-blue-700 hover:no-underline flex items-center gap-x-2">
-          <PlusIcon size={18} className="font-bold" />
-          <h2 className=" font-semibold">ADD NEW ADDRESS</h2>
+          <PlusIcon size={18} />
+          <h2 className="font-semibold">ADD NEW ADDRESS</h2>
         </AccordionTrigger>
+
         <AccordionContent className="max-w-[800px]">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="grid grid-cols-2 p-1 space-x-4 space-y-4 "
+              className="grid grid-cols-2 p-1 space-x-4 space-y-4"
             >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className={cn(
-                          "rounded-xs border-none shadow-sm focus-visible:ring-1 px-3 bg-white col-span-1 h-11"
-                        )}
-                        placeholder="Name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="rounded-xs border-none shadow-sm focus-visible:ring-1 bg-white px-3 col-span-1 h-11"
-                        placeholder="Phone"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="pincode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="rounded-xs border-none shadow-sm focus-visible:ring-1 bg-white px-3 col-span-1 h-11"
-                        placeholder="Pincode"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="locality"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="rounded-xs border-none shadow-sm focus-visible:ring-1 bg-white px-3 col-span-1 h-11"
-                        placeholder="Locality"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {[
+                "name",
+                "phone",
+                "pincode",
+                "locality",
+                "city",
+                "landmark",
+                "alternate_phone",
+              ].map((fieldName) => (
+                <FormField
+                  key={fieldName}
+                  control={form.control}
+                  name={fieldName as keyof z.infer<typeof FormSchema>}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          className="rounded-xs border-none shadow-sm focus-visible:ring-1 bg-white px-3 col-span-1 h-11"
+                          placeholder={fieldName.replace("_", " ").toUpperCase()}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ))}
+
+              {/* Address textarea */}
               <div className="col-span-2">
                 <FormField
                   control={form.control}
@@ -248,47 +194,30 @@ const AddNewAddress = ({
                       <FormControl>
                         <Textarea
                           placeholder="Write your full address"
-                          className="resize-none border-none shadow-sm focus-visible:ring-1 bg-white rounded-xs h-[100px] col-span-2 flex"
+                          className="resize-none border-none shadow-sm focus-visible:ring-1 bg-white rounded-xs h-[100px] col-span-2"
                           {...field}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
-                />{" "}
+                />
               </div>
-              <FormField
-                control={form.control}
-                name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="rounded-xs border-none shadow-sm focus-visible:ring-1 bg-white px-3 col-span-1 h-11"
-                        placeholder="City/Ditrict/Town"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              {/* State dropdown */}
               <FormField
                 control={form.control}
                 name="state"
                 render={({ field }) => (
                   <FormItem>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="min-h-11 border-none shadow-sm focus-visible:ring-1 bg-white rounded-xs w-full">
                           <SelectValue placeholder="Select Your State" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="col-span-1">
-                        {allState?.map((state, i) => (
+                      <SelectContent>
+                        {allState.map((state, i) => (
                           <SelectItem key={i} value={state.name}>
                             {state.name}
                           </SelectItem>
@@ -299,50 +228,21 @@ const AddNewAddress = ({
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="landmark"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="rounded-xs border-none shadow-sm focus-visible:ring-1 bg-white px-3 col-span-1 h-11"
-                        placeholder="Landmark"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="alternate_phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        className="rounded-xs bg-white border-none shadow-sm focus-visible:ring-1 px-3 col-span-1 h-11"
-                        placeholder="alternate phone"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              {/* Buttons */}
               <div className="col-span-1 flex gap-x-4">
                 <Button
-                  className=" rounded-xs cursor-pointer w-fit"
+                  className="rounded-xs cursor-pointer w-fit"
                   type="submit"
+                  disabled={loading}
                 >
-                  Submit
+                  {loading ? "Saving..." : "Submit"}
                 </Button>
                 <Button
                   onClick={clearAddressForm}
-                  className=" rounded-xs cursor-pointer w-fit"
+                  className="rounded-xs cursor-pointer w-fit"
                   type="button"
-                  variant={"outline"}
+                  variant="outline"
                 >
                   Clear
                 </Button>

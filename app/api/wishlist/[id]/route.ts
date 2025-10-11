@@ -50,9 +50,6 @@ export const GET = async (
 ) => {
   try {
     const userId = params.id; // ✅ Directly access
-
-    // console.log("Requested user:", userId);
-
     if (!userId) return NextResponse.json("guest user", { status: 401 });
 
     const items = await db
@@ -60,8 +57,6 @@ export const GET = async (
       .from(wishListItems)
       .innerJoin(productItems, eq(wishListItems.productId, productItems.id))
       .where(eq(wishListItems.userId, userId));
-
-    // console.log("Fetched items:", items); // ✅ Will now log
 
     if (items.length === 0)
       return NextResponse.json([], { status: 204 }); // ✅ Proper status
