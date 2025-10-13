@@ -46,10 +46,12 @@ import { productItems } from "@/db/schema/product-items";
 
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { id: string } }  // ✅ Not Promise
+  // { params }: { params: { id: string } }  // ✅ Not Promise
+    { params }: { params: Promise<{ id: string }> }
 ) => {
   try {
-    const userId = params.id; // ✅ Directly access
+    const {id:userId} = await params;
+    // const userId = params.id; // ✅ Directly access
     if (!userId) return NextResponse.json("guest user", { status: 401 });
 
     const items = await db
