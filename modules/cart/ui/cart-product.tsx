@@ -19,26 +19,10 @@ const CartProduct = ({ cart }: props) => {
   const { addresses, loading } = useAppSelector((state) => state.addresses);
   const [addressChanged, setAddressChanged] = useState<boolean>(false)
 
-  // const fetchCurrentAddress = useCallback(() => {
-  //   setCurrentAddress(() => {
-  //     const localAddress = localStorage.getItem("current-addr");
-  //     if (localAddress)
-  //       addresses.find((item: Address) => item.id === localAddress);
-  //     return addresses?.at(-1);
-  //   });
-  // }, [addresses]);
-
-  // useEffect(() => {
-  //   dispatch(fetchAddresses(userId ?? ""));
-  //   fetchCurrentAddress();
-  // }, [dispatch, userId, fetchCurrentAddress]);
-
-  // Fetch addresses only when userId changes
   useEffect(() => {
     dispatch(fetchAddresses(userId ?? ""));
   }, [dispatch, userId, addressChanged]);
 
-  // Set current address whenever `addresses` changes
   useEffect(() => {
     if (!addresses || addresses.length === 0) return;
 

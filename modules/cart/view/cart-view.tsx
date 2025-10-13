@@ -18,6 +18,7 @@ const CartView = () => {
   useEffect(() => {
     dispatch(fetchCart(session?.user.id ?? ''));
   }, [dispatch, session]);
+  
 
   return cart.length === 0 ? (
     <main className="bg-white flex justify-between items-center mt-4 rounded-xs p-6 max-w-[70vw]">

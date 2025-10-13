@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CartItem } from "@/features/cart-slice";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -6,7 +7,18 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   try {
-    const { cartItems } = await req.json();
+    const { cartItems, couponDiscount } = await req.json();
+
+    let stripeCouponId: string | undefined = undefined;
+    
+
+    if (couponDiscount ) {      
+      const coupon = await stripe.coupons.create({
+        percent_off: couponDiscount,
+        duration: "once",
+      });
+      stripeCouponId = coupon.id;
+    }
 
     const line_items = cartItems.map((item: CartItem) => ({
       price_data: {
@@ -21,6 +33,7 @@ export async function POST(req: Request) {
       payment_method_types: ["card"],
       mode: "payment", // 'payment' | 'subscription' etc.
       line_items,
+      discounts: stripeCouponId ? [{ coupon: stripeCouponId }] : [],
       success_url: `${process.env.NEXT_PUBLIC_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/cancel`,
     });
