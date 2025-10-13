@@ -14,6 +14,7 @@ export const productItems = pgTable("product_items", {
   CatType: text("category_type"),
   SubCatType: text("sub_category_type"),
   name: text("name").notNull(),
+  mrp_price: numeric('mrp_price',{ precision: 10, scale: 2 }),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
   sizes: text("sizes").array(),
   material: text("material"),

@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
 
 export async function POST(req: NextRequest) {
-  const { userId, cartItem, addQuantity = 0, removeQuantity = 0 } = await req.json();
+  const { userId, cartItem, addQuantity = 0, removeQuantity = 0 } = await req.json();  
 
   if (!userId || !cartItem?.productId ) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });

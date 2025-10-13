@@ -1,7 +1,9 @@
-import { useWishlist } from "@/hooks/wishlist-context";
+import { fetchWishlist, setGuestWishlist, toggleGuestWishlist, toggleWishlist } from "@/features/wishlist-slice";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { StarIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type Product = {
   id: string;
@@ -34,7 +36,14 @@ const ProductCard = ({
   const [selectedSizeById, setSelectedSizeById] = useState<
     Record<string, string | null>
   >({});
-   const { wishlist,guestWishlist, toggleWishlist } = useWishlist();
+  //  const { wishlist,guestWishlist, toggleWishlist } = useWishlist();
+   const { wishlist, guestWishlist, loading } = useAppSelector(
+    (state) => state.wishlist
+  );
+
+  const dispatch = useAppDispatch();
+  const {data: session} = useSession();
+  const userId = session?.user.id;
 
    const wishlistItems = wishlist.length > 0 ? wishlist : guestWishlist;
 
@@ -52,7 +61,30 @@ const ProductCard = ({
       setHoverSide("right");
     }
   };
+
+
+  const handleToggleWishlist = (productId: string, size?: string) => {
+    if (userId) {
+      const exists = wishlist.some(
+        (item) => item.productId === productId && item.size === size
+      );
+      dispatch(toggleWishlist({ userId, productId, size, exists }));
+    } else {
+      dispatch(toggleGuestWishlist({ productId, size }));
+    }
+  };
   
+    useEffect(() => {
+    if (userId) {
+      dispatch(fetchWishlist(userId));
+    } else {
+      // Load from localStorage for guests
+      const local = localStorage.getItem("wishlist");
+      if (local) {
+        dispatch(setGuestWishlist(JSON.parse(local)));
+      }
+    }
+  }, [userId, dispatch]);
 
   return (
     <div key={id}>
@@ -103,7 +135,7 @@ const ProductCard = ({
         )}
 
         <button
-          onClick={() => toggleWishlist({ productId: id, size: sizes?.at(0) })}
+          onClick={() => handleToggleWishlist(id, sizes?.at(0))}
           aria-label="Toggle wishlist"
           className={`hidden group-hover:flex absolute right-6 top-6 text-white rounded-full hover:bg-black p-2 ${
             wishlistItems?.some((w) => w.productId === id)  ? "bg-black" : "bg-zinc-400"

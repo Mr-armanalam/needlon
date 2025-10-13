@@ -23,6 +23,7 @@ export async function GET( req: Request,
         category: productItems.category,
         CatType: productItems.CatType,
         price: productItems.price,
+        mrp_price: productItems.mrp_price,
         image: productItems.image,
         modalImage: productItems.modalImage,
       })

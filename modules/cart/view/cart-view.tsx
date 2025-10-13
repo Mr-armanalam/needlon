@@ -1,12 +1,25 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import PriceDetails from "../ui/price-details";
 import CartProduct from "../ui/cart-product";
 import Link from "next/link";
-import { useCart } from "@/hooks/cart-context";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { fetchCart } from "@/features/cart-slice";
+import { useSession } from "next-auth/react";
 
 const CartView = () => {
-  const {cart, removeFromCart} = useCart();
+   const { cart, loading } = useAppSelector(
+    (state) => state.cart
+  );
+
+  const {data: session} = useSession();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCart(session?.user.id ?? ''));
+  }, [dispatch, session]);
+  
+
   return cart.length === 0 ? (
     <main className="bg-white flex justify-between items-center mt-4 rounded-xs p-6 max-w-[70vw]">
       <div>
@@ -25,7 +38,7 @@ const CartView = () => {
   ) : (
     <main className="grid gap-4 my-6 grid-cols-3">
       <div className="col-span-2 rounded shadow-sm">
-        <CartProduct removeFromCart={removeFromCart} cart={cart} />
+        <CartProduct cart={cart} />
       </div>
       <div className="col-span-1 h-fit rounded shadow-sm bg-white">
         <PriceDetails cart={cart} />

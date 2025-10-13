@@ -1,62 +1,67 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Address } from "@/features/address-slice";
 
-export function ChooseAddress() {
+type props = {
+  addresses: Address[];
+  currentAddress?: string;
+  setAddressChanged: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function ChooseAddress({ addresses,setAddressChanged, currentAddress}:props) {
+
+
+  const handleAddressChange = (id: string) => {
+    localStorage.setItem("current-addr", id);
+    setAddressChanged((prev) => !prev);
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline">Change</Button>
+        <Button variant="outline" className="cursor-pointer">
+          Change
+        </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="grid gap-4">
-          <div className="space-y-2">
-            <h4 className="leading-none font-medium">Dimensions</h4>
-            <p className="text-muted-foreground text-sm">
-              Set the dimensions for the layer.
-            </p>
-          </div>
-          <div className="grid gap-2">
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="width">Width</Label>
-              <Input
-                id="width"
-                defaultValue="100%"
-                className="col-span-2 h-8"
+      <PopoverContent align="center" className="w-[420px]">
+        <RadioGroup
+          defaultValue={currentAddress}
+          className="flex flex-col gap-y-4"
+        >
+          {addresses?.map((item, i) => (
+            <div
+              onClick={() => handleAddressChange(item.id)}
+              key={i}
+              className="bg-stone-200 items-center gap-x-4 flex rounded-md py-3 px-4 cursor-pointer"
+            >
+              <RadioGroupItem
+                color="white"
+                value={item.address}
+                id={`id-${i}`}
+                className="bg-white border border-gray-400"
               />
+              <Label
+                htmlFor={`id-${i}`}
+                className="flex flex-col cursor-pointer items-start"
+              >
+                <p className="font-semibold text-gray-950">
+                  {item.name}, {item.pincode}
+                </p>
+                <p className="text-sm text-stone-600 line-clamp-1">
+                  {item.address},{item.phone}, {item.landmark}, {item.locality}
+                </p>
+              </Label>
             </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxWidth">Max. width</Label>
-              <Input
-                id="maxWidth"
-                defaultValue="300px"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="height">Height</Label>
-              <Input
-                id="height"
-                defaultValue="25px"
-                className="col-span-2 h-8"
-              />
-            </div>
-            <div className="grid grid-cols-3 items-center gap-4">
-              <Label htmlFor="maxHeight">Max. height</Label>
-              <Input
-                id="maxHeight"
-                defaultValue="none"
-                className="col-span-2 h-8"
-              />
-            </div>
-          </div>
-        </div>
+          ))}
+        </RadioGroup>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

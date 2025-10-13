@@ -1,15 +1,21 @@
 "use client";
-import React from "react";
-import { useWishlist } from "@/hooks/wishlist-context";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Trash2Icon } from "lucide-react";
-import { useCart } from "@/hooks/cart-context";
+import { useSession } from "next-auth/react";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { addToCart } from "@/features/cart-slice";
+import { fetchWishlist, setGuestWishlist, toggleGuestWishlist, toggleWishlist } from "@/features/wishlist-slice";
 
 const WishlistView = () => {
-  const { wishlist, guestWishlist, toggleWishlist } = useWishlist();
-  const { addToCart } = useCart();
+  const { wishlist, guestWishlist, loading } = useAppSelector(
+    (state) => state.wishlist
+  );
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+  const dispatch = useAppDispatch();
   const wishlistItems =
     wishlist.length > 0
       ? wishlist
@@ -23,7 +29,29 @@ const WishlistView = () => {
           image: null,
           updatedAt: new Date(),
         }));
-        
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchWishlist(userId));
+    } else {
+      // Load from localStorage for guests
+      const local = localStorage.getItem("wishlist");
+      if (local) {
+        dispatch(setGuestWishlist(JSON.parse(local)));
+      }
+    }
+  }, [userId, dispatch]);
+
+  const handleToggleWishlist = (productId: string, size?: string) => {
+    if (userId) {
+      const exists = wishlist.some(
+        (item) => item.productId === productId && item.size === size
+      );
+      dispatch(toggleWishlist({ userId, productId, size, exists }));
+    } else {
+      dispatch(toggleGuestWishlist({ productId, size }));
+    }
+  };
 
   return (
     <div className="">
@@ -53,14 +81,18 @@ const WishlistView = () => {
               <div className="flex gap-x-3">
                 <Button
                   onClick={() =>
-                    addToCart(
-                      {
-                        id: item.productId,
-                        name: item.name,
-                        price: Number(item.price),
-                        image: item.image ?? "",
-                      },
-                      item.size ?? "s"
+                    dispatch(
+                      addToCart({
+                        userId: session?.user.id,
+                        product: {
+                          ...item,
+                          id: item.productId,
+                          price: Number(item.price),
+                          size: item.size ?? "s",
+                          image: item.image ?? "",
+                        },
+                        size: item.size ?? "s",
+                      })
                     )
                   }
                   className="text-xs cursor-pointer rounded-full mt-3"
@@ -69,10 +101,7 @@ const WishlistView = () => {
                 </Button>
                 <Button
                   onClick={() =>
-                    toggleWishlist({
-                      productId: item.productId,
-                      size: item.size ?? "",
-                    })
+                    handleToggleWishlist(item.productId, item.size ?? "")
                   }
                   variant={"outline"}
                   className="text-xs cursor-pointer rounded-full mt-3"
