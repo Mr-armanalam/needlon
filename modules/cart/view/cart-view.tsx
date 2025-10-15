@@ -41,7 +41,7 @@ const CartView = () => {
         <CartProduct cart={cart} />
       </div>
       <div className="col-span-1 h-fit rounded shadow-sm bg-white">
-        <PriceDetails cart={cart} />
+        <PriceDetails userId={session?.user.id ?? ''} cart={cart} />
       </div>
     </main>
   );

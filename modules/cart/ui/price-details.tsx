@@ -4,7 +4,7 @@ import { CartItem } from "@/features/cart-slice";
 import React, { useState } from "react";
 import ApplyCoupon from "../components/apply-coupen";
 
-const PriceDetails = ({ cart }: { cart: CartItem[] }) => {
+const PriceDetails = ({userId, cart }: {userId: string; cart: CartItem[]; }) => {
   const price = Math.round(
     cart.reduce((totalPrice, item) => totalPrice + Number(item.price), 0)
   );
@@ -24,7 +24,7 @@ const PriceDetails = ({ cart }: { cart: CartItem[] }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cartItems: cart, couponDiscount }),
+        body: JSON.stringify({ cartItems: cart, couponDiscount, userId }),
       });
       const { url } = await response.json();
       window.location.href = url;
