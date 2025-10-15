@@ -15,6 +15,13 @@
       "when": 1760327446008,
       "tag": "0001_tan_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760509313926,
+      "tag": "0002_violet_retro_girl",
+      "breakpoints": true
     }
   ]
 }
