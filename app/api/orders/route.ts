@@ -27,6 +27,8 @@ export async function GET(req: Request) {
       currency: orders.currency,
       paymentId: orders.paymentId,
       productName: productItems.name,
+      image: productItems.image,
+      price: orderItems.priceAtPurchase,
     })
     .from(orders)
     .leftJoin(orderItems, eq(orders.id, orderItems.orderId))

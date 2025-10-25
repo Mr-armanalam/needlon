@@ -1,7 +1,9 @@
 import {
   pgTable,
   uuid,
-  integer
+  integer,
+  text,
+  timestamp
 } from "drizzle-orm/pg-core";
 import { orders } from "./orders";
 import { relations } from "drizzle-orm";
@@ -14,6 +16,8 @@ export const orderItems = pgTable("order_items", {
   productId: uuid("product_id").references(() => productItems.id).notNull(),
   quantity: integer("quantity").notNull(),
   priceAtPurchase: integer("price_at_purchase").notNull(),
+  properties: text('order_properties'),
+  delivery_date: timestamp('delivery_date'),
 });
 
 
