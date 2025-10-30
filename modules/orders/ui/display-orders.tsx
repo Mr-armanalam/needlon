@@ -4,6 +4,7 @@ import NoUserAddress from "@/modules/account/shared/no-user-address";
 import { format } from "date-fns";
 import { BoxIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface props {
@@ -22,9 +23,10 @@ const DisplayOrders = ({ loading, orders }: props) => {
         <div className="no-scrollbar ">
           {orders.length != 0 &&
             orders?.map((item, index) => (
-              <div
+              <Link
+                href={`/account/orders/${item.orderId}`}
                 key={index}
-                className={`border-y no-scrollbar  border-stone-200 mb-1.5 flex`}
+                className={`border-y hover:shadow-md cursor-pointer border-stone-200 mb-1.5 hover:mb-2.5 flex`}
               >
                 <div className="relative w-[190px] h-[190px]">
                   <Image src={item.image ?? ""} fill alt="wishlist items" />
@@ -51,7 +53,7 @@ const DisplayOrders = ({ loading, orders }: props) => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
         </div>
       ) : (

@@ -5,6 +5,7 @@ import {
   varchar,
   timestamp,
   text,
+  numeric,
 } from "drizzle-orm/pg-core";
 import { usersTable } from "./users";
 import { relations } from "drizzle-orm";
@@ -16,6 +17,9 @@ export const orders = pgTable("orders", {
   total: integer("total").notNull(),
   currency: varchar("currency", { length: 10 }).notNull().default("INR"),
   status: varchar("status", { length: 20 }).notNull().default("PENDING"),
+  shipping_charge: numeric('shipping_charge').default('40'),
+  pod_charge: numeric('pod_charge').default('7'),
+  shipping_address: text('shipping_address'),
   paymentId: text("payment_id"),
   createdAt: timestamp("created_at").defaultNow(),
 });
