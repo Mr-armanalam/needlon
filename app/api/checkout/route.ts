@@ -7,9 +7,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: Request) {
   try {
-    const { cartItems, couponDiscount, userId } = await req.json();
+    const { cartItems, couponDiscount, currentAddressId, shippingCharge, pod_charge, invoice,  userId } = await req.json();
 
-    if (!userId) {
+    if (!(userId && currentAddressId) ) {
       return NextResponse.json({ error: "User not authenticated" }, { status: 401 });
     }
 
@@ -42,11 +42,16 @@ export async function POST(req: Request) {
       cancel_url: `${process.env.NEXT_PUBLIC_URL}/cancel`,
       metadata: {
         userId,
+        currentAddressId,
+        pod_charge,
+        shippingCharge,
+        invoice,
         items: JSON.stringify(
           cartItems.map((item:any) => ({
             productId: item.productId,
             quantity: item.quantity,
             price: item.price,
+            // order properties
           }))
         ),
       },

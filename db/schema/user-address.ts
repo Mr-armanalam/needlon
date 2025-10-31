@@ -20,9 +20,10 @@ export const userAddress = pgTable("user_address", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export const userAddressRelation = relations(userAddress, ({ one }) => ({
+export const userAddressRelation = relations(userAddress, ({ one, many }) => ({
   user: one(usersTable, {
     fields: [userAddress.userId],
     references: [usersTable.id],
   }),
+  address: many(userAddress)
 }));

@@ -38,6 +38,11 @@ export async function POST(req: Request) {
       const session = event.data.object as any;
 
       const userId = session.metadata?.userId;
+      const shippingAddress = session.metadata?.currentAddressId;
+      const shippingCharge = session.metadata?.shippingCharge;
+      const pod_charge = session.metadata?.pod_charge;
+      const invoice = session.metadata?.invoice;
+
       const items: Array<{ productId: string; quantity: number; price: number }> =
         session.metadata?.items ? JSON.parse(session.metadata.items) : [];
 
@@ -51,14 +56,21 @@ export async function POST(req: Request) {
         .values({ userId, total, currency, status: "PAID", paymentId })
         .returning({ id: orders.id });
 
-      await db.insert(orderItems).values(
-        items.map((item) => ({
-          orderId: newOrder.id,
-          productId: item.productId,
-          quantity: item.quantity,
-          priceAtPurchase: Math.round(Number(item.price) * 100),
-        }))
-      );
+      const itemData = items.map((item) => ({
+        orderId: newOrder.id,
+        productId: item.productId,
+        quantity: item.quantity,
+        priceAtPurchase: Math.round(Number(item.price) * 100),
+        shipping_address: shippingAddress || "",
+        shipping_charge: shippingCharge ,
+        pod_charge,
+        invoice,
+      }));
+
+      // Insert order items as an array of rows that match the orderItems schema
+      if (itemData.length > 0) {
+        await db.insert(orderItems).values(itemData);
+      }
 
       console.log("✅ Order Stored:", newOrder.id);
       break;

@@ -1,24 +1,23 @@
-'use client'
-import React, { useEffect } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import PriceDetails from "../ui/price-details";
 import CartProduct from "../ui/cart-product";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { fetchCart } from "@/features/cart-slice";
 import { useSession } from "next-auth/react";
+import { Address } from "@/features/address-slice";
 
 const CartView = () => {
-   const { cart, loading } = useAppSelector(
-    (state) => state.cart
-  );
+  const { cart, loading } = useAppSelector((state) => state.cart);
+  const [currentAddress, setCurrentAddress] = useState<Address>();
 
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchCart(session?.user.id ?? ''));
+    dispatch(fetchCart(session?.user.id ?? ""));
   }, [dispatch, session]);
-  
 
   return cart.length === 0 ? (
     <main className="bg-white flex justify-between items-center mt-4 rounded-xs p-6 max-w-[70vw]">
@@ -38,10 +37,18 @@ const CartView = () => {
   ) : (
     <main className="grid gap-4 my-6 grid-cols-3">
       <div className="col-span-2 rounded shadow-sm">
-        <CartProduct cart={cart} />
+        <CartProduct
+          cart={cart}
+          currentAddress={currentAddress}
+          setCurrentAddress={setCurrentAddress}
+        />
       </div>
       <div className="col-span-1 h-fit rounded shadow-sm bg-white">
-        <PriceDetails userId={session?.user.id ?? ''} cart={cart} />
+        <PriceDetails
+          currentAddressId={currentAddress?.id}
+          userId={session?.user.id ?? ""}
+          cart={cart}
+        />
       </div>
     </main>
   );

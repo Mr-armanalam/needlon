@@ -8,10 +8,12 @@ import { useSession } from "next-auth/react";
 
 type props = {
   cart: CartItem[];
+  currentAddress?: Address;
+  setCurrentAddress: React.Dispatch<React.SetStateAction<Address | undefined>>;
 };
 
-const CartProduct = ({ cart }: props) => {
-  const [currentAddress, setCurrentAddress] = useState<Address>();
+const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
+  // const [currentAddress, setCurrentAddress] = useState<Address>();
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
 

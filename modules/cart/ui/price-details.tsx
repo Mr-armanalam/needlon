@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { CartItem } from "@/features/cart-slice";
 import React, { useState } from "react";
 import ApplyCoupon from "../components/apply-coupen";
+import { Address } from "@/features/address-slice";
 
-const PriceDetails = ({userId, cart }: {userId: string; cart: CartItem[]; }) => {
+const PriceDetails = ({userId, cart, currentAddressId }: {currentAddressId?: string; userId: string; cart: CartItem[]; }) => {
   const price = Math.round(
     cart.reduce((totalPrice, item) => totalPrice + Number(item.price), 0)
   );
@@ -14,17 +15,19 @@ const PriceDetails = ({userId, cart }: {userId: string; cart: CartItem[]; }) => 
   const discount = Math.round(mrp_price - price);
   const [couponDiscount, setCouponDiscount] = useState(0);
   const totalCouponDiscount = price*couponDiscount/100;
+  
   // TODO: add discount and coupen to the item database
 
   const handlePayment = async () => {
     try {
+      if (!currentAddressId) return;
       const response = await fetch("/api/checkout", {
         method: "POST",
         cache: "no-cache",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cartItems: cart, couponDiscount, userId }),
+        body: JSON.stringify({ cartItems: cart, couponDiscount, userId, currentAddressId }),
       });
       const { url } = await response.json();
       window.location.href = url;
