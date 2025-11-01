@@ -13,8 +13,6 @@ interface props {
 }
 
 const DisplayOrders = ({ loading, orders }: props) => {
-  console.log(orders);
-
   return (
     <div className="mt-7 no-scrollbar">
       {loading ? (
