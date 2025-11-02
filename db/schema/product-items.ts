@@ -10,6 +10,7 @@ import {
 import { orderItems } from "./order-items";
 import { wishListItems } from "./wishlist-items";
 import { cartItems } from "./cart-items";
+import { productReview } from "./product-review";
 
 export const productItems = pgTable("product_items", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -32,4 +33,5 @@ export const productItemsRelation = relations(productItems, ({ many }) => ({
   orderItem: many(orderItems),
   wishlist: many(wishListItems),
   cartItems: many(cartItems),
+  review: many(productReview),
 }));

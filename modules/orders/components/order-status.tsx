@@ -46,10 +46,10 @@ const OrderStatus = ({
           <p className="font-medium text-stone-700 mt-2">₹ {itemPrice / 100}</p>
           <div className="flex gap-x-6">
             <Button variant={'outline'} className="rounded-full text-xs mt-4 cursor-pointer">
-              Buy it Again
+              View product
             </Button>
             <Button  className="rounded-full text-xs mt-4 cursor-pointer">
-              View product
+              write a product review
             </Button>
           </div>
         </div>

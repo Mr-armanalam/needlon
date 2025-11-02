@@ -10,6 +10,7 @@ import { cartItems } from "./cart-items";
 import { wishListItems } from "./wishlist-items";
 import { userAddress } from "./user-address";
 import { orders } from "./orders";
+import { productReview } from "./product-review";
 
 
 export const genderType = pgEnum("gender", [
@@ -35,4 +36,5 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
   wishlistItems: many(wishListItems),
   userAddress: many(userAddress),
   Orders: many(orders),
+  review: many(productReview),
 }));
