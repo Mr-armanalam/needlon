@@ -2,8 +2,8 @@
 import { redirect } from "next/navigation";
 import { getOrderFromDB } from "@/modules/webhook/server/get-orderfrmdb";
 
-export default async function SuccessPage({ searchParams }: { searchParams: { session_id?: string }}) {
-  const sessionId = searchParams.session_id;
+export default async function SuccessPage({ searchParams }: { searchParams: Promise<{ session_id?: string }>}) {
+  const {session_id: sessionId} = await searchParams;
   if (!sessionId) redirect("/");
 
   const {line_items, Payment} = await getOrderFromDB(sessionId ?? ''); 

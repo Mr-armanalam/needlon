@@ -1,10 +1,12 @@
 import OrderView from '@/modules/orders/view/order-view'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const page = () => {
   
   return (
-   <OrderView />
+   <Suspense fallback={<div>loading...</div>}>
+     <OrderView />
+   </Suspense>
   )
 }
 

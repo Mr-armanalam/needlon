@@ -1,9 +1,9 @@
 'use server'
 import { db } from "@/db";
 import { coupons } from "@/db/schema/coupons";
-import { eq, gt, lte, or, and, isNull } from "drizzle-orm";
+import { eq, gt, lte, and } from "drizzle-orm";
 
-export async function validateCoupon({ code, userId }: { code: string; userId: string }) {
+export async function validateCoupon({ code }: { code: string; userId: string }) {
   const now = new Date();
 
   const [coupon] = await db.select().from(coupons).where(
