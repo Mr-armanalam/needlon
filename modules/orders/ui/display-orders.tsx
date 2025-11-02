@@ -14,11 +14,11 @@ interface props {
 
 const DisplayOrders = ({ loading, orders }: props) => {
   return (
-    <div className="mt-7 no-scrollbar">
+    <div className="mt-7 overflow-y-scroll no-scrollbar">
       {loading ? (
         <p className="px-6">Loading orders...</p>
       ) : orders.length ? (
-        <div className="no-scrollbar ">
+        <div className="overflow-y-scroll no-scrollbar ">
           {orders.length != 0 &&
             orders?.map((item, index) => (
               <Link

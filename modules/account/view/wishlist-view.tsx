@@ -64,7 +64,7 @@ const WishlistView = () => {
         wishlistItems?.map((item, index) => (
           <div
             key={index}
-            className={`border-y no-scrollbar gap-x-8  border-stone-200 mb-1.5 flex`}
+            className={`border-y overflow-y-scroll no-scrollbar gap-x-8  border-stone-200 mb-1.5 flex`}
           >
             <div className="relative w-[180px] h-[180px]">
               <Image src={item.image ?? ""} fill alt="wishlist items" />
