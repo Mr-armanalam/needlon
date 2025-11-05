@@ -2,8 +2,8 @@ import { pgTable, uuid, integer, text, timestamp } from "drizzle-orm/pg-core";
 import { orders } from "./orders";
 import { relations } from "drizzle-orm";
 import { productItems } from "./product-items";
-import { userAddress } from "./user-address";
 import { productReview } from "./product-review";
+import { orderStatus } from "./order-status";
 
 export const orderItems = pgTable("order_items", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -16,12 +16,10 @@ export const orderItems = pgTable("order_items", {
   rating: uuid('rating').references(()=> productReview.id, {onDelete: 'cascade'}),
   quantity: integer("quantity").notNull(),
   priceAtPurchase: integer("price_at_purchase").notNull(),
-  shipping_charge: integer("shipping_charge").default(40),
-  pod_charge: integer("pod_charge").default(7),
-  shipping_address: uuid('shipping_address').references(() => userAddress.id, {onDelete: 'cascade'}).notNull(),
   invoice: text('invoice'),
   properties: text("order_properties"),
   delivery_date: timestamp("delivery_date"),
+  order_status: uuid('order_status').references(() => orderStatus.id, {onDelete: 'cascade'})
 });
 
 export const orderItemsRelation = relations(orderItems, ({ one, many }) => ({
@@ -33,9 +31,9 @@ export const orderItemsRelation = relations(orderItems, ({ one, many }) => ({
     fields: [orderItems.productId],
     references: [productItems.id],
   }),
-  address: one(userAddress, {
-    fields: [orderItems.shipping_address],
-    references: [userAddress.id],
+  order_status: one(orderStatus, {
+    fields: [orderItems.order_status],
+    references: [orderStatus.id],
   }),
   rating: many(productReview)
 }));

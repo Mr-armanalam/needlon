@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Form,
   FormControl,
@@ -28,7 +28,17 @@ const formSchema = z.object({
 const ApplyCoupon = ({
   setCouponDiscount,
 }: {
-  setCouponDiscount: (data: number) => void;
+  setCouponDiscount: ({
+    code,
+    percent,
+    value,
+    id
+  }: {
+    code: string;
+    percent: number;
+    value: number;
+    id: string;
+  }) => void;
 }) => {
   const { data: session } = useSession();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,8 +59,26 @@ const ApplyCoupon = ({
       return;
     }
 
-    if (result?.coupon && typeof result.coupon.maxUses === "number" && result.coupon.maxUses <= 2) {
-      setCouponDiscount(result.coupon.value);
+    if (
+      result?.coupon &&
+      typeof result.coupon.maxUses === "number" &&
+      result.coupon?.maxUses <= 2
+    ) {
+      if (result.coupon.type == "FLAT") {
+        setCouponDiscount({
+          code: result.coupon.code,
+          value: result.coupon.value,
+          percent: 0,
+          id: result.coupon.id
+        });
+      } else {
+        setCouponDiscount({
+          code: result.coupon.code,
+          value: 0,
+          percent: result.coupon.value,
+          id: result.coupon.id
+        });
+      }
     }
   }
 

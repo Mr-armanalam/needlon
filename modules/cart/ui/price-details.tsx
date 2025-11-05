@@ -5,18 +5,32 @@ import React, { useState } from "react";
 import ApplyCoupon from "../components/apply-coupen";
 import { Address } from "@/features/address-slice";
 
-const PriceDetails = ({userId, cart, currentAddressId }: {currentAddressId?: string; userId: string; cart: CartItem[]; }) => {
+const PriceDetails = ({
+  userId,
+  cart,
+  currentAddressId,
+}: {
+  currentAddressId?: string;
+  userId: string;
+  cart: CartItem[];
+}) => {
   const price = Math.round(
     cart.reduce((totalPrice, item) => totalPrice + Number(item.price), 0)
   );
   const mrp_price = Math.round(
-    cart.reduce((totalPrice, item) => totalPrice + Number(item.mrp_price), 0)
+    cart.reduce((totalPrice, item) => totalPrice + Number(item?.mrp_price), 0)
   );
   const discount = Math.round(mrp_price - price);
-  const [couponDiscount, setCouponDiscount] = useState(0);
-  const totalCouponDiscount = price*couponDiscount/100;
-  
-  // TODO: add discount and coupen to the item database
+  const [couponDiscount, setCouponDiscount] = useState({
+    code: "",
+    percent: 0,
+    value: 0,
+    id: ''
+  });
+  const totalCouponDiscount = couponDiscount.value
+    ? couponDiscount.value
+    : (price * couponDiscount.percent) / 100;
+
 
   const handlePayment = async () => {
     try {
@@ -27,7 +41,16 @@ const PriceDetails = ({userId, cart, currentAddressId }: {currentAddressId?: str
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ cartItems: cart, couponDiscount, userId, currentAddressId }),
+        body: JSON.stringify({
+          cartItems: cart,
+          percentDiscount: couponDiscount.percent,
+          discountAmount: couponDiscount.value,
+          couponId: couponDiscount.id,
+          price,
+          mrp_price,
+          userId,
+          currentAddressId,
+        }),
       });
       const { url } = await response.json();
       window.location.href = url;
@@ -49,7 +72,7 @@ const PriceDetails = ({userId, cart, currentAddressId }: {currentAddressId?: str
             </tr>
             <tr>
               <td>Discount</td>
-              <td className="text-right text-green-600">- ₹{discount}</td>
+              <td className="text-right text-green-600"> ₹{discount}</td>
             </tr>
             <tr>
               <td className="flex items-center gap-1">
@@ -61,15 +84,15 @@ const PriceDetails = ({userId, cart, currentAddressId }: {currentAddressId?: str
                   ⓘ
                 </span>
               </td>
-              <td className="text-right text-green-600">- ₹{totalCouponDiscount}</td>
+              <td className="text-right text-green-600">
+                - ₹{totalCouponDiscount}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      {couponDiscount === 0 && (
-        <ApplyCoupon
-          setCouponDiscount={setCouponDiscount}
-        />
+      {couponDiscount.value === 0 && couponDiscount.percent === 0 && (
+        <ApplyCoupon setCouponDiscount={setCouponDiscount} />
       )}
 
       <div className="flex px-4 py-5 border-y border-dashed justify-between font-bold text-lg text-gray-800">

@@ -39,21 +39,34 @@ export async function POST(req: Request) {
 
       const userId = session.metadata?.userId;
       const shippingAddress = session.metadata?.currentAddressId;
-      const shippingCharge = session.metadata?.shippingCharge;
-      const pod_charge = session.metadata?.pod_charge;
+      const coupon_discount = session.metadata?.coupon_discount;
+      const mrp_price = session.metadata?.mrp_price;
       const invoice = session.metadata?.invoice;
 
-      const items: Array<{ productId: string; quantity: number; price: number }> =
-        session.metadata?.items ? JSON.parse(session.metadata.items) : [];
+      const items: Array<{
+        productId: string;
+        quantity: number;
+        price: number;
+        properties: string;
+      }> = session.metadata?.items ? JSON.parse(session.metadata.items) : [];
 
-      const total = Math.round(session.amount_total || 0);
+      const total = Math.round(session.amount_total || 0) / 100;
       const currency = session.currency?.toUpperCase() || "INR";
       const paymentId = session.id;
 
       // ✅ Insert Order
       const [newOrder] = await db
         .insert(orders)
-        .values({ userId, total, currency, status: "PAID", paymentId })
+        .values({
+          userId,
+          total,
+          coupon_discount,
+          shipping_address: shippingAddress || "",
+          currency,
+          status: "PAID",
+          mrp_price,
+          paymentId,
+        })
         .returning({ id: orders.id });
 
       const itemData = items.map((item) => ({
@@ -61,9 +74,7 @@ export async function POST(req: Request) {
         productId: item.productId,
         quantity: item.quantity,
         priceAtPurchase: Math.round(Number(item.price) * 100),
-        shipping_address: shippingAddress || "",
-        shipping_charge: shippingCharge ,
-        pod_charge,
+        properties: item.properties,
         invoice,
       }));
 
@@ -83,7 +94,10 @@ export async function POST(req: Request) {
       const session = event.data.object as any;
       const paymentId = session.id || session.payment_intent;
 
-      await db.update(orders).set({ status: "FAILED" }).where(eq(orders.paymentId, paymentId));
+      await db
+        .update(orders)
+        .set({ status: "FAILED" })
+        .where(eq(orders.paymentId, paymentId));
       console.log("⚠️ Order Marked as FAILED");
       break;
     }
