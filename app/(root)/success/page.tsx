@@ -27,7 +27,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
            <strong className="text-gray-700">Order ID:</strong> {Payment?.orderId}
          </p>
          <p className="text-sm mt-2 text-yellow-800">
-           <strong className="text-gray-700">Amount Paid:</strong> ₹{(Payment.paymentAmount || 0) / 100}
+           <strong className="text-gray-700">Amount Paid:</strong> ₹{(Payment.paymentAmount || 0)}
          </p>
 
          <ul className="text-left text-gray-600 list-disc ml-4 text-sm mt-2">

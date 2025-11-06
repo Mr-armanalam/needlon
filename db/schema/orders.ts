@@ -18,7 +18,7 @@ export const orders = pgTable("orders", {
     .references(() => usersTable.id, { onDelete: "cascade" })
     .notNull(),
   total: integer("total").notNull(),
-  currency: varchar("currency", { length: 10 }).notNull().default("INR"),
+  currency: varchar("currency", { length: 10 }).default("INR"),
   paymentMode: varchar("paymentMode").default('card'),
   status: varchar("status", { length: 20 }).notNull().default("PENDING"),
   paymentId: text("payment_id"),
