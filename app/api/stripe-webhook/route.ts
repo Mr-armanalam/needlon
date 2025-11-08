@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { db } from "@/db";
 import { orders } from "@/db/schema/orders";
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
+import { coupons } from "@/db/schema/coupons";
 
-// Stripe Raw Body Config
 export const config = { api: { bodyParser: false } };
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -18,6 +18,37 @@ async function buffer(readable: ReadableStream<Uint8Array>) {
   return Buffer.concat(chunks);
 }
 
+// Helper: update coupon usage if valid
+async function updateCouponUsage(userId: string, couponId: string) {
+  const [coupon] = await db
+    .select()
+    .from(coupons)
+    .where(
+      and(
+        eq(coupons.id, couponId),
+        eq(coupons.userId, userId),
+        eq(coupons.isActive, true),
+        sql`${coupons.expiresAt} > NOW()`,
+        sql`${coupons.usedCount} < ${coupons.maxUses}`
+      )
+    );
+
+  if (!coupon) {
+    console.warn("⚠️ Coupon invalid, expired, or maxed out:", couponId);
+    return;
+  }
+
+  await db
+    .update(coupons)
+    .set({
+      usedCount: sql`${coupons.usedCount} + 1`,
+      isActive: sql`CASE WHEN ${coupons.usedCount} + 1 >= ${coupons.maxUses} THEN false ELSE ${coupons.isActive} END`,
+    })
+    .where(eq(coupons.id, couponId));
+
+  console.log("✅ Coupon usage updated:", couponId);
+}
+
 export async function POST(req: Request) {
   const body = await buffer(req.body!);
   const sig = req.headers.get("stripe-signature")!;
@@ -29,16 +60,38 @@ export async function POST(req: Request) {
     console.error("❌ Webhook signature verification failed.", err);
     return new Response(`Webhook Error: ${err}`, { status: 400 });
   }
+  const session = event.data.object as Stripe.Checkout.Session;
+  const paymentStatus = session.payment_status;
 
   if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.orderId;
     const coupon_discount = session.metadata?.coupon_discount;
-    if (orderId) {
+    const couponId = session.metadata?.couponId;
+    const userId = session.metadata?.userId ?? "";
+    const amount_total = session.amount_total;
+
+    if (orderId && amount_total) {
       await db
         .update(orders)
-        .set({ status: "PAID", coupon_discount: Number(coupon_discount) })
+        .set({
+          status: paymentStatus,
+          total: Math.round(Number(amount_total) / 100),
+          coupon_discount: Math.round(Number(coupon_discount)/100),
+        })
         .where(eq(orders.id, orderId));
+    }
+
+    // if (couponId) {
+    //   await db
+    //     .update(coupons)
+    //     .set({
+    //       usedCount: sql`${coupons.usedCount} + 1`,
+    //     })
+    //     .where(and(eq(coupons.userId, userId), eq(coupons.id, couponId)));
+    // }
+
+    if (couponId) {
+      await updateCouponUsage(userId, couponId);
     }
   }
 
@@ -48,134 +101,15 @@ export async function POST(req: Request) {
   ) {
     const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.orderId;
+    console.log(session, "session");
+
     if (orderId) {
       await db
         .update(orders)
-        .set({ status: "FAILED" })
-        .where(eq(orders.id,orderId));
+        .set({ status: paymentStatus })
+        .where(eq(orders.id, orderId));
     }
   }
 
   return NextResponse.json({ received: true }, { status: 200 });
 }
-// /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { NextResponse } from "next/server";
-// import Stripe from "stripe";
-// import { db } from "@/db";
-// import { orders } from "@/db/schema/orders";
-// import { orderItems } from "@/db/schema/order-items";
-// import { and, eq, sql } from "drizzle-orm";
-// import { coupons } from "@/db/schema/coupons";
-
-// // Stripe Raw Body Config
-// export const config = { api: { bodyParser: false } };
-
-// const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-// const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-
-// async function buffer(readable: ReadableStream<Uint8Array>) {
-//   const reader = readable.getReader();
-//   const chunks = [];
-//   let result;
-//   while (!(result = await reader.read()).done) chunks.push(result.value);
-//   return Buffer.concat(chunks);
-// }
-
-// export async function POST(req: Request) {
-//   const body = await buffer(req.body!);
-//   const sig = req.headers.get("stripe-signature")!;
-//   let event: Stripe.Event;
-
-//   try {
-//     event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-//   } catch (err) {
-//     console.error("❌ Webhook signature verification failed.", err);
-//     return new Response(`Webhook Error: ${err}`, { status: 400 });
-//   }
-
-//   switch (event.type) {
-//     case "checkout.session.completed": {
-//       console.log("✅ Payment Successful");
-//       const session = event.data.object as any;
-
-//       const userId = session.metadata?.userId;
-//       const shippingAddress = session.metadata?.currentAddressId;
-//       const couponId = session.metadata?.couponId;
-//       const coupon_discount = session.metadata?.coupon_discount;
-//       const mrp_price = session.metadata?.mrp_price;
-//       const invoice = session.metadata?.invoice;
-
-//       const items: Array<{
-//         productId: string;
-//         quantity: number;
-//         price: number;
-//         properties: string;
-//       }> = session.metadata?.items ? JSON.parse(session.metadata.items) : [];
-
-//       const total = Math.round(session.amount_total || 0) / 100;
-//       const currency = session.currency?.toUpperCase() || "INR";
-//       const paymentId = session.id;
-
-//       // ✅ Insert Order
-//       const [newOrder] = await db
-//         .insert(orders)
-//         .values({
-//           userId,
-//           total,
-//           coupon_discount,
-//           shipping_address: shippingAddress || "",
-//           currency,
-//           status: "PAID",
-//           mrp_price,
-//           paymentId,
-//         })
-//         .returning({ id: orders.id });
-
-//       if (couponId) {
-//         await db
-//           .update(coupons)
-//           .set({
-//             usedCount: sql`${coupons.usedCount} + 1`,
-//           })
-//           .where(and(eq(coupons.userId, userId), eq(coupons.id, couponId)));
-//       }
-
-//       const itemData = items.map((item) => ({
-//         orderId: newOrder.id,
-//         productId: item.productId,
-//         quantity: item.quantity,
-//         priceAtPurchase: Math.round(Number(item.price) * 100),
-//         properties: item.properties,
-//         invoice,
-//       }));
-
-//       // Insert order items as an array of rows that match the orderItems schema
-//       if (itemData.length > 0) {
-//         await db.insert(orderItems).values(itemData);
-//       }
-
-//       console.log("✅ Order Stored:", newOrder.id);
-//       break;
-//     }
-
-//     case "checkout.session.async_payment_failed":
-//     case "payment_intent.payment_failed": {
-//       console.log("❌ Payment Failed");
-
-//       const session = event.data.object as any;
-//       const paymentId = session.id || session.payment_intent;
-
-//       await db
-//         .update(orders)
-//         .set({ status: "FAILED" })
-//         .where(eq(orders.paymentId, paymentId));
-//       console.log("⚠️ Order Marked as FAILED");
-//       break;
-//     }
-
-//     default:
-//       console.log("ℹ️ Unhandled event:", event.type);
-//   }
-
-//   return NextResponse.json({ received: true }, { status: 200 });
-// }

@@ -12,15 +12,15 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
   return (
     <div className="text-center p-10">
       <h1 className="text-3xl font-bold">
-        {Payment.status === "PAID" ? "✅ Payment Successful!" : "❌ Payment Failed!"}
+        {Payment.status === 'paid' ? "✅ Payment Successful!" : "❌ Payment Failed!"}
       </h1>
-      <p className="text-gray-600">{Payment.status === "PAID" ? "Thank you for your purchase." : "Your payment could not be processed."}</p>
+      <p className="text-gray-600">{Payment.status === 'paid' ? "Thank you for your purchase." : "Your payment could not be processed."}</p>
 
-      {Payment.status === "PAID" && (
+      {Payment.status === 'paid' && (
          <div className="mt-8 text-start bg-stone-50 shadow px-8 py-4 rounded-md max-w-lg mx-auto">
          <div className="flex items-cente justify-between">
           <h2 className="text-2xl font-garamond font-bold mt-4">Order Summary</h2>
-         <p className="text-sm font-bold text-stone-600">{Payment.status === "PAID" ? 'Order Placed!' : 'Payment Failed'}</p>
+         <p className="text-sm font-bold text-stone-600">{Payment.status === 'paid' ? 'Order Placed!' : 'Payment Failed'}</p>
         </div>
 
          <p className="text-sm mt-4 text-yellow-800">
