@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { CartItem } from "@/features/cart-slice";
 import React, { useState } from "react";
 import ApplyCoupon from "../components/apply-coupen";
-import { Address } from "@/features/address-slice";
 
 const PriceDetails = ({
   userId,

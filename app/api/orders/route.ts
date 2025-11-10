@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { orders } from "@/db/schema/orders";
 import { orderItems } from "@/db/schema/order-items";
 import { productItems } from "@/db/schema/product-items";
@@ -5,6 +6,22 @@ import { and, eq, ilike, sql } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import { db } from "@/db";
 import { authOptions } from "@/lib/auth-option/auth-data";
+
+
+export type GroupedOrder = {
+  orderId: string;
+  createdAt: Date | null;
+  status: string;
+  total: number;
+  currency: string | null;
+  paymentId: string | null;
+  items: {
+    productName: string;
+    image: string | null;
+    price: number;
+    properties: string | null;
+  }[];
+};
 
 export async function GET(req: Request) {
   const session = await getServerSession(authOptions);
@@ -29,10 +46,11 @@ export async function GET(req: Request) {
       productName: productItems.name,
       image: productItems.image,
       price: orderItems.priceAtPurchase,
+      properties: orderItems.properties,
     })
     .from(orders)
-    .leftJoin(orderItems, eq(orders.id, orderItems.orderId))
-    .leftJoin(productItems, eq(orderItems.productId, productItems.id))
+    .innerJoin(orderItems, eq(orders.id, orderItems.orderId))
+    .innerJoin(productItems, eq(orderItems.productId, productItems.id))
     .where(
       and(
         eq(orders.userId, userId),
@@ -41,5 +59,32 @@ export async function GET(req: Request) {
     )
     .orderBy(orders.createdAt);
 
-  return Response.json(data);
+  const grouped = Object.values(
+    data.reduce((acc, row) => {
+      if (!acc[row.orderId]) {
+        acc[row.orderId] = {
+          orderId: row.orderId,
+          createdAt: row.createdAt,
+          status: row.status,
+          total: row.total,
+          currency: row.currency,
+          paymentId: row.paymentId,
+          items: [],
+        };
+      }
+
+      acc[row.orderId].items.push({
+        productName: row.productName,
+        image: row.image,
+        price: row.price,
+        properties: row.properties,
+      });
+
+      return acc;
+    }, {} as Record<string, GroupedOrder>)
+  );
+
+  console.log(grouped);
+
+  return Response.json(grouped);
 }

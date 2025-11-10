@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { GroupedOrder } from "@/app/api/orders/route";
 import { Button } from "@/components/ui/button";
 import NoUserAddress from "@/modules/account/shared/no-user-address";
 import { format } from "date-fns";
@@ -9,7 +10,7 @@ import React from "react";
 
 interface props {
   loading: boolean;
-  orders: any[];
+  orders: GroupedOrder[];
 }
 
 const DisplayOrders = ({ loading, orders }: props) => {
@@ -20,23 +21,23 @@ const DisplayOrders = ({ loading, orders }: props) => {
       ) : orders.length ? (
         <div className="overflow-y-scroll no-scrollbar ">
           {orders.length != 0 &&
-            orders?.map((item, index) => (
+            orders?.map((order, index) => (
               <Link
-                href={`/account/orders/${item.orderId}`}
+                href={`/account/orders/${order.orderId}`}
                 key={index}
                 className={`border-y hover:shadow-md cursor-pointer border-stone-200 mb-1.5 hover:mb-2.5 flex`}
               >
                 <div className="relative w-[190px] h-[190px]">
-                  <Image src={item.image ?? ""} fill alt="wishlist items" />
+                  <Image src={order.items[0].image ?? ""} fill alt="wishlist items" />
                 </div>
                 <div className="relative w-full">
                   <div className="my-6 ml-6 flex-1 text-stone-800">
-                    <h1 className="font-semibold">{item.productName}</h1>
+                    <h1 className="font-semibold">{order.items[0].productName}</h1>
                     <p className="text-sm pl-0.5 lowercase text-stone-600">
-                      Size: {item.size}
+                      Size: {order.items[0].properties}
                     </p>
                     <h2 className="text-2xl font-semibold my-2">
-                      ₹{item.price / 100}
+                      ₹{order.total}
                     </h2>
                     <div className="flex gap-x-6">
                       <Button className="text-xs rounded-full mt-3">
@@ -47,7 +48,7 @@ const DisplayOrders = ({ loading, orders }: props) => {
                       </Button>
                     </div>
                     <p className="absolute bottom-6 right-4 text-stone-500 text-xs ">
-                      Delivery expected on {format(item.createdAt, "dd MMMM")}
+                      Delivery expected on {format(String(order.createdAt), "dd MMMM")}
                     </p>
                   </div>
                 </div>

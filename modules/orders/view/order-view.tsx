@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchOrder from "../ui/search-order";
 import DisplayOrders from "../ui/display-orders";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -39,6 +39,9 @@ const OrderView = () => {
       fetchOrders(query);
     }
   }, [searchParams]);
+
+  console.log(orders);
+  
 
   return (
     <>
