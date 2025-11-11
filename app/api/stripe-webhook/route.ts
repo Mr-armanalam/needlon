@@ -64,10 +64,12 @@ export async function POST(req: Request) {
   const paymentStatus = session.payment_status;
 
   if (event.type === "checkout.session.completed") {
-    const orderId = session.metadata?.orderId;
     const coupon_discount = session.metadata?.coupon_discount;
-    const couponId = session.metadata?.couponId;
+
+    const orderId = session.metadata?.orderId;
     const userId = session.metadata?.userId ?? "";
+    const couponId = session.metadata?.couponId ?? "";
+    const verified_pod_charge = session.metadata?.verified_pod_charge ?? "0";
     const amount_total = session.amount_total;
 
     if (orderId && amount_total) {
@@ -76,19 +78,11 @@ export async function POST(req: Request) {
         .set({
           status: paymentStatus,
           total: Math.round(Number(amount_total) / 100),
-          coupon_discount: Math.round(Number(coupon_discount)/100),
+          coupon_discount: Math.round(Number(coupon_discount) / 100),
+          pod_charge: Math.round(Number(verified_pod_charge)/100)
         })
         .where(eq(orders.id, orderId));
     }
-
-    // if (couponId) {
-    //   await db
-    //     .update(coupons)
-    //     .set({
-    //       usedCount: sql`${coupons.usedCount} + 1`,
-    //     })
-    //     .where(and(eq(coupons.userId, userId), eq(coupons.id, couponId)));
-    // }
 
     if (couponId) {
       await updateCouponUsage(userId, couponId);

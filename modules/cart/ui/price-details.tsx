@@ -31,32 +31,67 @@ const PriceDetails = ({
     : (price * couponDiscount.percent) / 100;
 
 
+  // const handlePayment = async () => {
+  //   try {
+  //     if (!currentAddressId) return;
+  //     const response = await fetch("/api/checkout", {
+  //       method: "POST",
+  //       cache: "no-cache",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         cartItems: cart,
+  //         percentDiscount: couponDiscount.percent,
+  //         discountAmount: couponDiscount.value,
+  //         couponId: couponDiscount.id,
+  //         price : Math.round(price),
+  //         mrp_price : Math.round(mrp_price),
+  //         userId,
+  //         currentAddressId,
+  //       }),
+  //     });
+  //     const { url } = await response.json();
+  //     window.location.href = url;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const handlePayment = async () => {
-    try {
-      if (!currentAddressId) return;
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        cache: "no-cache",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cartItems: cart,
-          percentDiscount: couponDiscount.percent,
-          discountAmount: couponDiscount.value,
-          couponId: couponDiscount.id,
-          price : Math.round(price),
-          mrp_price : Math.round(mrp_price),
-          userId,
-          currentAddressId,
-        }),
-      });
-      const { url } = await response.json();
-      window.location.href = url;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  try {
+    if (!currentAddressId) return;
+
+    // Temporary logic: add shipping charge per product
+    const cartWithShipping = cart.map((item) => ({
+      ...item,
+      shippingCharge: item.shippingCharge ?? 50, // for now fixed 50₹ per product or based on condition
+    }));
+
+    const response = await fetch("/api/checkout", {
+      method: "POST",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cartItems: cartWithShipping,
+        percentDiscount: couponDiscount.percent,
+        discountAmount: couponDiscount.value,
+        couponId: couponDiscount.id,
+        price: Math.round(price),
+        mrp_price: Math.round(mrp_price),
+        userId,
+        currentAddressId,
+      }),
+    });
+
+    const { url } = await response.json();
+    window.location.href = url;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   return (
     <section>
       <h1 className="px-4 py-4 text-md text-stone-500 font-semibold font-garamond border-b">

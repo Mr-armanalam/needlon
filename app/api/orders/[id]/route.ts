@@ -37,14 +37,14 @@ export async function GET(
         orderProperties: orderItems.properties,
         paymentMode: orders.paymentMode,
         shippingCharge: orderItems.shipping_charge,
-        podCharge: orderItems.pod_charge,
+        podCharge: orders.pod_charge,
         priceAtperchage: orderItems.priceAtPurchase
       }
     )
       .from(orderItems)
       .leftJoin(orders, eq(orderItems.orderId, orders.id))
       .leftJoin(productItems, eq(orderItems.productId, productItems.id))
-      .leftJoin(userAddress, eq(orderItems.shipping_address, userAddress.id))
+      .leftJoin(userAddress, eq(orders.shipping_address, userAddress.id))
       .where(and(eq(orderItems.orderId, orderId), eq(orders.userId, userId)));
 
     return Response.json({ order }, { status: 200 });

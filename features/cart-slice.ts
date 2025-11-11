@@ -12,6 +12,7 @@ export interface CartItem {
   mrp_price?: number;
   image: string;
   updatedAt?: Date ;
+  shippingCharge?: number;
 }
 
 interface CartState {
