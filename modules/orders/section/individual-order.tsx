@@ -17,10 +17,12 @@ interface OrderItemProp {
   image: string;
   orderProperties?: string;
   itemName: string;
+  couponDiscount: number;
+  totalPurchasePrice: number;
 }
 
 const IndividualOrder = () => {
-  const [orderItem, setOrderItem] = useState<OrderItemProp>();
+  const [orderItem, setOrderItem] = useState<OrderItemProp[]>();
   const params = useParams();
   const orderId = params.order;
 
@@ -39,28 +41,40 @@ const IndividualOrder = () => {
     if (orderId) fetchOrderById();
   }, [orderId]);
 
+  console.log(orderItem);
+
+  const firstOrder = orderItem?.[0];
+
   return (
     <div className="px-6 overflow-y-scroll no-scrollbar">
       <h1 className="text-3xl mb-2 font-garamond font-semibold text-gray-900">
         Order Details
       </h1>
-      {orderItem && (
+      {firstOrder && (
         <>
           <OrderDetails
-            order_date={orderItem.orderDate}
-            order_id={orderItem.orderId}
-            shipping_address={orderItem.shippingAddress}
-            shippingCharge={orderItem.shippingCharge}
-            pod_charge={orderItem.podCharge}
-            payment_method={orderItem.paymentMode}
-            itemPrice={orderItem.priceAtperchage}
+            noOfItem={orderItem.length}
+            order_date={firstOrder.orderDate ?? new Date()}
+            order_id={firstOrder.orderId}
+            shipping_address={firstOrder.shippingAddress}
+            shippingCharge={firstOrder.shippingCharge}
+            pod_charge={firstOrder.podCharge}
+            payment_method={firstOrder.paymentMode}
+            itemPrice={firstOrder.priceAtperchage}
+            totalPurchasePrice={firstOrder.totalPurchasePrice}
+            couponDiscount={firstOrder.couponDiscount}
           />
-          <OrderStatus
-            itemName={orderItem?.itemName}
-            itemPrice={orderItem?.priceAtperchage}
-            image={orderItem.image}
-            properties={orderItem.orderProperties}
-          />
+
+          {orderItem?.map((order, index) => (
+            <OrderStatus
+              key={index}
+              productId={order.productId}
+              itemName={order?.itemName}
+              itemPrice={order?.priceAtperchage}
+              image={order?.image}
+              properties={order?.orderProperties}
+            />
+          ))}
         </>
       )}
     </div>

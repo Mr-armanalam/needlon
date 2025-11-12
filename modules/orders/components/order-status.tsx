@@ -1,3 +1,4 @@
+"use client";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import React from "react";
@@ -10,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 type props = {
   image?: string;
@@ -17,6 +19,7 @@ type props = {
   size?: string;
   properties?: string;
   itemName: string;
+  productId: string;
 };
 
 const OrderStatus = ({
@@ -25,9 +28,11 @@ const OrderStatus = ({
   size = "s",
   properties,
   itemName,
+  productId,
 }: props) => {
+  const router = useRouter();
   return (
-    <div className="border bg-stone-50 rounded-sm mt-4 mx-1">
+    <div className="border bg-stone-50 rounded-sm mt-0.5 mx-1">
       <div className="m-4 flex gap-x-4 ">
         <div className="relative h-[140px] w-[130px]">
           {image ? (
@@ -43,12 +48,16 @@ const OrderStatus = ({
           <p className="text-sm">
             {size && `size: ${size}`} {properties}
           </p>
-          <p className="font-medium text-stone-700 mt-2">₹ {itemPrice / 100}</p>
+          <p className="font-medium text-stone-700 mt-2">₹ {itemPrice}</p>
           <div className="flex gap-x-6">
-            <Button variant={'outline'} className="rounded-full text-xs mt-4 cursor-pointer">
+            <Button
+              onClick={() => router.push(`/product/${productId}`)}
+              variant={"outline"}
+              className="rounded-full text-xs mt-4 cursor-pointer"
+            >
               View product
             </Button>
-            <Button  className="rounded-full text-xs mt-4 cursor-pointer">
+            <Button className="rounded-full text-xs mt-4 cursor-pointer">
               write a product review
             </Button>
           </div>

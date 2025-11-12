@@ -24,7 +24,7 @@ export async function GET(
 
     const userId = session.user.id;
 
-    const [order] = await db
+    const order = await db
       .select(
         {
         orderDate: orders.createdAt,
@@ -38,7 +38,9 @@ export async function GET(
         paymentMode: orders.paymentMode,
         shippingCharge: orderItems.shipping_charge,
         podCharge: orders.pod_charge,
-        priceAtperchage: orderItems.priceAtPurchase
+        priceAtperchage: orderItems.priceAtPurchase,
+        totalPurchasePrice: orders.total,
+        couponDiscount: orders.coupon_discount
       }
     )
       .from(orderItems)
@@ -46,6 +48,7 @@ export async function GET(
       .leftJoin(productItems, eq(orderItems.productId, productItems.id))
       .leftJoin(userAddress, eq(orders.shipping_address, userAddress.id))
       .where(and(eq(orderItems.orderId, orderId), eq(orders.userId, userId)));
+      
 
     return Response.json({ order }, { status: 200 });
   } catch (error) {

@@ -84,7 +84,7 @@ export async function GET(req: Request) {
     }, {} as Record<string, GroupedOrder>)
   );
 
-  console.log(grouped);
+  // console.log(grouped);
 
   return Response.json(grouped);
 }

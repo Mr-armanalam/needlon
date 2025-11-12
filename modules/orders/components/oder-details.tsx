@@ -10,6 +10,9 @@ interface props {
   shippingCharge: number;
   pod_charge: number;
   itemPrice: number;
+  couponDiscount: number;
+  totalPurchasePrice: number;
+  noOfItem: number;
 }
 const OrderDetails = ({
   order_date,
@@ -19,9 +22,12 @@ const OrderDetails = ({
   shippingCharge,
   pod_charge,
   itemPrice,
+  totalPurchasePrice,
+  couponDiscount,
+  noOfItem,
 }: props) => {
   return (
-    <div className="px-1 text-gray-900">
+    <div className="px-1 mb-4 text-gray-900">
       <div className="flex items-center text-sm gap-x-4">
         <p>Order placed {format(order_date, "dd MMMM yyyy")}</p>
         <div className="h-[15px] w-0.5 bg-gray-300 border-l" />
@@ -37,26 +43,36 @@ const OrderDetails = ({
         </div>
         <div className="flex-1/3">
           <h3 className="font-semibold">Payment method</h3>
-          <p className="text-xs">{payment_method ?? "Pay on Delivery"}</p>
+          <p className="text-xs text-green-500 ">
+            {payment_method ?? "Pay on Delivery"}
+          </p>
         </div>
         <div className="flex-1/3">
           <h4 className="font-semibold">Order Summary</h4>
           <div className="text-xs">
             <div className="flex justify-between items-center">
-              <p>Item(s) Subtotal:</p>
-              <p>{itemPrice / 100}</p>
+              <p>Item({noOfItem}) Subtotal:</p>
+              <p>{noOfItem * itemPrice}</p>
             </div>
             <div className="flex justify-between items-center">
-              <p>Shipping:</p>
-              <p>{shippingCharge}</p>
+              <p>Shipping({noOfItem}):</p>
+              <p>{noOfItem * shippingCharge}</p>
             </div>
-            <div className="flex justify-between items-center">
-              <p>Cash/Pay on Delivery fee:</p>
-              <p>{pod_charge}</p>
-            </div>
+            {couponDiscount !==0 && (
+              <div className="flex justify-between items-center">
+                <p>Coupon Discount:</p>
+                <p className="text-green-500">-{couponDiscount}</p>
+              </div>
+            )}
+            {pod_charge !==0 && (
+              <div className="flex justify-between items-center">
+                <p>Cash/Pay on Delivery fee:</p>
+                <p>{pod_charge}</p>
+              </div>
+            )}
             <div className="flex justify-between items-center">
               <p className="font-semibold">Total:</p>
-              <p>{itemPrice / 100 + shippingCharge + pod_charge}</p>
+              <p>{totalPurchasePrice}</p>
             </div>
           </div>
         </div>

@@ -38,10 +38,7 @@ const OrderView = () => {
     if (query) {
       fetchOrders(query);
     }
-  }, [searchParams]);
-
-  console.log(orders);
-  
+  }, [searchParams]);  
 
   return (
     <>
