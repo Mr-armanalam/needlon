@@ -1,4 +1,3 @@
-"use client";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import React from "react";
@@ -32,13 +31,13 @@ const OrderStatus = ({
 }: props) => {
   const router = useRouter();
   return (
-    <div className="border bg-stone-50 rounded-sm mt-0.5 mx-1">
+    <div className="border bg-white rounded-sm mt-0.5 mx-1">
       <div className="m-4 flex gap-x-4 ">
         <div className="relative h-[140px] w-[130px]">
           {image ? (
-            <Image className="rounded-md" fill alt="order_image" src={image} />
+            <Image className="rounded-md " fill alt="order_image" src={image} />
           ) : (
-            <div className="bg-stone-200 rounded h-[140px] w-[130px]" />
+            <div className="bg-white rounded h-[140px] w-[130px]" />
           )}
         </div>
         <div>
@@ -63,14 +62,14 @@ const OrderStatus = ({
           </div>
         </div>
       </div>
-      <Separator orientation="horizontal" />
+      <Separator orientation="horizontal" className="bg-gray-100" />
       <div className="px-4">
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full bg-whit rounded-md">
           <AccordionItem value="item-1">
             <AccordionTrigger className="font-semibold cursor-pointer text-blue-700">
               See All Updates -&gt;
             </AccordionTrigger>
-            <AccordionContent className="p-4">
+            <AccordionContent className="p-4 bg-white rounded-md mb-4">
               <OrderTimeline />
             </AccordionContent>
           </AccordionItem>

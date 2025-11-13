@@ -33,39 +33,39 @@ const OrderDetails = ({
         <div className="h-[15px] w-0.5 bg-gray-300 border-l" />
         <p>Order number {order_id}</p>
       </div>
-      <div className="flex border bg-stone-50 rounded p-4 text-sm mt-2 gap-x-8 justify-between">
-        <div className="flex-1/3">
-          <h2 className="font-semibold">Ship to</h2>
-          <p className="text-wrap text-xs">
+      <div className="flex border bg-gray-900 text-white rounded-md p-4 text-sm mt-2 gap-x-8 justify-between">
+        <div className="flex-1/3 p-4">
+          <h2 className="font-semibold mb-4">Ship to</h2>
+          <p className="text-wrap text-xs leading-5">
             {sd.name}, {sd.pincode}, {sd.address}, {sd.phone}, {sd.landmark},{" "}
             {sd.locality}
           </p>
         </div>
-        <div className="flex-1/3">
+        <div className="flex-1/3 p-4">
           <h3 className="font-semibold">Payment method</h3>
-          <p className="text-xs text-green-500 ">
+          <p className="text-sm capitalize mt-6 text-green-500 ">
             {payment_method ?? "Pay on Delivery"}
           </p>
         </div>
-        <div className="flex-1/3">
-          <h4 className="font-semibold">Order Summary</h4>
-          <div className="text-xs">
-            <div className="flex justify-between items-center">
+        <div className="flex-1/3 bg-stone-200 text-gray-900 p-4 rounded-xl ">
+          <h4 className="font-semibold border-b-1 py-1 border-white">Order Summary</h4>
+          <div className="text-xs flex flex-col gap-y">
+            <div className="flex border-b-1 py-1 border-white justify-between items-center">
               <p>Item({noOfItem}) Subtotal:</p>
               <p>{noOfItem * itemPrice}</p>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex border-b-1 py-1 border-white  justify-between items-center">
               <p>Shipping({noOfItem}):</p>
               <p>{noOfItem * shippingCharge}</p>
             </div>
             {couponDiscount !==0 && (
-              <div className="flex justify-between items-center">
+              <div className="flex border-b-1 py-1 border-white  justify-between items-center">
                 <p>Coupon Discount:</p>
                 <p className="text-green-500">-{couponDiscount}</p>
               </div>
             )}
             {pod_charge !==0 && (
-              <div className="flex justify-between items-center">
+              <div className="flex border-b-1 py-1 border-white  justify-between items-center">
                 <p>Cash/Pay on Delivery fee:</p>
                 <p>{pod_charge}</p>
               </div>
