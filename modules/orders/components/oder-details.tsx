@@ -47,30 +47,30 @@ const OrderDetails = ({
             {payment_method ?? "Pay on Delivery"}
           </p>
         </div>
-        <div className="flex-1/3 bg-stone-200 text-gray-900 p-4 rounded-xl ">
-          <h4 className="font-semibold border-b-1 py-1 border-white">Order Summary</h4>
+        <div className="flex-1/3 bg-stone-200/50 text-gray-950 p-4 rounded-xl ">
+          <h4 className="font-semibold border-b-1 py-1 border-gray-900">Order Summary</h4>
           <div className="text-xs flex flex-col gap-y">
-            <div className="flex border-b-1 py-1 border-white justify-between items-center">
+            <div className="flex border-b-1 py-1 border-gray-900 justify-between items-center">
               <p>Item({noOfItem}) Subtotal:</p>
               <p>{noOfItem * itemPrice}</p>
             </div>
-            <div className="flex border-b-1 py-1 border-white  justify-between items-center">
+            <div className="flex border-b-1 py-1 border-gray-900  justify-between items-center">
               <p>Shipping({noOfItem}):</p>
               <p>{noOfItem * shippingCharge}</p>
             </div>
             {couponDiscount !==0 && (
-              <div className="flex border-b-1 py-1 border-white  justify-between items-center">
+              <div className="flex border-b-1 py-1 border-gray-900  justify-between items-center">
                 <p>Coupon Discount:</p>
                 <p className="text-green-500">-{couponDiscount}</p>
               </div>
             )}
             {pod_charge !==0 && (
-              <div className="flex border-b-1 py-1 border-white  justify-between items-center">
+              <div className="flex border-b-1 py-1 border-gray-900  justify-between items-center">
                 <p>Cash/Pay on Delivery fee:</p>
                 <p>{pod_charge}</p>
               </div>
             )}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between py-1 items-center">
               <p className="font-semibold">Total:</p>
               <p>{totalPurchasePrice}</p>
             </div>

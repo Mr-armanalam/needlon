@@ -41,8 +41,6 @@ const IndividualOrder = () => {
     if (orderId) fetchOrderById();
   }, [orderId]);
 
-  console.log(orderItem);
-
   const firstOrder = orderItem?.[0];
 
   return (
@@ -73,8 +71,10 @@ const IndividualOrder = () => {
               itemPrice={order?.priceAtperchage}
               image={order?.image}
               properties={order?.orderProperties}
+              orderItemId={order.orderId}
             />
           ))}
+
         </>
       )}
     </div>
