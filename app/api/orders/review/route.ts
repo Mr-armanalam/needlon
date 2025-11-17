@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { orderItems } from "@/db/schema/order-items";
+import { orders } from "@/db/schema/orders";
 import { productReview } from "@/db/schema/product-review";
 import { authOptions } from "@/lib/auth-option/auth-data";
 import { eq } from "drizzle-orm";
@@ -23,49 +24,54 @@ export const POST = async (req: NextRequest) => {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [checkValidOrder] = await db.select({
-      rating,
-      // validate order
-    }).from(orderItems).where(
-      eq(orderItems.id, orderItemId )
-    )
-
-    const [createRating] = await db
-      .insert(productReview)
-      .values({
-        productId: productId,
-        userId: session.user.id,
-        userName: session.user.name ?? "",
-        rating,
-        comment,
+    const [checkValidOrder] = await db
+      .select({
+        rating: orderItems.rating,
+        paymentStatus: orders.status,
       })
-      .returning();
+      .from(orderItems)
+      .innerJoin(orders, eq(orderItems.orderId, orders.id))
+      .where(eq(orderItems.id, orderItemId));
 
-    if (!createRating)
-      return NextResponse.json(
-        { error: "Failed to reviewing this product" },
-        { status: 500 }
-      );
+    console.log(checkValidOrder);
 
-    const [updateOrderItem] = await db
-      .update(orderItems)
-      .set({
-        rating: createRating.id,
-      })
-      .where(eq(orderItems.id, orderItemId)).returning();
+    if (
+      checkValidOrder.paymentStatus === "paid" &&
+      checkValidOrder.rating === null
+    ) {
+      const [createRating] = await db
+        .insert(productReview)
+        .values({
+          productId: productId,
+          userId: session.user.id,
+          userName: session.user.name ?? "",
+          rating,
+          comment,
+        })
+        .returning();
 
-    if (!updateOrderItem)
-      return NextResponse.json(
-        { error: "Failed to update order rating" },
-        { status: 500 }
-      );
+      if (!createRating)
+        return NextResponse.json(
+          { error: "Failed to reviewing this product" },
+          { status: 500 }
+        );
 
-      console.log(createRating, updateOrderItem);
-      
+      const [updateOrderItem] = await db
+        .update(orderItems)
+        .set({
+          rating: createRating.id,
+        })
+        .where(eq(orderItems.id, orderItemId))
+        .returning();
 
-    return NextResponse.json({ createRating }, { status: 200 });
+      if (!updateOrderItem)
+        return NextResponse.json(
+          { error: "Failed to update order rating" },
+          { status: 500 }
+        );
 
-    // const [data] = await db.insert(updateOrderItems).values()
+      return NextResponse.json({ createRating }, { status: 200 });
+    }
   } catch (error) {
     console.log(error);
     return NextResponse.json(
@@ -74,3 +80,26 @@ export const POST = async (req: NextRequest) => {
     );
   }
 };
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const allreview = await db
+      .select()
+      .from(productReview)
+      .where(eq(productReview.userId, session.user.id));
+
+    return NextResponse.json({ allreview }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: "something went wrong to fetching user review" },
+      { status: 500 }
+    );
+  }
+}

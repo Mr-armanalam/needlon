@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { Star } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type props = {
   orderItemId: string;
@@ -39,6 +39,17 @@ const OrderRating = ({ orderItemId, productId }: props) => {
       alert("Failed to submit");
     }
   };
+
+  const fetchProductReview = async() => {
+    const response = await fetch('/api/orders/review');
+    const result = await response.json()
+    console.log(result);
+    
+  }
+
+  useEffect(() =>{
+    fetchProductReview();
+  } ,[])
 
   return (
     <section className="m-4 p-4 flex flex-col gap-y-3 bg-stone-200 rounded-md">
