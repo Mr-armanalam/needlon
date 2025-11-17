@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import OrderRating from "../ui/order-rating";
 
 type props = {
   image?: string;
@@ -19,6 +20,7 @@ type props = {
   properties?: string;
   itemName: string;
   productId: string;
+  orderItemId: string;
 };
 
 const OrderStatus = ({
@@ -28,6 +30,7 @@ const OrderStatus = ({
   properties,
   itemName,
   productId,
+  orderItemId
 }: props) => {
   const router = useRouter();
   return (
@@ -64,7 +67,11 @@ const OrderStatus = ({
       </div>
       <Separator orientation="horizontal" className="bg-gray-100" />
       <div className="px-4">
-        <Accordion type="single" collapsible className="w-full bg-whit rounded-md">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full bg-whit rounded-md"
+        >
           <AccordionItem value="item-1">
             <AccordionTrigger className="font-semibold cursor-pointer text-blue-700">
               See All Updates -&gt;
@@ -75,6 +82,12 @@ const OrderStatus = ({
           </AccordionItem>
         </Accordion>
       </div>
+      <Separator orientation="horizontal" className="bg-gray-100" />
+
+      <OrderRating 
+        orderItemId={orderItemId}
+        productId={productId}
+      />
     </div>
   );
 };
