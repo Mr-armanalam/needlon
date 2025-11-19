@@ -35,6 +35,7 @@ export async function GET(
         // size: orderItems.size
         productId: productItems.id,
         orderProperties: orderItems.properties,
+        ratingId: orderItems.rating,
         paymentMode: orders.paymentMode,
         shippingCharge: orderItems.shipping_charge,
         podCharge: orders.pod_charge,

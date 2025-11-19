@@ -15,6 +15,7 @@ interface OrderItemProp {
   priceAtperchage: number;
   productId: string;
   image: string;
+  ratingId?: string;
   orderProperties?: string;
   itemName: string;
   couponDiscount: number;
@@ -66,6 +67,8 @@ const IndividualOrder = () => {
           {orderItem?.map((order, index) => (
             <OrderStatus
               key={index}
+              ratingId={order.ratingId}
+              orderIndex ={index}
               productId={order.productId}
               itemName={order?.itemName}
               itemPrice={order?.priceAtperchage}
