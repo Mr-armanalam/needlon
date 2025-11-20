@@ -184,7 +184,7 @@ const OrderRating = ({
 
   const { allRating, rating, hover, comment } = useSelector(
     (state: RootState) => state.rating
-  );  
+  );
 
   useEffect(() => {
     dispatch(fetchProductReview());
@@ -192,7 +192,7 @@ const OrderRating = ({
 
   const handleSubmit = async () => {
     if (!rating) return alert("Please select a rating");
-    
+
     await dispatch(
       submitReview({
         productId,
@@ -207,15 +207,19 @@ const OrderRating = ({
     dispatch(clearRatingState());
   };
 
-  const hasReview = allRating?.[orderIndex]?.id;
-  console.log(ratingId, hasReview);
-  
+  // const existingReview = allRating?.find((r) => r.id === ratingId);
+  const existingReview = allRating?.find(
+  (r) => r.orderItemId === orderItemId
+);
+
+
+  const shouldShowForm = !existingReview;
 
   return (
     <section className="m-4 p-4 flex flex-col gap-y-3 bg-stone-200 rounded-md">
-      {(hasReview === undefined && hasReview !== ratingId) ? (
+      {shouldShowForm ? (
         <>
-          <div  className="flex justify-between">
+          <div className="flex justify-between">
             <h1 className="font-semibold">Rate your experience</h1>
             <div className="flex text-sm font-semibold border">
               <Button
@@ -276,12 +280,12 @@ const OrderRating = ({
                 key={star}
                 size={14}
                 className={`transition ${
-                  allRating?.[orderIndex]?.rating >= star
+                  existingReview?.rating >= star
                     ? "text-[#FFA534]"
                     : "text-[#e7e5e4]"
                 }`}
                 fill={
-                  allRating?.[orderIndex]?.rating >= star
+                  existingReview?.rating >= star
                     ? "#FFA534"
                     : "#e7e5e4"
                 }

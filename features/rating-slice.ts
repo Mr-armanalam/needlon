@@ -8,6 +8,7 @@ export type RatingProps = {
   updatedAt: Date;
   userId: string;
   userName: string;
+  orderItemId?: string;
 };
 
 type RatingState = {
@@ -37,9 +38,29 @@ export const fetchProductReview = createAsyncThunk(
 );
 
 // SUBMIT REVIEW
+// export const submitReview = createAsyncThunk(
+//   "rating/submitReview",
+//   async (payload: { productId: string; orderItemId: string; rating: number; comment: string }) => {
+//     const res = await fetch("/api/orders/review", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (!res.ok) throw new Error("Failed to submit");
+
+//     return true;
+//   }
+// );
+
 export const submitReview = createAsyncThunk(
   "rating/submitReview",
-  async (payload: { productId: string; orderItemId: string; rating: number; comment: string }) => {
+  async (payload: {
+    productId: string;
+    orderItemId: string;
+    rating: number;
+    comment: string;
+  }) => {
     const res = await fetch("/api/orders/review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -48,7 +69,7 @@ export const submitReview = createAsyncThunk(
 
     if (!res.ok) throw new Error("Failed to submit");
 
-    return true;
+    return await res.json(); // returns { review, orderItemId }
   }
 );
 
@@ -82,9 +103,19 @@ const ratingSlice = createSlice({
       })
       .addCase(fetchProductReview.rejected, (state) => {
         state.loading = false;
+      })
+      .addCase(submitReview.fulfilled, (state, action) => {
+        const { review, orderItemId } = action.payload;
+
+        // Optimistic update
+        state.allRating.push({
+          ...review,
+          orderItemId, // ⭐ add this
+        });
       });
   },
 });
 
-export const { setRating, setHover, setComment, clearRatingState } = ratingSlice.actions;
+export const { setRating, setHover, setComment, clearRatingState } =
+  ratingSlice.actions;
 export default ratingSlice.reducer;
