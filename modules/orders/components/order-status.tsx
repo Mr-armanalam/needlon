@@ -21,6 +21,8 @@ type props = {
   itemName: string;
   productId: string;
   orderItemId: string;
+  orderIndex: number;
+  ratingId?: string;
 };
 
 const OrderStatus = ({
@@ -30,7 +32,9 @@ const OrderStatus = ({
   properties,
   itemName,
   productId,
-  orderItemId
+  orderItemId,
+  orderIndex,
+  ratingId
 }: props) => {
   const router = useRouter();
   return (
@@ -85,6 +89,8 @@ const OrderStatus = ({
       <Separator orientation="horizontal" className="bg-gray-100" />
 
       <OrderRating 
+        ratingId={ratingId}
+        orderIndex={orderIndex}
         orderItemId={orderItemId}
         productId={productId}
       />
