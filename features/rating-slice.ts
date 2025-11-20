@@ -37,22 +37,6 @@ export const fetchProductReview = createAsyncThunk(
   }
 );
 
-// SUBMIT REVIEW
-// export const submitReview = createAsyncThunk(
-//   "rating/submitReview",
-//   async (payload: { productId: string; orderItemId: string; rating: number; comment: string }) => {
-//     const res = await fetch("/api/orders/review", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify(payload),
-//     });
-
-//     if (!res.ok) throw new Error("Failed to submit");
-
-//     return true;
-//   }
-// );
-
 export const submitReview = createAsyncThunk(
   "rating/submitReview",
   async (payload: {
