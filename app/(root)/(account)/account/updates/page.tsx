@@ -34,6 +34,14 @@ const notifications = [
     time: "2 days ago",
     read: true,
   },
+  {
+    id: "n5",
+    title: "New product launched!",
+    message: "Check out our latest winter collection.",
+    type: "offer",
+    time: "2 days ago",
+    read: true,
+  },
 ];
 
 const iconMap: Record<string, React.ReactNode> = {
