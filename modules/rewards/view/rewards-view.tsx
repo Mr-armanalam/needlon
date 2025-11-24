@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-// --- DEMO COUPON DATA ---
 export const coupons = [
   {
     id: "1",
@@ -39,7 +38,7 @@ export const coupons = [
   },
 ];
 
-// --- Helper ---
+
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -49,20 +48,20 @@ const formatDate = (date: string) =>
 
 export default function RewardsView() {
   return (
-    <div>
-      <h1 className="font-garamond text-3xl font-semibold text-gray-900">
+    <section>
+      <h1 className="font-garamond text-2xl font-semibold text-gray-900">
         Your rewards & coupons
       </h1>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-7">
         {coupons.map((coupon) => (
           <CouponCard key={coupon.id} coupon={coupon} />
         ))}
       </div>
-    </div>
+      <p className="font-garamond mx-auto text-center w-full mt-[100px] text-gray-300 font-semibold text-xl">End Here</p>
+    </section>
   );
 }
 
-// --- MAIN COUPON CARD WITH GRADIENT + METALLIC STYLE ---
 function CouponCard({ coupon }: any) {
   const isMetallic = coupon.metallic;
 
@@ -75,7 +74,6 @@ function CouponCard({ coupon }: any) {
           "bg-gradient-to-br from-zinc-900 to-zinc-700 border-zinc-600"
       )}
     >
-      {/* Metallic Shine Overlay */}
       {isMetallic && (
         <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_60%)]" />
       )}
@@ -88,7 +86,6 @@ function CouponCard({ coupon }: any) {
 
           <div className="text-base opacity-90">{coupon.description}</div>
 
-          {/* Coupon Code Box */}
           <div
             className={cn(
               "mt-3 w-fit px-4 py-2 rounded-xl border backdrop-blur text-sm font-semibold tracking-wider",
@@ -126,7 +123,6 @@ function CouponCard({ coupon }: any) {
             )}
           </div>
 
-          {/* Apply Button */}
           <Button
             disabled={coupon.status !== "active"}
             className={cn(
