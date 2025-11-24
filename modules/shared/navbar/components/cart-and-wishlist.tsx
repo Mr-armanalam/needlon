@@ -31,7 +31,7 @@ const CartAndWishList = () => {
           <ShoppingBagIcon className="w-4 h-4" />
         </Link>
         <Link
-          href={"/account/notification"}
+          href={"/account/updates"}
           className="flex cursor-pointer relative items-center space-x-2"
         >
           <span className="absolute -top-2.5 -right-4 bg-red-500 text-white text-xs rounded-full px-1">
