@@ -34,7 +34,7 @@ const UserSectionData = [
   },
   {
     label: "Your Coupen",
-    link: "/account/coupen",
+    link: "/account/rewards",
     description: "Unlock savings with a pro-deals",
     icon: <ReceiptIndianRupee width={16} height={16} />,
   },
