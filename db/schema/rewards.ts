@@ -9,12 +9,12 @@ export const rewardSchema = pgTable('rewards_schema', {
   coupon_code: text('coupon_code').notNull(),
   discount: text('discount').notNull(),
   discription: text('discription').notNull(),
-  gradient: text('gradient_color').notNull(),
+  gradient: text('gradient_color').notNull().default('from-purple-500 to-pink-500'),
   status: statusEnum().default('upcoming'),
   validFrom: date('valide_from').defaultNow().notNull(),
   validTo: date('valide_to').notNull(),
   createdAt: timestamp('createdAt').defaultNow(),
-  userId: uuid('userId').notNull().references(() => usersTable.id, {onDelete: 'cascade'})
+  userId: uuid('user_id').notNull().references(() => usersTable.id, {onDelete: 'cascade'})
 })
 
 export const rewardSchemaRelation = relations(rewardSchema, ({one}) => ({

@@ -21,6 +21,7 @@ const PersonalInfo = () => {
     null | "personal" | "email" | "phone"
   >(null);
 
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPersonalData((previousValue) => ({ ...previousValue, [name]: value }));

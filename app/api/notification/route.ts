@@ -1,0 +1,30 @@
+import { db } from "@/db";
+import { updateSchema } from "@/db/schema/updates";
+import { authOptions } from "@/lib/auth-option/auth-data";
+import { eq } from "drizzle-orm";
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
+
+export const GET = async () => {
+  try {
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const notification = await db
+      .select()
+      .from(updateSchema)
+      .where(eq(updateSchema.userId, userId));
+    return NextResponse.json({ notification }, { status: 200 });
+    
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "something went wrong" },
+      { status: 500 }
+    );
+  }
+};

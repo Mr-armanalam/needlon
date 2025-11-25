@@ -9,7 +9,7 @@ export const updateSchema = pgTable("update_schema", {
   type: text("update_type").notNull(),
   time: timestamp("notification_time").defaultNow().notNull(),
   read: boolean("is_readed").default(false).notNull(),
-  userId: uuid("userId")
+  userId: uuid("user_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
 });

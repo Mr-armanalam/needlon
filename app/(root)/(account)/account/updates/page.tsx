@@ -1,42 +1,17 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import { Bell, Package, Tag, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const notifications = [
-  {
-    id: "n1",
-    title: "Your order has been shipped",
-    message:
-      "Order #451239 is on the way. Track your package for live updates.",
-    type: "order",
-    time: "2 hours ago",
-    read: false,
-  },
-  {
-    id: "n2",
-    title: "Exclusive 20% OFF for you",
-    message: "Use code WELCOME20 on your next purchase. Valid till Dec 30.",
-    type: "offer",
-    time: "5 hours ago",
-    read: false,
-  },
-  {
-    id: "n3",
-    title: "Password Changed Successfully",
-    message: "Your account password was updated.",
-    type: "system",
-    time: "1 day ago",
-    read: true,
-  },
-  {
-    id: "n4",
-    title: "New product launched!",
-    message: "Check out our latest winter collection.",
-    type: "offer",
-    time: "2 days ago",
-    read: true,
-  },
-];
+export type NotificationType = {
+  id: string;
+  title: string;
+  message: string;
+  type: "order" | "offer" | "system"; 
+  time: Date; 
+  read: boolean;
+};
+
 
 const iconMap: Record<string, React.ReactNode> = {
   order: <Package size={20} className="text-blue-600" />,
@@ -45,6 +20,20 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export default function NotificationSection() {
+  const [allNotification, setAllNotification] = useState<NotificationType[]>([]);
+
+  const fetch_all_notification = async () => {
+    const response = await fetch("/api/notification");
+    const result = await response.json();
+    if (!response.ok) return alert("something went wrong !");
+    setAllNotification(result.notification);
+  };
+
+  useEffect(() => {
+    fetch_all_notification();
+  },[])
+  
+
   return (
     <div className="w-full bg-white px-5">
       <div className="flex items-center gap-2 mb-4">
@@ -55,7 +44,7 @@ export default function NotificationSection() {
       </div>
 
       <div className="flex flex-col gap-y-1 divide-y divide-gray-200">
-        {notifications.map((n) => (
+        {allNotification.length !== 0 && allNotification.map((n) => (
           <div
             key={n.id}
             className={`flex gap-4 relative group p-4 transition rounded-xl ${
@@ -69,7 +58,7 @@ export default function NotificationSection() {
             <div className="flex-1">
               <h2 className="font-semibold text-gray-900">{n.title}</h2>
               <p className="text-sm text-gray-600 mt-1">{n.message}</p>
-              <span className="text-xs text-gray-500 mt-1 block">{n.time}</span>
+              <span className="text-xs text-gray-500 mt-1 block">{new Date(n.time).getHours()} Hours</span>
             </div>
 
             <Button

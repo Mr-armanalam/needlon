@@ -1,42 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export const coupons = [
-  {
-    id: "1",
-    code: "SAVE20",
-    discount: "20% OFF",
-    description: "Get flat 20% off on all textile products.",
-    validFrom: "2025-11-01T00:00:00Z",
-    validTo: "2025-11-30T23:59:59Z",
-    status: "active", // active | upcoming | expired
-    gradient: "from-purple-500 to-pink-500",
-  },
-  {
-    id: "2",
-    code: "FESTIVE50",
-    discount: "₹50 OFF",
-    description: "₹50 off on orders above ₹499.",
-    validFrom: "2025-11-20T00:00:00Z",
-    validTo: "2025-12-10T23:59:59Z",
-    status: "upcoming",
-    gradient: "from-blue-500 to-cyan-500",
-  },
-  {
-    id: "3",
-    code: "LUCKY100",
-    discount: "₹100 OFF",
-    description: "Premium Reward Coupon.",
-    validFrom: "2025-10-01T00:00:00Z",
-    validTo: "2025-10-10T23:59:59Z",
-    status: "expired",
-    metallic: true,
-  },
-];
+export type Rewards = {
+  id: string;
+  coupon_code: string;
+  discount: string;
+  discription: string;
+  validFrom: Date; // ISO Date
+  validTo: Date;
+  metallic?: string;   // ISO Date
+  status: "active" | "upcoming" | "expired";
+  gradient?: string; 
+};
 
 
 const formatDate = (date: string) =>
@@ -47,23 +27,37 @@ const formatDate = (date: string) =>
   });
 
 export default function RewardsView() {
+  const [allRewards, setAllRewards] = useState<Rewards[]>([]);
+
+  const fetch_all_rewards = async () => {
+      const response = await fetch("/api/rewards");
+      const result = await response.json();
+      if (!response.ok) return alert("something went wrong !");
+      setAllRewards(result.rewards);
+    };
+  
+    useEffect(() => {
+      fetch_all_rewards();
+    },[])
+        
+  
   return (
     <section>
       <h1 className="font-garamond text-2xl font-semibold text-gray-900">
         Your rewards & coupons
       </h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-7">
-        {coupons.map((coupon) => (
+        {allRewards.length !== 0 && allRewards.map((coupon) => (
           <CouponCard key={coupon.id} coupon={coupon} />
         ))}
       </div>
-      <p className="font-garamond mx-auto text-center w-full mt-[100px] text-gray-300 font-semibold text-xl">End Here</p>
+      <p className="font-garamond mx-auto text-center w-full mt-[100px] text-gray-500 font-semibold text-xl">End Here</p>
     </section>
   );
 }
 
-function CouponCard({ coupon }: any) {
-  const isMetallic = coupon.metallic;
+function CouponCard({ coupon }: {coupon:Rewards}) {
+  const isMetallic = coupon?.metallic;  
 
   return (
     <Card
@@ -84,7 +78,7 @@ function CouponCard({ coupon }: any) {
             {coupon.discount}
           </div>
 
-          <div className="text-base opacity-90">{coupon.description}</div>
+          <div className="text-base opacity-90">{coupon.discription}</div>
 
           <div
             className={cn(
@@ -94,12 +88,12 @@ function CouponCard({ coupon }: any) {
                 : "bg-white/20 border-white/40"
             )}
           >
-            {coupon.code}
+            {coupon.coupon_code}
           </div>
 
           {/* Validity */}
           <div className="text-xs mt-2 opacity-90">
-            Valid: {formatDate(coupon.validFrom)} – {formatDate(coupon.validTo)}
+            Valid: {formatDate(String(coupon.validFrom))} – {formatDate(String(coupon.validTo))}
           </div>
 
           {/* Status Tag */}
