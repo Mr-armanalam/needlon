@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Rewards } from "../view/rewards-view";
 import { useRef, useState } from "react";
-import { CopyIcon, EyeIcon, ReceiptIcon, ReceiptIndianRupee } from "lucide-react";
+import { CopyIcon, EyeIcon, ReceiptIndianRupee } from "lucide-react";
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString("en-IN", {

@@ -1,16 +1,11 @@
-'use client'
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { Bell, Package, Tag, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-export type NotificationType = {
-  id: string;
-  title: string;
-  message: string;
-  type: "order" | "offer" | "system"; 
-  time: Date; 
-  read: boolean;
-};
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "@/store/store";
+import { fetchNotifications, markAsRead } from "@/features/notification-slice";
 
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -20,19 +15,15 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export default function NotificationSection() {
-  const [allNotification, setAllNotification] = useState<NotificationType[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const fetch_all_notification = async () => {
-    const response = await fetch("/api/notification");
-    const result = await response.json();
-    if (!response.ok) return alert("something went wrong !");
-    setAllNotification(result.notification);
-  };
+  const { notifications, loading } = useSelector(
+    (state: RootState) => state.notification
+  );
 
   useEffect(() => {
-    fetch_all_notification();
-  },[])
-  
+    dispatch(fetchNotifications());
+  }, [dispatch]);
 
   return (
     <div className="w-full bg-white px-5">
@@ -43,8 +34,10 @@ export default function NotificationSection() {
         </h1>
       </div>
 
+      {loading && <p className="text-center text-gray-500">Loading...</p>}
+
       <div className="flex flex-col gap-y-1 divide-y divide-gray-200">
-        {allNotification.length !== 0 && allNotification.map((n) => (
+        {notifications.map((n) => (
           <div
             key={n.id}
             className={`flex gap-4 relative group p-4 transition rounded-xl ${
@@ -58,15 +51,20 @@ export default function NotificationSection() {
             <div className="flex-1">
               <h2 className="font-semibold text-gray-900">{n.title}</h2>
               <p className="text-sm text-gray-600 mt-1">{n.message}</p>
-              <span className="text-xs text-gray-500 mt-1 block">{new Date(n.time).getHours()} Hours</span>
+              <span className="text-xs text-gray-500 mt-1 block">
+                {new Date(n.time).getHours()} Hours
+              </span>
             </div>
 
-            <Button
-              variant="outline"
-              className="absolute top-2 hidden  group-hover:block text-xs hover:bg-blue-300 hover:text-blue-900 cursor-pointer right-2 "
-            >
-              Mark as read
-            </Button>
+            {!n.read && (
+              <Button
+                onClick={() => dispatch(markAsRead(n.id))}
+                variant="outline"
+                className="absolute top-2 hidden group-hover:block text-xs hover:bg-blue-300 hover:text-blue-900 cursor-pointer right-2"
+              >
+                Mark as read
+              </Button>
+            )}
 
             {!n.read && (
               <span className="w-2 h-2 rounded-full bg-blue-600 mt-2"></span>

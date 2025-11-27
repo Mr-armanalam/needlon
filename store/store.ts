@@ -6,6 +6,7 @@ import cartReducer from '../features/cart-slice'
 import wishlistReducer from '../features/wishlist-slice'
 import addressReducer from '../features/address-slice'
 import ratingReducer from '../features/rating-slice'
+import notificationReducer from "@/features/notification-slice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     counter: counterReducer,
     cart: cartReducer,
     rating: ratingReducer,
+    notification: notificationReducer,
   },
 });
 
