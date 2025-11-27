@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Rewards } from "../view/rewards-view";
 import { useRef, useState } from "react";
-import { CopyIcon, EyeIcon } from "lucide-react";
+import { CopyIcon, EyeIcon, ReceiptIcon, ReceiptIndianRupee } from "lucide-react";
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString("en-IN", {
@@ -110,14 +110,15 @@ export function CouponCard({ coupon }: { coupon: Rewards }) {
           <Button
             disabled={coupon.status !== "active"}
             className={cn(
-              "mt-4 w-full font-bold rounded-xl py-3 text-base",
+              "mt-4 w-full font-bold cursor-pointer rounded-xl text-sm py-3",
               coupon.status === "active"
-                ? "bg-white text-black hover:bg-gray-200"
+                ? "bg-white text-gray-900 hover:bg-gray-200"
                 : "bg-white/30 text-white/60 cursor-not-allowed"
             )}
             onClick={() => setIsCouponVisible(true)}
           >
-            Apply Coupon
+            <ReceiptIndianRupee size={10} />
+            {coupon.title}
           </Button>
         </div>
       </CardContent>

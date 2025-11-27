@@ -39,6 +39,5 @@ export const usersRelations = relations(usersTable, ({ many }) => ({
   userAddress: many(userAddress),
   Orders: many(orders),
   review: many(productReview),
-  rewards: many(rewardSchema),
   updates: many(updateSchema)
 }));

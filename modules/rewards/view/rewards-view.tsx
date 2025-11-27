@@ -5,6 +5,7 @@ import { CouponCard } from "../components/coupon-card";
 
 export type Rewards = {
   id: string;
+  title: string;
   coupon_code: string;
   discount: string;
   discription: string;
@@ -21,7 +22,7 @@ export default function RewardsView() {
 
   const fetch_all_rewards = async () => {
     const response = await fetch("/api/rewards");
-    const result = await response.json();
+    const result = await response.json();    
     if (!response.ok) return alert("something went wrong !");
     setAllRewards(result.rewards);
   };
@@ -29,6 +30,7 @@ export default function RewardsView() {
   useEffect(() => {
     fetch_all_rewards();
   }, []);
+  
 
   return (
     <section>
