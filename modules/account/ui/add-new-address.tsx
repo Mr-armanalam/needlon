@@ -28,7 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { addOrUpdateAddress, fetchAddresses } from "@/features/address-slice";
@@ -38,11 +37,19 @@ export const FormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   phone: z.string().min(10, { message: "Number must be at least 10 digits." }),
   pincode: z.string().min(6, { message: "Pincode must be 6 digits." }),
-  locality: z.string().min(2, { message: "Locality must be at least 2 characters." }),
-  address: z.string().min(2, { message: "Address must be at least 2 characters." }),
-  city: z.string().min(2, { message: "City name must be at least 2 characters." }),
+  locality: z
+    .string()
+    .min(2, { message: "Locality must be at least 2 characters." }),
+  address: z
+    .string()
+    .min(2, { message: "Address must be at least 2 characters." }),
+  city: z
+    .string()
+    .min(2, { message: "City name must be at least 2 characters." }),
   state: z.string().min(2, { message: "State must be at least 2 characters." }),
-  landmark: z.string().min(2, { message: "Landmark must be at least 2 characters." }),
+  landmark: z
+    .string()
+    .min(2, { message: "Landmark must be at least 2 characters." }),
   alternate_phone: z.string().optional(),
 });
 
@@ -65,7 +72,9 @@ const AddNewAddress = ({
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.addresses);
 
-  const [allState, setAllState] = useState<{ name: string; state_code: string }[]>([]);
+  const [allState, setAllState] = useState<
+    { name: string; state_code: string }[]
+  >([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -82,14 +91,12 @@ const AddNewAddress = ({
     },
   });
 
-  // ✅ Reset and close accordion
   const clearAddressForm = () => {
     form.reset();
     clearEditing?.();
     setAccordionValue(undefined);
   };
 
-  // ✅ Pre-fill form if editing
   useEffect(() => {
     if (editingAddress) {
       form.reset(editingAddress);
@@ -100,7 +107,6 @@ const AddNewAddress = ({
     }
   }, [editingAddress, form, setAccordionValue]);
 
-  // ✅ Handle form submission
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const userId = session?.user.id;
     if (!userId) return toast.error("You must be logged in to save address.");
@@ -109,7 +115,11 @@ const AddNewAddress = ({
       await dispatch(
         addOrUpdateAddress({
           userId,
-          data: { ...data, alternate_phone: data.alternate_phone ?? "", userId },
+          data: {
+            ...data,
+            alternate_phone: data.alternate_phone ?? "",
+            userId,
+          },
           editingAddressId: editingAddress?.id,
         })
       ).unwrap();
@@ -123,17 +133,15 @@ const AddNewAddress = ({
     }
   };
 
-  // ✅ Fetch Indian states
+  const fetchState = async () => {
+    const res = await fetch("/api/state");
+    const data = await res.json();
+    if (data?.states?.length === null) return;
+    setAllState(data.states ?? []);
+  };
+
   useEffect(() => {
-    (async () => {
-      const res = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country: "India" }),
-      });
-      const { data } = await res.json();
-      setAllState(data?.states ?? []);
-    })();
+    fetchState();
   }, []);
 
   return (
@@ -174,7 +182,9 @@ const AddNewAddress = ({
                       <FormControl>
                         <Input
                           className="rounded-xs border-none shadow-sm focus-visible:ring-1 bg-white px-3 col-span-1 h-11"
-                          placeholder={fieldName.replace("_", " ").toUpperCase()}
+                          placeholder={fieldName
+                            .replace("_", " ")
+                            .toUpperCase()}
                           {...field}
                         />
                       </FormControl>
@@ -184,7 +194,6 @@ const AddNewAddress = ({
                 />
               ))}
 
-              {/* Address textarea */}
               <div className="col-span-2">
                 <FormField
                   control={form.control}
@@ -204,24 +213,27 @@ const AddNewAddress = ({
                 />
               </div>
 
-              {/* State dropdown */}
               <FormField
                 control={form.control}
                 name="state"
                 render={({ field }) => (
                   <FormItem>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="min-h-11 border-none shadow-sm focus-visible:ring-1 bg-white rounded-xs w-full">
                           <SelectValue placeholder="Select Your State" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {allState.map((state, i) => (
-                          <SelectItem key={i} value={state.name}>
-                            {state.name}
-                          </SelectItem>
-                        ))}
+                        {allState.length !== 0 &&
+                          allState.map((state, i) => (
+                            <SelectItem key={i} value={state.name}>
+                              {state.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -229,7 +241,6 @@ const AddNewAddress = ({
                 )}
               />
 
-              {/* Buttons */}
               <div className="col-span-1 flex gap-x-4">
                 <Button
                   className="rounded-xs cursor-pointer w-fit"

@@ -31,14 +31,13 @@ const AddressView = () => {
     undefined
   );
 
-  // ✅ Fetch addresses when session loads
+ 
   useEffect(() => {
     if (session?.user.id) {
       dispatch(fetchAddresses(session.user.id));
     }
   }, [dispatch, session?.user.id]);
 
-  // ✅ Handle delete
   const onDeleteAddress = async (id: string) => {
     try {
       await dispatch(deleteAddress(id)).unwrap();
@@ -49,7 +48,6 @@ const AddressView = () => {
     }
   };
 
-  // ✅ Handle edit
   const onEditAddress = (addr: typeof userAddress.$inferSelect) => {
     if (!session?.user.id) return;
     setAccordionValue("item-1");
