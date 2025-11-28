@@ -24,7 +24,7 @@ interface AddressState {
 
 const initialState: AddressState = {
   addresses: [],
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -86,6 +86,7 @@ const addressSlice = createSlice({
     builder
       .addCase(fetchAddresses.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchAddresses.fulfilled, (state, action) => {
         state.loading = false;

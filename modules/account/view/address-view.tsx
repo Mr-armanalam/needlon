@@ -14,7 +14,7 @@ import {
 import NoUserAddress from "../shared/no-user-address";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { deleteAddress, fetchAddresses } from "@/features/address-slice";
-
+import AddressSkeleton from "./loadingAddress";
 
 const AddressView = () => {
   const dispatch = useAppDispatch();
@@ -31,7 +31,6 @@ const AddressView = () => {
     undefined
   );
 
- 
   useEffect(() => {
     if (session?.user.id) {
       dispatch(fetchAddresses(session.user.id));
@@ -83,13 +82,15 @@ const AddressView = () => {
       />
 
       <div className="mt-6">
-        {loading ? (
-          <p className="text-sm text-stone-500">Loading addresses...</p>
-        ) : error ? (
-          <p className="text-red-600 text-sm">{error}</p>
-        ) : addresses.length === 0 ? (
+        {loading && <AddressSkeleton />}
+
+        {!loading && error && <p className="text-red-600 text-sm">{error}</p>}
+
+        {!loading && !error && addresses.length === 0 && (
           <NoUserAddress Icon={HomeIcon} description="No address saved" />
-        ) : (
+        )}
+
+        {!loading && addresses.length > 0 && (
           <div className="border border-stone-200 rounded-xs">
             {addresses.map((addr) => (
               <div
@@ -124,8 +125,8 @@ const AddressView = () => {
                   {addr?.alternate_phone}
                 </p>
                 <p className="text-sm max-w-[500px]">
-                  {addr.address}, {addr.city}, {addr.landmark},{" "}
-                  {addr.locality}, {addr.state} - {addr.pincode}
+                  {addr.address}, {addr.city}, {addr.landmark}, {addr.locality},{" "}
+                  {addr.state} - {addr.pincode}
                 </p>
               </div>
             ))}
@@ -137,4 +138,3 @@ const AddressView = () => {
 };
 
 export default AddressView;
-
