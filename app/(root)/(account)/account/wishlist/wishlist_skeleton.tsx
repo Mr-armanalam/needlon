@@ -1,0 +1,37 @@
+import { Skeleton } from "@/components/ui/skeleton";
+
+export function WishlistItemSkeleton() {
+  return (
+    <div className="flex px-6 flex-col gap-6">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="w-full border-b py-6">
+          <div className="flex gap-5">
+            {/* Image */}
+            <Skeleton className="w-32 h-32 rounded-md" />
+
+            {/* Content */}
+            <div className="flex-1 flex flex-col justify-between">
+              {/* Title */}
+              <div>
+                <Skeleton className="h-4 w-48 mb-2" />
+                <Skeleton className="h-3 w-20 mb-3" />
+                <Skeleton className="h-5 w-28" />
+              </div>
+
+              {/* Buttons */}
+              <div className="flex items-center gap-3 mt-4">
+                <Skeleton className="h-10 w-28 rounded-full" />
+                <Skeleton className="h-10 w-10 rounded-full" />
+              </div>
+            </div>
+
+            {/* Added Date */}
+            <div className="hidden md:flex items-start">
+              <Skeleton className="h-3 w-24" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { Trash2Icon } from "lucide-react";
+import { HeartOff, Trash2Icon } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { addToCart } from "@/features/cart-slice";
 import {
@@ -14,6 +14,8 @@ import {
   toggleWishlist,
   WishlistItem,
 } from "@/features/wishlist-slice";
+import NoUserAddress from "../shared/no-user-address";
+import { WishlistItemSkeleton } from "@/app/(root)/(account)/account/wishlist/wishlist_skeleton";
 
 interface Props {
   serverWishlist?: WishlistItem[];
@@ -94,23 +96,29 @@ const WishlistView = ({ serverWishlist = [], userId }: Props) => {
 
   const listCount = localList.length;
 
-  const handleToggleWishlist = (productId: string, size?: string, price?: string, image?: string, name?: string,) => {
+  const handleToggleWishlist = (
+    productId: string,
+    size?: string,
+    price?: string,
+    image?: string,
+    name?: string
+  ) => {
     setLocalList((prev) =>
       prev.filter(
         (it) => !(it.productId === productId && it.size === (size ?? it.size))
       )
     );
 
-    if (userId) {      
+    if (userId) {
       const exists = true;
       dispatch(toggleWishlist({ userId, productId, size, exists }));
-    } else {   
+    } else {
       dispatch(
         toggleGuestWishlist({
           productId: productId,
-          name : name ?? '',
+          name: name ?? "",
           price: Number(price),
-          image: image ?? '',
+          image: image ?? "",
           size: size,
         })
       );
@@ -133,18 +141,6 @@ const WishlistView = ({ serverWishlist = [], userId }: Props) => {
     );
   };
 
-  if (loading && userId && listCount === 0) {
-    return <div className="px-3 text-stone-500 mt-8">Loading wishlist...</div>;
-  }
-
-  if (!listCount) {
-    return (
-      <div className="text-center text-stone-500 mt-10">
-        No wishlist items found.
-      </div>
-    );
-  }
-
   const makeKey = (it: WishlistItem, idx: number) =>
     it.id || `${it.productId}-${it.size ?? "s"}-${idx}`;
 
@@ -153,6 +149,14 @@ const WishlistView = ({ serverWishlist = [], userId }: Props) => {
       <h1 className="font-semibold text-2xl font-garamond pb-7">
         Wishlist Items ({listCount})
       </h1>
+
+      {loading && userId && listCount === 0 && <WishlistItemSkeleton />}
+
+      {!listCount && (
+        <div className="text-center text-stone-500 mt-10">
+          <NoUserAddress Icon={HeartOff} description="No any wishlist items" />
+        </div>
+      )}
 
       {localList.map((item, index) => (
         <div
@@ -187,7 +191,15 @@ const WishlistView = ({ serverWishlist = [], userId }: Props) => {
                 Add to Cart
               </Button>
               <Button
-                onClick={() => handleToggleWishlist(item.productId, item.size, item.price, item.image, item.price)}
+                onClick={() =>
+                  handleToggleWishlist(
+                    item.productId,
+                    item.size,
+                    item.price,
+                    item.image,
+                    item.price
+                  )
+                }
                 variant="outline"
                 className="text-xs rounded-full"
               >
