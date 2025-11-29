@@ -6,12 +6,10 @@ import { productItems } from "@/db/schema/product-items";
 
 export const GET = async (
   req: NextRequest,
-  // { params }: { params: { id: string } }  // ✅ Not Promise
-    { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
-  try {
-    const {id:userId} = await params;
-    // const userId = params.id; // ✅ Directly access
+  try {    
+    const { id: userId } = await params;    
     if (!userId) return NextResponse.json("guest user", { status: 401 });
 
     const items = await db
@@ -19,9 +17,8 @@ export const GET = async (
       .from(wishListItems)
       .innerJoin(productItems, eq(wishListItems.productId, productItems.id))
       .where(eq(wishListItems.userId, userId));
-
-    if (items.length === 0)
-      return NextResponse.json([], { status: 204 }); // ✅ Proper status
+      
+    if (items.length === 0) return NextResponse.json([], { status: 204 }); // ✅ Proper status
 
     const transformedData = items.map((item) => ({
       id: item.wishlist_items.id,
@@ -34,6 +31,8 @@ export const GET = async (
       updatedAt: item.wishlist_items.updatedAt,
     }));
 
+    console.log('transform', transformedData);
+    
     return NextResponse.json(transformedData, { status: 200 });
   } catch (error) {
     console.log("API Error:", error);

@@ -1,4 +1,9 @@
-import { fetchWishlist, setGuestWishlist, toggleGuestWishlist, toggleWishlist } from "@/features/wishlist-slice";
+import {
+  fetchWishlist,
+  setGuestWishlist,
+  toggleGuestWishlist,
+  toggleWishlist,
+} from "@/features/wishlist-slice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { StarIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -16,12 +21,8 @@ type Product = {
   catType?: string;
 };
 
-
 interface ProductCardProps extends Product {
-  onAddToCart: (
-    product: Product,
-    size: string
-  ) => void;
+  onAddToCart: (product: Product, size: string) => void;
 }
 
 const ProductCard = ({
@@ -37,16 +38,15 @@ const ProductCard = ({
     Record<string, string | null>
   >({});
   //  const { wishlist,guestWishlist, toggleWishlist } = useWishlist();
-   const { wishlist, guestWishlist, loading } = useAppSelector(
+  const { wishlist, guestWishlist, loading } = useAppSelector(
     (state) => state.wishlist
   );
 
   const dispatch = useAppDispatch();
-  const {data: session} = useSession();
+  const { data: session } = useSession();
   const userId = session?.user.id;
 
-   const wishlistItems = wishlist.length > 0 ? wishlist : guestWishlist;
-
+  const wishlistItems = wishlist.length > 0 ? wishlist : guestWishlist;
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
@@ -62,19 +62,26 @@ const ProductCard = ({
     }
   };
 
-
-  const handleToggleWishlist = (productId: string, size?: string) => {
+  const handleToggleWishlist = (productId: string, image: string, price: number, name: string, size?: string ) => {
     if (userId) {
       const exists = wishlist.some(
         (item) => item.productId === productId && item.size === size
       );
       dispatch(toggleWishlist({ userId, productId, size, exists }));
     } else {
-      dispatch(toggleGuestWishlist({ productId, size }));
+      dispatch(
+        toggleGuestWishlist({
+          productId: productId,
+          name,
+          price: Number(price),
+          image: image,
+          size: size,
+        })
+      );
     }
   };
-  
-    useEffect(() => {
+
+  useEffect(() => {
     if (userId) {
       dispatch(fetchWishlist(userId));
     } else {
@@ -135,16 +142,20 @@ const ProductCard = ({
         )}
 
         <button
-          onClick={() => handleToggleWishlist(id, sizes?.at(0))}
+          onClick={() => handleToggleWishlist(id, image, price, name, sizes?.at(0) )}
           aria-label="Toggle wishlist"
           className={`hidden group-hover:flex absolute right-6 top-6 text-white rounded-full hover:bg-black p-2 ${
-            wishlistItems?.some((w) => w.productId === id)  ? "bg-black" : "bg-zinc-400"
+            wishlistItems?.some((w) => w.productId === id)
+              ? "bg-black"
+              : "bg-zinc-400"
           }`}
         >
           <StarIcon
             size={16}
             className={
-             wishlistItems.some((w) => w.productId === id) ? "fill-orange-400 text-orange-400" : ""
+              wishlistItems.some((w) => w.productId === id)
+                ? "fill-orange-400 text-orange-400"
+                : ""
             }
           />
         </button>
