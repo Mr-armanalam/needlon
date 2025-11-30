@@ -1,11 +1,10 @@
+import { auth } from "@/auth";
 import { db } from "@/db";
 import { orderItems } from "@/db/schema/order-items";
 import { orders } from "@/db/schema/orders";
 import { productItems } from "@/db/schema/product-items";
 import { userAddress } from "@/db/schema/user-address";
-import { authOptions } from "@/lib/auth-option/auth-data";
 import { and, eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { NextRequest } from "next/server";
 
 export async function GET(
@@ -15,21 +14,19 @@ export async function GET(
   try {
     const { id: orderId } = await params;
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     if (!session?.user?.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-
     const userId = session.user.id;
 
     const order = await db
-      .select(
-        {
+      .select({
         orderDate: orders.createdAt,
         orderId: orderItems.id,
-        shippingAddress: {...userAddress},
+        shippingAddress: { ...userAddress },
         itemName: productItems.name,
         image: productItems.image,
         // size: orderItems.size
@@ -41,15 +38,13 @@ export async function GET(
         podCharge: orders.pod_charge,
         priceAtperchage: orderItems.priceAtPurchase,
         totalPurchasePrice: orders.total,
-        couponDiscount: orders.coupon_discount
-      }
-    )
+        couponDiscount: orders.coupon_discount,
+      })
       .from(orderItems)
       .leftJoin(orders, eq(orderItems.orderId, orders.id))
       .leftJoin(productItems, eq(orderItems.productId, productItems.id))
       .leftJoin(userAddress, eq(orders.shipping_address, userAddress.id))
       .where(and(eq(orderItems.orderId, orderId), eq(orders.userId, userId)));
-      
 
     return Response.json({ order }, { status: 200 });
   } catch (error) {

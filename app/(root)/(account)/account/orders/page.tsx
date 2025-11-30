@@ -7,22 +7,32 @@
 
 // export default page;
 
-
 // app/orders/page.tsx
 
-import OrderView from '@/modules/orders/view/order-view';
+import OrderView from "@/modules/orders/view/order-view";
 import { GroupedOrder } from "@/app/api/orders/route";
+import { cookies } from "next/headers";
 
-export default async function Page({ searchParams }: { searchParams: { search?: string } }) {
-  const searchQuery = searchParams.search || "";
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ search?: string }>;
+}) {
+  const params = await searchParams;
+  const searchQuery = params.search || "";
+  const cookieStore = cookies().toString();
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/orders?search=${searchQuery}`, {
-    cache: "no-store",
-    credentials: 'include'
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/orders?search=${searchQuery}`,
+    {
+      cache: "no-store",
+      headers: {
+        Cookie: cookieStore,
+      },
+    }
+  );
 
   const orders: GroupedOrder[] = res.status === 401 ? [] : await res.json();
-  
 
   return <OrderView initialOrders={orders} initialSearch={searchQuery} />;
 }

@@ -1,14 +1,13 @@
+import { auth } from "@/auth";
 import { db } from "@/db";
 import { coupons } from "@/db/schema/coupons";
 import { rewardSchema } from "@/db/schema/rewards";
-import { authOptions } from "@/lib/auth-option/auth-data";
 import { eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     const userId = session?.user?.id;
 
     if (!userId) {

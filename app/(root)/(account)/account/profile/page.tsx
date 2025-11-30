@@ -1,11 +1,10 @@
-import { authOptions } from "@/lib/auth-option/auth-data";
+import { auth } from "@/auth";
 import { getPersonalinfo } from "@/modules/account/server/personal-Info-controller";
 import PersonalInfo from "@/modules/account/view/personal-info";
-import { getServerSession } from "next-auth";
 import React from "react";
 
 const page = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   const userId = session?.user?.id;
   
   let personalData = null;

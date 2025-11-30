@@ -1,13 +1,12 @@
+import { auth } from "@/auth";
 import { db } from "@/db";
 import { updateSchema } from "@/db/schema/updates";
-import { authOptions } from "@/lib/auth-option/auth-data";
 import { and, eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     const userId = session?.user?.id;
 
     if (!userId) {
@@ -30,7 +29,7 @@ export const GET = async () => {
 
 export const PATCH = async (req: NextRequest) => {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     const userId = session?.user?.id;
 
     if (!userId) {
