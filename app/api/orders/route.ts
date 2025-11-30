@@ -24,7 +24,7 @@ export type GroupedOrder = {
 };
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);  
 
   if (!session?.user?.id) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
