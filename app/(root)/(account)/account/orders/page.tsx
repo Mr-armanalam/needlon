@@ -23,11 +23,11 @@ export default async function Page({
   const cookieStore = cookies().toString();
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/orders?search=${searchQuery}`,
+    `${process.env.NEXT_PUBLIC_URL}/api/orders?search=${searchQuery}`,
     {
       cache: "no-store",
       headers: {
-        Cookie: cookieStore,
+        Cookie: cookieStore, //TODO: BUILD REQUEST UI FOR GETTING COOKIES PERMISSION
       },
     }
   );

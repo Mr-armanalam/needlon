@@ -66,7 +66,7 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
         />
       </div>
       <div className="bg-white">
-        {cart.map((item, i) => (
+        {cart?.length >= 0 && cart?.map((item, i) => (
           <CartItems
             key={i}
             name={item.name}

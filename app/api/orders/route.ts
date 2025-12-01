@@ -23,11 +23,8 @@ export type GroupedOrder = {
 };
 
 export async function GET(req: Request) {
-  console.log('hi');
   
-  const session = await auth();  
-  console.log(session, 'session');
-  
+  const session = await auth();    
 
   if (!session?.user?.id) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

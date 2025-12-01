@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { eq, and } from "drizzle-orm";
 import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
+import { auth } from "@/auth";
 
 export async function POST(req: NextRequest) {
   const { userId, cartItem, addQuantity = 0, removeQuantity = 0 } = await req.json();  
@@ -55,13 +56,17 @@ export async function POST(req: NextRequest) {
 }
 
 
-export const GET = async (req: NextRequest) => {
-  const { userId } = await req.json();
+// export const GET = async () => {
+//   // const { userId } = await req.json();
+//   const session = await auth();
+//   const userId = session?.user.id;
 
-  const [cartItem] = await db
-    .select()
-    .from(cartItems)
-    .where(eq(cartItems.userId, userId));
+//   if (!userId) return NextResponse.json({error: 'unauthorised access'}, {status: 401})
 
-  return NextResponse.json(cartItem, { status: 200 });
-};
+//   const [cartItem] = await db
+//     .select()
+//     .from(cartItems)
+//     .where(eq(cartItems.userId, userId));
+
+//   return NextResponse.json(cartItem, { status: 200 });
+// };

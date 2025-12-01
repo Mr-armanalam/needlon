@@ -32,7 +32,7 @@ const ApplyCoupon = ({
     code,
     percent,
     value,
-    id
+    id,
   }: {
     code: string;
     percent: number;
@@ -46,7 +46,7 @@ const ApplyCoupon = ({
     defaultValues: {
       coupon_code: "",
     },
-  });
+  });  
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const result = await validateCoupon({
@@ -59,26 +59,23 @@ const ApplyCoupon = ({
       return;
     }
 
-    if (
-      result?.coupon &&
-      typeof result.coupon.maxUses === "number" &&
-      result.coupon?.maxUses <= 2
-    ) {
+    if (result.coupon && result.coupon.usedCount! <= result.coupon.maxUses!) {
       if (result.coupon.type == "FLAT") {
         setCouponDiscount({
           code: result.coupon.code,
           value: result.coupon.value,
           percent: 0,
-          id: result.coupon.id
+          id: result.coupon.id,
         });
       } else {
         setCouponDiscount({
           code: result.coupon.code,
           value: 0,
           percent: result.coupon.value,
-          id: result.coupon.id
+          id: result.coupon.id,
         });
       }
+      
     }
   }
 

@@ -8,9 +8,6 @@ import { eq, sql } from "drizzle-orm";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-/**
- * Helper: compute sums from order_items and return totals
- */
 async function computeOrderSums(orderId: string) {
   const [result] = await db.execute(
     sql`
@@ -124,7 +121,7 @@ export async function POST(req: Request) {
       });
       stripeCouponId = coupon.id;
     }
-
+    
   
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
@@ -152,7 +149,7 @@ export async function POST(req: Request) {
         });
       }
     }
-
+    
     
     if (podChargeForOrder > 0) {
       line_items.push({
@@ -185,7 +182,6 @@ export async function POST(req: Request) {
         amount_total: String(total),
       },
     });
-
     
     await db
       .update(orders)
