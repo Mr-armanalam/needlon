@@ -1,14 +1,3 @@
-// import OrderView from "@/modules/orders/view/order-view";
-// import React from "react";
-
-// const page = () => {
-//   return <OrderView />;
-// };
-
-// export default page;
-
-// app/orders/page.tsx
-
 import OrderView from "@/modules/orders/view/order-view";
 import { GroupedOrder } from "@/app/api/orders/route";
 import { cookies } from "next/headers";
@@ -20,7 +9,7 @@ export default async function Page({
 }) {
   const params = await searchParams;
   const searchQuery = params.search || "";
-  const cookieStore = cookies().toString();
+  const cookieStore = await cookies().toString();
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/orders?search=${searchQuery}`,
@@ -36,3 +25,4 @@ export default async function Page({
 
   return <OrderView initialOrders={orders} initialSearch={searchQuery} />;
 }
+
