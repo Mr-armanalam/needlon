@@ -46,7 +46,6 @@ async function updateCouponUsage(userId: string, couponId: string) {
     })
     .where(eq(coupons.id, couponId));
 
-  console.log("✅ Coupon usage updated:", couponId);
 }
 
 export async function POST(req: Request) {
@@ -95,8 +94,6 @@ export async function POST(req: Request) {
   ) {
     const session = event.data.object as Stripe.Checkout.Session;
     const orderId = session.metadata?.orderId;
-    console.log(session, "session");
-
     if (orderId) {
       await db
         .update(orders)

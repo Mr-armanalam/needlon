@@ -1,12 +1,10 @@
+import { auth } from "@/auth";
 import { db } from "@/db";
 import { orderItems } from "@/db/schema/order-items";
 import { orders } from "@/db/schema/orders";
 import { productReview } from "@/db/schema/product-review";
-import { authOptions } from "@/lib/auth-option/auth-data";
 import { eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -19,7 +17,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const session = await getServerSession(authOptions);
+    const session = await auth();
 
     if (!session?.user?.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -78,7 +76,7 @@ export const POST = async (req: NextRequest) => {
 };
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session?.user?.id) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

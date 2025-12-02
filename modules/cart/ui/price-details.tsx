@@ -12,12 +12,12 @@ const PriceDetails = ({
   currentAddressId?: string;
   userId: string;
   cart: CartItem[];
-}) => {
+}) => {  
   const price = Math.round(
-    cart.reduce((totalPrice, item) => totalPrice + Number(item.price), 0)
+    cart?.reduce((totalPrice, item) => totalPrice + Number(item.price), 0)
   );
   const mrp_price = Math.round(
-    cart.reduce((totalPrice, item) => totalPrice + Number(item?.mrp_price), 0)
+    cart?.reduce((totalPrice, item) => totalPrice + Number(item?.mrp_price), 0)
   );
   const discount = Math.round(mrp_price - price);
   const [couponDiscount, setCouponDiscount] = useState({
@@ -30,33 +30,6 @@ const PriceDetails = ({
     ? couponDiscount.value
     : (price * couponDiscount.percent) / 100;
 
-
-  // const handlePayment = async () => {
-  //   try {
-  //     if (!currentAddressId) return;
-  //     const response = await fetch("/api/checkout", {
-  //       method: "POST",
-  //       cache: "no-cache",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         cartItems: cart,
-  //         percentDiscount: couponDiscount.percent,
-  //         discountAmount: couponDiscount.value,
-  //         couponId: couponDiscount.id,
-  //         price : Math.round(price),
-  //         mrp_price : Math.round(mrp_price),
-  //         userId,
-  //         currentAddressId,
-  //       }),
-  //     });
-  //     const { url } = await response.json();
-  //     window.location.href = url;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const handlePayment = async () => {
   try {
     if (!currentAddressId) return;
@@ -64,7 +37,7 @@ const PriceDetails = ({
     // Temporary logic: add shipping charge per product
     const cartWithShipping = cart.map((item) => ({
       ...item,
-      shippingCharge: item.shippingCharge ?? 50, // for now fixed 50₹ per product or based on condition
+      shippingCharge: item.shippingCharge ?? 50, 
     }));
 
     const response = await fetch("/api/checkout", {
@@ -91,6 +64,9 @@ const PriceDetails = ({
     console.log(error);
   }
 };
+
+// console.log(couponDiscount, 'coupon');
+
 
   return (
     <section>

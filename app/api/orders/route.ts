@@ -3,9 +3,8 @@ import { orders } from "@/db/schema/orders";
 import { orderItems } from "@/db/schema/order-items";
 import { productItems } from "@/db/schema/product-items";
 import { and, eq, ilike, sql } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { db } from "@/db";
-import { authOptions } from "@/lib/auth-option/auth-data";
+import { auth } from "@/auth";
 
 
 export type GroupedOrder = {
@@ -24,7 +23,8 @@ export type GroupedOrder = {
 };
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions);
+  
+  const session = await auth();    
 
   if (!session?.user?.id) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

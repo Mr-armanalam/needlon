@@ -40,7 +40,7 @@ export const fetchWishlist = createAsyncThunk(
   "wishlist/fetchWishlist",
   async (userId: string) => {
     const baseURL =
-      typeof window === "undefined" ? process.env.NEXT_PUBLIC_APP_URL : "";
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_URL : "";
 
     const res = await fetch(`${baseURL}/api/wishlist/${userId}`, {
       cache: "no-store",

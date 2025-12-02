@@ -30,8 +30,6 @@ export const GET = async (
       image: item.product_items.image,
       updatedAt: item.wishlist_items.updatedAt,
     }));
-
-    console.log('transform', transformedData);
     
     return NextResponse.json(transformedData, { status: 200 });
   } catch (error) {
