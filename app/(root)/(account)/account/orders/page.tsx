@@ -9,7 +9,10 @@ export default async function Page({
 }) {
   const params = await searchParams;
   const searchQuery = params.search || "";
-  const cookieStore = await cookies().toString();
+  const cookie = await cookies();
+  const cookieStore = cookie.toString();
+
+  // const cookieStore = await cookies().toString();
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/orders?search=${searchQuery}`,

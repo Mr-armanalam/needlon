@@ -1,45 +1,10 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import OrderDetails from "../components/oder-details";
 import OrderStatus from "../components/order-status";
-import { useParams } from "next/navigation";
-import { Address } from "@/features/address-slice";
+import { OrderItemProp } from "@/app/(root)/(account)/account/orders/[order]/page";
 
-interface OrderItemProp {
-  orderDate: Date;
-  orderId: string;
-  shippingAddress: Address;
-  paymentMode: string;
-  shippingCharge: number;
-  podCharge: number;
-  priceAtperchage: number;
-  productId: string;
-  image: string;
-  orderProperties?: string;
-  itemName: string;
-  couponDiscount: number;
-  totalPurchasePrice: number;
-}
 
-const IndividualOrder = () => {
-  const [orderItem, setOrderItem] = useState<OrderItemProp[]>();
-  const params = useParams();
-  const orderId = params.order;
-
-  async function fetchOrderById() {
-    if (!orderId) return;
-    const res = await fetch(`/api/orders/${orderId}`);
-    if (!res.ok) {
-      console.error("Failed to fetch order:", res.statusText);
-      return;
-    }
-    const result = await res.json();
-    setOrderItem(result.order);
-  }
-
-  useEffect(() => {
-    if (orderId) fetchOrderById();
-  }, [orderId]);
+const IndividualOrder = ({orderItem}: { orderItem: OrderItemProp[] | null }) => {
 
   const firstOrder = orderItem?.[0];
 

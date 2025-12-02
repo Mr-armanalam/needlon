@@ -5,22 +5,22 @@ import { orders } from "@/db/schema/orders";
 import { productItems } from "@/db/schema/product-items";
 import { userAddress } from "@/db/schema/user-address";
 import { and, eq } from "drizzle-orm";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  try {
+  try {    
     const { id: orderId } = await params;
 
     const session = await auth();
-
     if (!session?.user?.id) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = session.user.id;
+    if (!orderId) return NextResponse.json({error: 'Invalid order'}, {status: 400});
 
     const order = await db
       .select({
