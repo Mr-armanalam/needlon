@@ -22,8 +22,6 @@ export interface OrderItemProp {
 }
 
 async function getOrder(orderId: string, cookieStore: string) {
-  console.log(orderId, 'orderIdclient');
-
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/orders/${orderId}`,
     {

@@ -1,9 +1,10 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Rewards } from "../view/rewards-view";
 import { useRef, useState } from "react";
 import { CopyIcon, EyeIcon, ReceiptIndianRupee } from "lucide-react";
+import { Rewards } from "@/app/(root)/(account)/account/rewards/page";
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString("en-IN", {
@@ -18,27 +19,24 @@ export function CouponCard({ coupon }: { coupon: Rewards }) {
   const couponRef = useRef<HTMLDivElement | null>(null);
 
   const handleCopyClick = async () => {
-    // prefer copying the explicit coupon value, fallback to element textContent if available
     const textToCopy =
       coupon.coupon_code ?? couponRef.current?.textContent ?? "";
 
     if (!textToCopy) {
       setCopySuccess("Nothing to copy!");
-      setTimeout(() => setCopySuccess(""), 2000); // Clear message after 2 seconds
+      setTimeout(() => setCopySuccess(""), 2000);
       return;
     }
 
     try {
       await navigator.clipboard.writeText(textToCopy);
       setCopySuccess("Copied!");
-      setTimeout(() => setCopySuccess(""), 2000); // Clear message after 2 seconds
+      setTimeout(() => setCopySuccess(""), 2000);
     } catch (err) {
       setCopySuccess("Failed to copy!");
       console.error("Failed to copy text: ", err);
     }
   };
-
-  // const onApplycoupon = () => {};
 
   return (
     <Card
