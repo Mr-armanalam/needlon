@@ -1,6 +1,7 @@
 "use client";
 import { fetchCart } from "@/features/cart-slice";
 import {
+  fetchNotifications,
   selectUnreadCount,
 } from "@/features/notification-slice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
@@ -17,6 +18,7 @@ const CartAndWishList = () => {
   const unreadCount = useAppSelector(selectUnreadCount);
 
   useEffect(() => {
+    dispatch(fetchNotifications());
     dispatch(fetchCart(session?.user.id ?? ""));
   }, [dispatch, session]);
 

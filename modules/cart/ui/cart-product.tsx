@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CartItems from "../components/cart-items";
 import { ChooseAddress } from "../components/choose-address";
 import { CartItem } from "@/features/cart-slice";
@@ -47,7 +47,7 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
       </h1>
       <div className="flex justify-between items-center border-y py-4 mb-2 border-stone-200 bg-white px-4">
         {loading ? (
-          <div className="border px-2 flex-1 rounded-xl space-y-2">
+          <div className="p-2 pr-4 flex-1 rounded-xl space-y-2">
             <Skeleton className="h-6 w-40" />
             <Skeleton className="h-4 w-full" />
           </div>

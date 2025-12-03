@@ -186,7 +186,7 @@ const WishlistView = ({ serverWishlist = [], userId }: Props) => {
             <div className="flex gap-x-3 mt-3">
               <Button
                 onClick={() => handleAddToCart(item)}
-                className="text-xs rounded-full"
+                className="text-xs cursor-pointer rounded-full"
               >
                 Add to Cart
               </Button>
