@@ -17,6 +17,7 @@ const page = () => {
 }
 
 export default page
+// TODO: We have to implement get cookiew permission ui
 
 // import HomeView from "@/modules/home/view/home-view";
 // import React from "react";
