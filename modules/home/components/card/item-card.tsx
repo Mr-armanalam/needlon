@@ -10,7 +10,7 @@ export default function ProductCardPreview({
   offer: string;
 }) {
   return (
-    <div className="h-fit bg-gradient-to-br from-stone-100 to-stone-200 min-w-[340px] rounded-lg p-6 shadow-xl border border-gray-100 relative overflow-hidden flex flex-col md:flex-row gap-2">
+    <div className="h-fit cursor-pointer transition hover:transition-discrete hover:-translate-1 bg-gradient-to-br from-stone-100 to-stone-200 hover:from-stone-100 hover:to-stone-50 min-w-[340px] rounded-lg p-6 shadow-xl border border-gray-100 relative overflow-hidden flex flex-col md:flex-row gap-2">
       <div className="flex-1 mt-3">
         <div className="text-[10px] text-gray-600">
           <span className="font-semibold">4.5 ★★★★★</span> / 5
@@ -43,7 +43,7 @@ export default function ProductCardPreview({
       </div>
 
       <div className="flex-1  w-full flex justify-center relative">
-        <div className="relative w-[110px] h-[160px] flex items-center justify-center">
+        <div className="relative w-[140px] h-[170px] flex items-center justify-center">
           <Image
             fill
             src={image ?? "/images/image6.png"}
