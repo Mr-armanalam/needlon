@@ -72,7 +72,7 @@ const HeroSlider = () => {
   return (
     <div className="flex cursor-pointer flex-col items-center">
       <Carousel
-         setApi={setApi}
+        setApi={setApi}
         opts={{
           loop: true,
           align: "start",

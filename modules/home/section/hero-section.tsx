@@ -1,11 +1,12 @@
 import React from 'react'
-import RecentSearch from '../components/hero-components/recent-search'
+import SubcatSearch from '../components/hero-components/subcat-search'
 import HeroSlider from '../components/hero-components/hero-slider'
 
-const HeroSection = () => {
+const HeroSection = async() => {
+  
   return (
     <section className='px-8 mb-16 w-full'>
-      <RecentSearch />
+      <SubcatSearch />
       <HeroSlider />
     </section>
   )
