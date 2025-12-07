@@ -1,10 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCustomSearchParams } from "@/modules/shared/navigation/set-search-params";
 import React, { useEffect, useRef, useState } from "react";
 
-const recentSearches = [
-  { label: "recent" },
+const subCatSearches = [
   { label: "Wedding Sherwani" },
   { label: "Custom Blazer" },
   { label: "Silk Saree" },
@@ -14,13 +14,18 @@ const recentSearches = [
   { label: "Party Gown" },
   { label: "Tailored Waistcoat" },
   { label: "Casual Linen Shirt" },
+  { label: "Party Gown" },
+  { label: "Tailored Waistcoat" },
+  { label: "Casual Linen Shirt" },
   { label: "Office Pants" },
 ];
 
-export default function RecentSearch() {
+export default function SubcatSearch() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [showAllSubcat, setshowAllSubcat] = useState(false);
   const [showLeftFade, setShowLeftFade] = useState(false);
   const [showRightFade, setShowRightFade] = useState(false);
+  const {setParam} = useCustomSearchParams();
 
   const checkScroll = () => {
     const el = containerRef.current;
@@ -40,26 +45,32 @@ export default function RecentSearch() {
 
   return (
     <div className="relative top-1">
-      {/* Left gradient */}
       {showLeftFade && (
         <div className="absolute left-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
       )}
 
-      {/* Scrollable tags */}
       <div
         ref={containerRef}
         className="flex gap-x-4 overflow-x-auto no-scrollbar"
       >
-        {recentSearches.slice(0, 5).map((item, i) => (
+        <Button
+          className={cn(
+            "text-xs cursor-pointer bg-gray-900 text-white hover:bg-black disabled:bg-black"
+          )}
+          variant={"secondary"}
+          size={"sm"}
+        >
+          Explore
+        </Button>
+
+        {subCatSearches.slice(0, showAllSubcat ? -1 : 5).map((item, i) => (
           <Button
             key={i}
-            className={cn(
-              "text-xs cursor-pointer hover:bg-zinc-300",
-              i === 0 &&
-                "bg-gray-900 text-white hover:bg-black disabled:bg-black"
-            )}
+            className={cn("text-xs cursor-pointer hover:bg-zinc-300")}
             variant={"secondary"}
             size={"sm"}
+            onClick={() =>setParam(item.label.toString(), true)
+            }
           >
             {item.label.toLowerCase()}
           </Button>
@@ -69,12 +80,12 @@ export default function RecentSearch() {
           className={cn("text-xs cursor-pointer hover:bg-zinc-300")}
           variant={"secondary"}
           size={"sm"}
+          onClick={() => setshowAllSubcat((previousState) => !previousState)}
         >
-          {"see all"}
+          {showAllSubcat ? "see less" : "see all"}
         </Button>
       </div>
 
-      {/* Right gradient */}
       {showRightFade && (
         <div className="absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
       )}
