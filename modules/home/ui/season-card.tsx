@@ -26,9 +26,9 @@ const SeasonCard = () => {
       </div>
       <div className="text-white mt-6">
         <div className="h-2 -skew-8 bg-white" />
-        <div className="relative p-6 pt-12 text-white">
+        <div className="relative px-6 pt-8 text-white">
           {/* Rating and Reviews */}
-          <div className="mb-2">*****</div>
+          <div className="">*****</div>
 
           {/* ProductData Name */}
           <h2 className="text-2xl font-extrabold leading-snug mb-2">
@@ -36,7 +36,7 @@ const SeasonCard = () => {
           </h2>
 
           {/* Price */}
-          <p className="text-xl font-bold mb-4">
+          <p className="text-lg font-semibold">
             USD {productData.price.toFixed(2)}
           </p>
 
