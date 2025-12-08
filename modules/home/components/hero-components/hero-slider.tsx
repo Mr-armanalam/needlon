@@ -18,8 +18,6 @@ import { heroProps } from "@/app/(root)/(home)/@hero_section/page";
 const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
   const [current, setCurrent] = useState(0);
   const [api, setApi] = useState<any>(null);
-
-  console.log(tailoringServices, 'kk');
   
   useEffect(() => {
     if (!api) return;

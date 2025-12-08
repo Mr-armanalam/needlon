@@ -19,16 +19,21 @@ export type heroProps = {
   timestamp?: Date;
 }
 
+
 const page = async() => {
 
   const heroItemResponse = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/hero-items`);
   const heroItemResult = await heroItemResponse.json();
   const tailoringServices: heroProps[] = heroItemResponse.status !== 200 ? [] : heroItemResult?.items;
   
+  const subcatItemResponse = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/sub-cat-search`);
+  const subcatItemResult = await subcatItemResponse.json();
+  const subCatSearches: Pick<heroProps, 'id' | 'name' | 'slug' | 'image' >[]= subcatItemResponse.status !== 200 ? [] : subcatItemResult?.items;
+  
   
   return (
     <section className="px-8 mb-16 w-full">
-      <SubcatSearch />
+      <SubcatSearch subCatSearchesItem={subCatSearches} />
       <HeroSlider tailoringServices={tailoringServices} />
     </section>
   );

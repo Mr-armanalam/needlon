@@ -1,26 +1,11 @@
 "use client";
+import { heroProps } from "@/app/(root)/(home)/@hero_section/page";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCustomSearchParams } from "@/modules/shared/navigation/set-search-params";
 import React, { useEffect, useRef, useState } from "react";
 
-const subCatSearches = [
-  { label: "Wedding Sherwani" },
-  { label: "Custom Blazer" },
-  { label: "Silk Saree" },
-  { label: "Formal Shirt Stitching" },
-  { label: "Lehenga Choli" },
-  { label: "Designer Kurta" },
-  { label: "Party Gown" },
-  { label: "Tailored Waistcoat" },
-  { label: "Casual Linen Shirt" },
-  { label: "Party Gown" },
-  { label: "Tailored Waistcoat" },
-  { label: "Casual Linen Shirt" },
-  { label: "Office Pants" },
-];
-
-export default function SubcatSearch() {
+export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: Pick<heroProps, 'id' | 'name' | 'slug' | 'image' >[]}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showAllSubcat, setshowAllSubcat] = useState(false);
   const [showLeftFade, setShowLeftFade] = useState(false);
@@ -63,16 +48,16 @@ export default function SubcatSearch() {
           Explore
         </Button>
 
-        {subCatSearches.slice(0, showAllSubcat ? -1 : 5).map((item, i) => (
+        {subCatSearchesItem.slice(0, showAllSubcat ? -1 : 5).map((item, i) => (
           <Button
             key={i}
             className={cn("text-xs cursor-pointer hover:bg-zinc-300")}
             variant={"secondary"}
             size={"sm"}
-            onClick={() =>setParam(item.label.toString(), true)
+            onClick={() =>setParam(item.slug.toString(), true)
             }
           >
-            {item.label.toLowerCase()}
+            {item.name.toLowerCase()}
           </Button>
         ))}
 

@@ -2,7 +2,6 @@
 import { db } from "@/db";
 import { heroItems } from "@/db/schema/hero-items";
 import { supabaseServer } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
