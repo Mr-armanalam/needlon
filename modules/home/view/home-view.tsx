@@ -12,7 +12,7 @@ const item = [
 const HomeView = () => {
   return (
     <div>
-      <HeroSection />
+      {/* <HeroSection /> */}
       <div className="bg-gray-100 flex flex-col gap-y-2 p-2">
         {item.map(({heading}, i) => (
           <HomePremRecomLike key={i} heading={heading} />

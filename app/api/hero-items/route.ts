@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { db } from "@/db";
+import { heroItems } from "@/db/schema/hero-items";
 import { supabaseServer } from "@/lib/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
@@ -28,24 +31,33 @@ export async function POST(req: Request) {
     if (uploadError) throw uploadError;
 
     const {
-      data: { publicUrl }
+      data: { publicUrl },
     } = supabase.storage.from("hero-images").getPublicUrl(fileName);
 
     // --- 2. Insert into heroItems table ---
-    const { error: insertError } = await supabase
-      .from("heroItems")
-      .insert({
-        name,
-        description,
-        offer,
-        slug,
-        image: publicUrl
-      });
+    const { error: insertError } = await supabase.from("heroItems").insert({
+      name,
+      description,
+      offer,
+      slug,
+      image: publicUrl,
+    });
 
     if (insertError) throw insertError;
 
     return Response.json({ success: true, image: publicUrl }, { status: 200 });
   } catch (err: any) {
     return Response.json({ error: err.message }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const data = await db.select().from(heroItems);
+    if (!data)
+      return Response.json({ error: "Server side error" }, { status: 501 });
+    return Response.json({ success: true, items: data }, { status: 200 });
+  } catch (error: any) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
 }
