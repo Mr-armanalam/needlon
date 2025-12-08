@@ -12,54 +12,15 @@ import { LucideTag } from "lucide-react";
 import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect, useState } from "react";
+import { heroProps } from "@/app/(root)/(home)/@hero_section/page";
 
-export const tailoringServices = [
-  {
-    id: 1,
-    name: "Wedding Sherwani",
-    description:
-      "Premium handcrafted sherwanis tailored for your special day. Choose from royal embroidery, rich fabrics, and a perfect fit. Designed to make you stand out.",
-    image: "/images/image1.png",
-    offer: "Flat 15% off for wedding season",
-  },
-  {
-    id: 2,
-    name: "Custom Kurta",
-    description:
-      "Elegant kurtas stitched to your measurements with top-quality cotton and silk blends. Ideal for festive, casual, and formal occasions alike.",
-    image: "/images/image1.png",
-    offer: null,
-  },
-  {
-    id: 3,
-    name: "Tailored Pants",
-    description:
-      "Sharp, well-fitted trousers for work, events, or everyday wear. Made with durable fabrics and expert tailoring for unmatched comfort.",
-    image: "/images/image2.png",
-    offer: "Buy 2 get 1 free",
-  },
-  {
-    id: 4,
-    name: "Silk Saree Draping & Stitching",
-    description:
-      "Perfectly pleated silk sarees and matching blouses. Our expert tailoring ensures elegance and comfort for weddings and festive events.",
-    image: "/images/image3.png",
-    offer: "Free blouse stitching with every saree",
-  },
-  {
-    id: 5,
-    name: "Formal Shirt Stitching",
-    description:
-      "Crisp, tailored shirts for business and events. Choose from premium cotton fabrics and get a perfect, confidence-boosting fit.",
-    image: "/images/image4.png",
-    offer: null,
-  },
-];
 
-const HeroSlider = () => {
+const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
   const [current, setCurrent] = useState(0);
   const [api, setApi] = useState<any>(null);
 
+  console.log(tailoringServices, 'kk');
+  
   useEffect(() => {
     if (!api) return;
     setCurrent(api.selectedScrollSnap());
