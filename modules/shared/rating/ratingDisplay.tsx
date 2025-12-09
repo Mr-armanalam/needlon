@@ -1,5 +1,5 @@
-import { calculateRatingMetrics } from "@/lib/utils";
 import { RatingComponentProps } from "@/types/ratingTypes";
+import { calculateRatingMetrics } from "@/utils/calculate-rating-metrics";
 import { StarHalfIcon, StarIcon } from "lucide-react";
 import React from "react";
 
@@ -28,9 +28,9 @@ const Star = ({ type, color, size }: { type: "full" | "half" | "empty" , color?:
   }
 };
 
-const RatingDisplay = ({ color='#FFDF00', ratings,size, maxRating = 5 }: RatingComponentProps) => {
+const RatingDisplay = ({ color='#FFDF00', avgRating,  ratings,size}: RatingComponentProps) => {
   const { fullStars, halfStar, emptyStars } =
-    calculateRatingMetrics(ratings, maxRating);
+    calculateRatingMetrics(ratings, 5, avgRating);
 
   const fullStarElements = Array(fullStars).fill(<Star color={color} size={size} type="full" />);
   const halfStarElements = Array(halfStar).fill(<Star color={color} size={size} type="half" />);

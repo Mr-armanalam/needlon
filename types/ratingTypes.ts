@@ -6,7 +6,8 @@ export interface RatingData {
 }
 
 export interface RatingComponentProps {
-  ratings: RatingData[];
+  avgRating: string;
+  ratings?: RatingData[];
   maxRating?: number; // Default to 5
   size?: number;
   color?: string;
