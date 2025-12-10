@@ -3,9 +3,9 @@ import { RatingData } from "@/types/ratingTypes";
 export const calculateRatingMetrics = (
   ratings?: RatingData[],
   maxRating: number = 5,
-  avgRating: string,
+  avgRating: string | number = 0,
 ) => {
-  if (ratings.length === 0) {
+  if (ratings?.length === 0) {
     return {
       averageRating: 0,
       fullStars: 0,
