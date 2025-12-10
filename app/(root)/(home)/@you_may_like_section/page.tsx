@@ -3,11 +3,10 @@ import { getProductByType } from "@/modules/shared/product-items/server/get-prod
 import React from "react";
 
 const page = async() => {
-  const premiumItems = await getProductByType({type: 'premium'}) || [];
-  
+  const userLikeItem = await getProductByType({type: 'user_like'}) || [];
   return (
     <section className="p-2 bg-gray-100">
-      <HomePremRecomLike items={premiumItems} heading={"Premium Items"} />
+      <HomePremRecomLike items={userLikeItem} heading={"You may like"} />
     </section>
   );
 };

@@ -29,7 +29,6 @@ export default function ProductCardPreview({
 
         <p className="mt-1 text-[10px] font-semibold text-gray-500 leading-4">
           Timeless style. Effortless cool.
-          {/* {item.} */}
         </p>
 
         <div className="mt-2 items-center gap-x-2 flex">

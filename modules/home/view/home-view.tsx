@@ -6,9 +6,8 @@ import SeasonSection from "../section/season-section";
 const HomeView = () => {
   return (
     <div>
-      <HomePremRecomLike heading={"You may like"} />
       <SeasonSection />
-      <HomePremRecomLike heading="Recommended Items" />
+      <HomePremRecomLike items={[]} heading="Recommended Items" />
       <DescriptionSection />
     </div>
   );

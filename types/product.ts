@@ -3,9 +3,10 @@ export interface ClientProductItem {
   name: string;
   createdAt: Date;
   updatedAt: Date;
-  category: string | null;
-  CatType: string | null;
-  SubCatType: string | null;
+  // category: string | null;
+  // CatType: string | null;
+  // SubCatType: string | null;
+  categoryId: string,
   mrp_price: string | null; 
   price: string;
   quantity: number;
