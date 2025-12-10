@@ -5,6 +5,7 @@ import { productItems } from "@/db/schema/product-items";
 import { orderItems } from "@/db/schema/order-items";
 import { eq, desc, inArray, sql } from "drizzle-orm";
 import { buildUserPreferenceVector } from "@/lib/recommendation-item";
+import { auth } from "@/auth";
 
 // ----------------------------------------------------
 // 1️⃣ Trending Products
@@ -49,9 +50,9 @@ async function getTopRatedProducts() {
 // ----------------------------------------------------
 // MAIN API ROUTE
 // ----------------------------------------------------
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get("userId");
+export async function GET() {
+  const session = await auth();    
+  const userId = session?.user.id;
 
   let recommended: any[] = [];
   let youMayLike: any[] = [];

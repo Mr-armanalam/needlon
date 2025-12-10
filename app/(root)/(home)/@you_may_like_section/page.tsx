@@ -5,7 +5,7 @@ import React from "react";
 const page = async() => {
   const userLikeItem = await getProductByType({type: 'user_like'}) || [];
   return (
-    <section className="p-2 bg-gray-100">
+    <section>
       <HomePremRecomLike items={userLikeItem} heading={"You may like"} />
     </section>
   );

@@ -12,16 +12,30 @@ export async function getProductByType({
 
     switch (type) {
       case "premium":
-         data = await db
+        data = await db
           .select()
           .from(productItems)
           .where(eq(productItems.isPremium, true));
         break;
 
       case "recommend":
+        const recommendRes = await fetch(
+          `${process.env.NEXT_PUBLIC_URL}/api/home-recommendation`,
+          { cache: "no-store" }
+        );
+
+        const { recommended } = await recommendRes.json();
+        data = recommended;
         break;
 
       case "user_like":
+        const userLikeRes = await fetch(
+          `${process.env.NEXT_PUBLIC_URL}/api/home-recommendation`,
+          { cache: "no-store" }
+        );
+
+        const { youMayLike } = await userLikeRes.json();
+        data = youMayLike;
         break;
 
       default:
