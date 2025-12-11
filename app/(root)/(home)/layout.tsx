@@ -6,12 +6,14 @@ const Layout = ({
   premium_section,
   you_may_like_section,
   recommendation_section,
+  season_section
 }: {
   children: ReactNode;
   hero_section: ReactNode;
   premium_section: ReactNode;
   you_may_like_section: ReactNode;
   recommendation_section: ReactNode;
+  season_section: ReactNode;
 }) => {
   return (
     <>
@@ -19,8 +21,9 @@ const Layout = ({
       <div className="bg-gray-100 flex flex-col gap-y-2 p-2">
         {premium_section}
         {you_may_like_section}
-        {children}
+        {season_section}
         {recommendation_section}
+        {children}
       </div>
     </>
   );
