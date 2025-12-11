@@ -1,11 +1,9 @@
 export interface ClientProductItem {
   id: string;
   name: string;
+  tagName: string;
   createdAt: Date;
   updatedAt: Date;
-  // category: string | null;
-  // CatType: string | null;
-  // SubCatType: string | null;
   categoryId: string,
   mrp_price: string | null; 
   price: string;

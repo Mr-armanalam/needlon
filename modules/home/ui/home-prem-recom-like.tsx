@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { Button } from "@/components/ui/button";
 import ProductCardPreview from "../components/card/item-card";
@@ -12,14 +11,6 @@ const HomePremRecomLike = ({heading, items}:{heading: string, items:ClientProduc
         {heading}
       </h1>
       <div className="flex overflow-auto px-6 gap-x-4 py-8 rounded-sm no-scrollbar relative">
-        {/* {Array.from({ length: 5 }).map((_, i) => (
-          <ProductCardPreview
-            key={i}
-            image="/images/image1.png"
-            title="serwani"
-            offer="from ₹500"
-          />
-        ))} */}
         {items?.length > 0 && items.map((i, k) => (
           <ProductCardPreview
             key={k}

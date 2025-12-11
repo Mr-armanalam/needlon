@@ -16,11 +16,9 @@ import { productCategory } from "./product-category";
 
 export const productItems = pgTable("product_items", {
   id: uuid("id").primaryKey().defaultRandom(),
-  // category: text("category"),
-  // CatType: text("category_type"),
-  // SubCatType: text("sub_category_type"),
   categoryId: uuid('category_id').notNull().references(() => productCategory.id, {onDelete: 'cascade'}),
   name: text("name").notNull(),
+  tagName: text('tag_name').notNull(),
   mrp_price: numeric("mrp_price", { precision: 10, scale: 2 }).default(
     "1500.00"
   ),
