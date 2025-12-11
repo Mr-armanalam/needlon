@@ -15,4 +15,5 @@ export interface ClientProductItem {
   averageRating: string; 
   reviewCount: number;
   isPremium: boolean;
+  seasonType: string;
 }

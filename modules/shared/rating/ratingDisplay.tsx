@@ -32,9 +32,9 @@ const RatingDisplay = ({ color='#FFDF00', avgRating,  ratings,size}: RatingCompo
   const { fullStars, halfStar, emptyStars } =
     calculateRatingMetrics(ratings, 5, avgRating);
 
-  const fullStarElements = Array(fullStars).fill(<Star color={color} size={size} type="full" />);
-  const halfStarElements = Array(halfStar).fill(<Star color={color} size={size} type="half" />);
-  const emptyStarElements = Array(emptyStars).fill(<Star color={color} size={size} type="empty" />);
+  const fullStarElements = Array(fullStars).fill(undefined).map((_, i) => (<Star key={`full-${i}`} color={color} size={size} type="full" />));
+  const halfStarElements = Array(halfStar).fill(undefined).map((_, k) => (<Star key={`half-${k}`} color={color} size={size} type="half" />));
+  const emptyStarElements = Array(emptyStars).fill(undefined).map((_, i) => (<Star key={`empty-${i}`} color={color} size={size} type="empty" />));
 
   return (
     <div className="flex flex-col gap-[5px]">

@@ -43,12 +43,12 @@ export default function ProductCardPreview({
       </div>
 
       <div className="flex-1  w-full flex justify-center relative">
-        <div className="relative w-[140px] h-[170px] flex items-center justify-center">
+        <div className="relative rounded-2xl border w-[140px] h-[170px] flex items-center justify-center">
           <Image
             fill
             src={item.image ?? "/images/image6.png"}
             alt="Denim Jacket"
-            className="object-contain rounded-4xl max-h-full max-w-full"
+            className="object-fill rounded-2xl max-h-full w-full"
           />
         </div>
       </div>
