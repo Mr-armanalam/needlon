@@ -63,15 +63,15 @@ const ItemControl = ({ sort, category, setFilterOpen }: param) => {
               </span>
             </Button>
           ))}
-          {Object.entries(params).flatMap(([_, values]) => values).length > 5 && (
-            <Button
-              onClick={() => setFilterOpen(true)}
-              className="rounded-full text-xl pb-5 cursor-pointer"
-              variant={"default"}
-            >
-              . . .
-            </Button>
-          )}
+        {Object.entries(params).flatMap(([_, values]) => values).length > 5 && (
+          <Button
+            onClick={() => setFilterOpen(true)}
+            className="rounded-full text-xl pb-5 cursor-pointer"
+            variant={"default"}
+          >
+            . . .
+          </Button>
+        )}
         {Object.keys(params).length > 0 && (
           <Button
             onClick={clearAll}
@@ -85,17 +85,24 @@ const ItemControl = ({ sort, category, setFilterOpen }: param) => {
       <div className="flex gap-4">
         <Select
           value={sort}
-          onValueChange={(sortby) =>
-            router.push(`/ready-to-wear/${category}?sort=${sortby}`)
-          }
+          onValueChange={(sortby) => {
+            const newParams = new URLSearchParams(searchParams.toString());
+            let values = newParams.get(category)?.split(",") || [];
+            values = values.filter((v) => v === sortby);
+            if (values.length > 0) return;
+            newParams.set("sort", sortby);
+            return router.push(
+              `/ready-to-wear/${category}?${newParams.toString()}`
+            );
+          }}
         >
           <SelectTrigger className="w-[200px] text-gray-900 min-h-10 border-stone-300 shadow-none rounded-xs focus-visible:outline-none h-[60px]">
             <SelectValue className="text-stone-300/70" placeholder="Featured" />
           </SelectTrigger>
           <SelectContent className="rounded-xs gap-y-12">
             <SelectItem value="featured">Sort By: Featured</SelectItem>
-            <SelectItem value="priceHigh">Price: Low to High</SelectItem>
-            <SelectItem value="priceLow">Price: High to Low</SelectItem>
+            <SelectItem value="priceLow">Price: Low to High</SelectItem>
+            <SelectItem value="priceHigh">Price: High to Low</SelectItem>
           </SelectContent>
         </Select>
 

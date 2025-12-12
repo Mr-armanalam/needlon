@@ -104,22 +104,25 @@ const FilterDrawer = ({ category, setFilterOpen, filterOpen }: filterParam) => {
     value: string,
     checked: boolean
   ) => {
+    const params = new URLSearchParams(searchParams.toString());
+
     setSelectedFilters((prev) => {
       const existing = prev[category] || [];
       const updated = checked
         ? [...existing, value]
         : existing.filter((v) => v !== value);
 
-      const params = new URLSearchParams(searchParams.toString());
+      // const params = new URLSearchParams(searchParams.toString());
       if (updated.length > 0) {
         params.set(category, updated.join(","));
       } else {
         params.delete(category);
       }
-      router.push(`?${params.toString()}`);
+      // router.push(`?${params.toString()}`);
 
       return { ...prev, [category]: updated };
     });
+    router.push(`?${params.toString()}`);
   };
 
   useEffect(() => {
@@ -130,6 +133,7 @@ const FilterDrawer = ({ category, setFilterOpen, filterOpen }: filterParam) => {
     });
     setSelectedFilters(filters);
   }, [searchParams]);
+
   return (
     <AnimatePresence>
       {filterOpen && (

@@ -4,7 +4,6 @@ import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
 import { productItems } from "@/db/schema/product-items";
 
-
 export async function GET( req: Request,
   { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -20,8 +19,6 @@ export async function GET( req: Request,
         createdAt: cartItems.createdAt,
         updatedAt: cartItems.updatedAt,
         name: productItems.name,
-        category: productItems.category,
-        CatType: productItems.CatType,
         price: productItems.price,
         mrp_price: productItems.mrp_price,
         image: productItems.image,
@@ -29,7 +26,7 @@ export async function GET( req: Request,
       })
       .from(cartItems)
       .where(eq(cartItems.userId, id))
-      .innerJoin(productItems, eq(cartItems.productId, productItems.id));
+      .innerJoin(productItems, eq(cartItems.productId, productItems.id))
 
     return NextResponse.json(cartItem);
   } catch (error) {

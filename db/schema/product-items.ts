@@ -34,8 +34,8 @@ export const productItems = pgTable("product_items", {
   reviewCount: integer("review_count").default(0).notNull(),
   isPremium: boolean("is_premium").notNull().default(false),
   seasonType: text('season_type').notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const productItemsRelation = relations(productItems, ({ many }) => ({

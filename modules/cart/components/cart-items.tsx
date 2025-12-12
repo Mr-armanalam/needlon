@@ -1,12 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { removeFromCart } from "@/features/cart-slice";
+import { fetchCart, removeFromCart } from "@/features/cart-slice";
 import { toggleWishlist } from "@/features/wishlist-slice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { format } from "date-fns";
 import { Trash2Icon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type cartItemProps = {
@@ -26,10 +27,10 @@ const CartItems = ({
   price = 400,
   updatedAt = new Date(),
 }: cartItemProps) => {
-  
-  const {wishlist, } = useAppSelector(state => state.wishlist);
-  const {data: session} = useSession();
+  const { wishlist } = useAppSelector((state) => state.wishlist);
+  const { data: session } = useSession();
   const userId = session?.user.id;
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
 
@@ -51,19 +52,27 @@ const CartItems = ({
           <Button
             disabled={!!wishlist.find((item) => item.productId === productId)}
             onClick={() =>
-              dispatch(toggleWishlist({
-                userId: userId ?? '',
-                productId,
-                size: size,
-                exists: !!wishlist.find((item) => item.productId === productId),
-              }))
+              dispatch(
+                toggleWishlist({
+                  userId: userId ?? "",
+                  productId,
+                  size: size,
+                  exists: !!wishlist.find(
+                    (item) => item.productId === productId
+                  ),
+                })
+              )
             }
             className="text-xs cursor-pointer rounded-full mt-3"
           >
             Save for later
           </Button>
           <Button
-            onClick={() => dispatch(removeFromCart({userId, productId ,size}))}
+            onClick={() => {
+              dispatch(removeFromCart({ userId, productId, size }));
+              if (userId) dispatch(fetchCart(userId));
+              router.refresh();
+            }}
             variant={"outline"}
             className="text-xs cursor-pointer rounded-full mt-3"
           >
