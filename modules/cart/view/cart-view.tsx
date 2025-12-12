@@ -45,7 +45,7 @@ const CartView = ({ cart, userId }: CartViewProps) => {
 
   return (
     <main className="grid gap-4 my-6 grid-cols-3">
-      <div className="col-span-2 rounded shadow-sm">
+      <div className="col-span-2 h-fit rounded shadow-sm">
         <CartProduct
           cart={cart}
           currentAddress={currentAddress}

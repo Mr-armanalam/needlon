@@ -6,10 +6,37 @@ import { eq, asc, desc, or } from "drizzle-orm";
 import { productItems } from "@/db/schema/product-items";
 import { db } from "@/db";
 import { createClient } from "@supabase/supabase-js";
+import { productCategory } from "@/db/schema/product-category";
+
+interface ProductItemResult {
+  id: string;
+  categoryId: string;
+  name: string;
+  tagName: string;
+  mrp_price: string | null;
+  price: string;
+  sizes: string[] | null;
+  material: string | null;
+  image: string | null;
+  modalImage: string[] | null;
+  quantity: number;
+  averageRating: string;
+  reviewCount: number;
+  isPremium: boolean;
+  seasonType: string;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+}
+
+export interface ClientProductItemWithCategory extends ProductItemResult {
+  category: string | null;
+  CatType: string | null;
+  SubCatType: string | null;
+}
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_API_KEY! 
+  process.env.NEXT_PUBLIC_SUPABASE_API_KEY!
 );
 
 export async function GET(req: Request) {
@@ -21,8 +48,8 @@ export async function GET(req: Request) {
 
   let conditions: any[] = [];
 
-  if (category) conditions.push(eq(productItems.CatType, category));
-  if (subcategory) conditions.push(eq(productItems.category, subcategory));
+  if (category) conditions.push(eq(productCategory.CatType, category));
+  if (subcategory) conditions.push(eq(productCategory.category, subcategory));
   if (material) conditions.push(eq(productItems?.material, material));
 
   let orderBy;
@@ -33,20 +60,60 @@ export async function GET(req: Request) {
   const products = await db
     .select()
     .from(productItems)
+    .leftJoin(productCategory, eq(productItems.categoryId, productCategory.id))
     .where(conditions.length ? or(...conditions) : undefined)
     .orderBy(orderBy);
 
-  return NextResponse.json(products);
+  const productData = products.map((item) => {
+    const product = item.product_items;
+    const category = item.product_category;
+
+    let mergedItem: ClientProductItemWithCategory = {
+      ...product,
+
+      // Default category fields to null in case of a failed join (though unlikely due to NOT NULL FK)
+      category: null,
+      CatType: null,
+      SubCatType: null,
+    };
+
+    if (category) {
+      const { category: catName, CatType, SubCatType } = category;
+
+      mergedItem = {
+        ...mergedItem,
+        category: catName,
+        CatType: CatType,
+        SubCatType: SubCatType,
+      };
+    }
+
+    return mergedItem;
+  });
+
+  return NextResponse.json(productData);
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    const [category] = await db
+      .insert(productCategory)
+      .values({
+        category: body.category,
+        CatType: body.CatType,
+        SubCatType: body.SubCatType,
+      })
+      .returning();
+
+    if (!category)
+      return NextResponse.json(
+        { error: "Error in to insert category" },
+        { status: 400 }
+      );
+
     await db.insert(productItems).values({
-      category: body.category,
-      CatType: body.CatType,
-      SubCatType: body.SubCatType,
       name: body.name,
       price: body.price,
       sizes: body.sizes,
@@ -54,6 +121,12 @@ export async function POST(req: Request) {
       image: body.image,
       modalImage: body.modalImage,
       material: body?.material,
+      categoryId: category.id,
+      averageRating: "0",
+      reviewCount: 0,
+      isPremium: body.isPremium ?? "false",
+      seasonType: body.seasonType ?? "casual",
+      tagName: body.tagName ?? "Hi this is default tag",
     });
 
     return NextResponse.json({ success: true }, { status: 201 });

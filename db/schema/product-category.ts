@@ -7,7 +7,7 @@ export const productCategory = pgTable("product_category", {
   category: text("category").notNull(),
   CatType: text("category_type").notNull(),
   SubCatType: text("sub_category_type").notNull(),
-  createdAt: timestamp('createdAt').defaultNow()
+  createdAt: timestamp('createdat').defaultNow()
 });
 
 export const productCategoryRelation = relations(productCategory, ({many})=> ({

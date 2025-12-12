@@ -1,9 +1,9 @@
 import React from 'react'
-import HeroSkeleton from '../../(home)/@hero_section/loading'
+import SeasonSectionSkeleton from '../../(home)/@season_section/loading'
 
 const page = () => {
   return (
-    <div><HeroSkeleton /></div>
+    <div><SeasonSectionSkeleton /></div>
   )
 }
 
