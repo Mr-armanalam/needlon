@@ -7,6 +7,8 @@ export const productCategory = pgTable("product_category", {
   category: text("category").notNull(),
   CatType: text("category_type").notNull(),
   SubCatType: text("sub_category_type").notNull(),
+  contentTag: text("content_tag"), 
+  descriptiveContent: text("descriptive_content"),
   createdAt: timestamp('createdat').defaultNow()
 });
 

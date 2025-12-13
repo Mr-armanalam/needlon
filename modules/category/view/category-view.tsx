@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 import { addToCart, fetchCart } from "@/features/cart-slice";
 import { useAppDispatch } from "@/store/store";
 
-type Product = {
+type ProductData = {
   id: string;
   name: string;
   price: number;
@@ -21,12 +21,26 @@ type Product = {
   catType?: string;
 };
 
+type Product = {
+  productData: ProductData[] | []
+  productTagDes: {
+    descriptiveContent: string;
+    contentTag: string;
+  }
+}
+
 const CategoryView = () => {
   const { categories, category } = useParams<{
     category: string;
     categories: string;
   }>();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product>({
+    productData: [],
+    productTagDes: {
+      descriptiveContent: "",
+      contentTag: "",
+    },
+  });
 
   const searchParams = useSearchParams();
 
@@ -35,7 +49,7 @@ const CategoryView = () => {
   const {data: session} = useSession();
   const dispatch = useAppDispatch();
 
-  const handleAddToCart = (product: Product, size: string) => {
+  const handleAddToCart = (product: ProductData, size: string) => {
     dispatch(
       addToCart({
         userId: session?.user.id,
@@ -64,17 +78,18 @@ const CategoryView = () => {
   useEffect(() => {
     productData();
   }, [category, sort, productData]);
+  
 
   return (
     <div className="px-6 py-8">
-      <Heading />
+      <Heading productTagDes = {products.productTagDes} />
       <ItemControl
         sort={sort}
         category={category}
         setFilterOpen={setFilterOpen}
       />
 
-      <Products onAddToCart={handleAddToCart} productData={products} />
+      <Products onAddToCart={handleAddToCart} productData={products.productData} />
 
       {open && <CheckoutPrompt setOpen={setOpen} />}
 

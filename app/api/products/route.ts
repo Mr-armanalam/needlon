@@ -15,8 +15,8 @@ interface ProductItemResult {
   tagName: string;
   mrp_price: string | null;
   price: string;
-  sizes: string[] | null;
-  material: string | null;
+  // sizes: string[] | null;
+  // material: string | null;
   image: string | null;
   modalImage: string[] | null;
   quantity: number;
@@ -44,13 +44,13 @@ export async function GET(req: Request) {
   const category = searchParams.get("category");
   const subcategory = searchParams.get("subcategory");
   const sort = searchParams.get("sort") || "featured";
-  const material = searchParams.get("material");
+  // const material = searchParams.get("material");
 
   let conditions: any[] = [];
 
   if (category) conditions.push(eq(productCategory.CatType, category));
   if (subcategory) conditions.push(eq(productCategory.category, subcategory));
-  if (material) conditions.push(eq(productItems?.material, material));
+  // if (material) conditions.push(eq(productItems?.material, material));
 
   let orderBy;
   if (sort === "priceHigh") orderBy = desc(productItems.price);
@@ -75,6 +75,8 @@ export async function GET(req: Request) {
       category: null,
       CatType: null,
       SubCatType: null,
+      mrp_price: null,
+      seasonType: ""
     };
 
     if (category) {
@@ -91,7 +93,13 @@ export async function GET(req: Request) {
     return mergedItem;
   });
 
-  return NextResponse.json(productData);
+  return NextResponse.json({
+    productData,
+    productTagDes: {
+      contentTag: products[0].product_category?.contentTag,
+      descriptiveContent: products[0].product_category?.descriptiveContent,
+    },
+  });
 }
 
 export async function POST(req: Request) {
@@ -116,16 +124,16 @@ export async function POST(req: Request) {
     await db.insert(productItems).values({
       name: body.name,
       price: body.price,
-      sizes: body.sizes,
+      // sizes: body.sizes,
       quantity: body.quantity,
       image: body.image,
       modalImage: body.modalImage,
-      material: body?.material,
+      // material: body?.material,
       categoryId: category.id,
       averageRating: "0",
       reviewCount: 0,
       isPremium: body.isPremium ?? "false",
-      seasonType: body.seasonType ?? "casual",
+      // seasonType: body.seasonType ?? "casual",
       tagName: body.tagName ?? "Hi this is default tag",
     });
 

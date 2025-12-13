@@ -2,8 +2,8 @@ export interface ClientProductItem {
   id: string;
   name: string;
   tagName: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | null;
+  updatedAt: Date | null;
   categoryId: string,
   mrp_price: string | null; 
   price: string;
