@@ -3,7 +3,11 @@ import SeasonCard from '../ui/season-card'
 import { Button } from '@/components/ui/button'
 import { ClientProductItem } from '@/types/product'
 
-const SeasonSection = ({seasonData}: {seasonData: ClientProductItem[]}) => {
+type seasonDataProps = {
+  seasonData : ClientProductItem[]
+}
+
+const SeasonSection = ({seasonData}: seasonDataProps) => {
   return (
     <div className='py-16'>
       <h1 className='text-center text-4xl text-gray-900 font-bold font-garamond '>This Season</h1>

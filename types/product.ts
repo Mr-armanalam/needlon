@@ -8,12 +8,12 @@ export interface ClientProductItem {
   mrp_price: string | null; 
   price: string;
   quantity: number;
-  material: string | null;
-  sizes: string[] | null; 
+  material?: string | null;
+  sizes?: string[] | null; 
   image: string | null;       
   modalImage: string[] | null; 
   averageRating: string; 
   reviewCount: number;
   isPremium: boolean;
-  seasonType: string;
+  seasonType?: string;
 }

@@ -3,11 +3,12 @@ import { getSeasonProduct } from '@/modules/shared/product-items/server/get-seas
 import React from 'react'
 
 const page = async() => {
-  const seasonData = await getSeasonProduct({seasonType: 'winter'});
+  const seasonProductData = await getSeasonProduct({seasonType: 'winter'});
+  const seasonProduct = seasonProductData?.map(item => item.seasonProduct) ?? [];
 
   return (
     <section>
-      <SeasonSection seasonData = {seasonData ?? []} />
+      <SeasonSection seasonData = {seasonProduct} />
     </section>
   )
 }
