@@ -18,9 +18,10 @@ export const filterGroups = pgTable("filter_groups", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const filterGroupRelations = relations(
-  filterGroups,
-  ({ many }) => ({
-    options: many(filterOptions),
+export const filterGroupRelations = relations(filterGroups, ({ many, one }) => ({
+  options: many(filterOptions),
+  category: one(productCategory, {
+    fields: [filterGroups.categoryId],
+    references: [productCategory.id]
   })
-);
+}));

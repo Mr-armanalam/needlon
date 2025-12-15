@@ -8,6 +8,7 @@ type seasonDataProps = {
 }
 
 const SeasonSection = ({seasonData}: seasonDataProps) => {
+  
   return (
     <div className='py-16'>
       <h1 className='text-center text-4xl text-gray-900 font-bold font-garamond '>This Season</h1>

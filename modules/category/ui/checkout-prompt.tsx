@@ -1,9 +1,14 @@
 'use client'
+import { Button } from "@/components/ui/button";
 import { fetchCart, removeFromCart } from "@/features/cart-slice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { TiShoppingCart } from "react-icons/ti";
+
+
 
 const CheckoutPrompt = ({
   setOpen,
@@ -11,6 +16,7 @@ const CheckoutPrompt = ({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const {data: session} = useSession();
+  const router = useRouter();
   const cart = useAppSelector((state) => state.cart.cart);
   const dispatch = useAppDispatch()
 
@@ -78,10 +84,9 @@ const CheckoutPrompt = ({
           <span>Subtotal</span>
           <span>${subtotal.toFixed(2)}</span>
         </p>
-        <button className="w-full bg-black text-white py-2 mt-4">
-          Proceed Checkout
-        </button>
-        <button className="w-full underline mt-2">Go to Shopping Cart</button>
+        <Button onClick={() => router.push('/cart')} size={'lg'} className=" w-full cursor-pointer mt-4 rounded-xs py-4">
+         <TiShoppingCart/> Proceed with cart 
+        </Button>
       </div>
     </div>
   );

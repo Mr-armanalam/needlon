@@ -16,7 +16,7 @@ export const productFilterOptions = pgTable(
       .references(() => filterOptions.id, { onDelete: "cascade" }),
   },
   (t) => ({
-    pk: primaryKey(t.productId, t.filterOptionId),
+    pk: primaryKey({columns: [t.productId, t.filterOptionId]}),
   })
 );
 

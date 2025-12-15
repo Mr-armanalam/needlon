@@ -1,4 +1,3 @@
-// filter-options.ts
 import { pgTable, text, uuid, integer, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { filterGroups } from "./filter-group";
@@ -18,9 +17,6 @@ export const filterOptions = pgTable("filter_options", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const filterOptionRelations = relations(
-  filterOptions,
-  ({ many }) => ({
-    products: many(productFilterOptions),
-  })
-);
+export const filterOptionRelations = relations(filterOptions, ({ many }) => ({
+  products: many(productFilterOptions),
+}));

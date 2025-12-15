@@ -45,7 +45,6 @@
 //   review: many(productReview),
 // }));
 
-
 // product-items.ts
 import {
   pgTable,
@@ -75,6 +74,7 @@ export const productItems = pgTable("product_items", {
 
   image: text("image"),
   modalImage: text("modal_image").array(),
+  sizes: text("sizes").array(),
 
   quantity: integer("quantity").default(1).notNull(),
 
@@ -89,9 +89,6 @@ export const productItems = pgTable("product_items", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-export const productItemsRelation = relations(
-  productItems,
-  ({ many }) => ({
-    filterOptions: many(productFilterOptions),
-  })
-);
+export const productItemsRelation = relations(productItems, ({ many }) => ({
+  filterOptions: many(productFilterOptions),
+}));

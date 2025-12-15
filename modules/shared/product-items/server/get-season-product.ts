@@ -14,10 +14,12 @@ export const getSeasonProduct = async ({
       .select({ id: filterOptions.id })
       .from(filterOptions)
       .where(eq(filterOptions.slug, seasonType));
+      console.log(filterOptionData, 'fod');
+      
 
     const data = await db
       .select({
-        seasonProduct: productItems
+        seasonProduct: productItems,
       })
       .from(productFilterOptions)
       .innerJoin(
@@ -25,7 +27,10 @@ export const getSeasonProduct = async ({
         eq(productItems.id, productFilterOptions.productId)
       )
       .where(eq(productFilterOptions.filterOptionId, filterOptionData.id));
+      console.log('data', data);
+      
     if (!data) return [];
+
     return data;
   } catch (error) {
     console.log(error);

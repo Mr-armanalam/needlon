@@ -5,7 +5,7 @@ import React from 'react'
 const page = async() => {
   const seasonProductData = await getSeasonProduct({seasonType: 'winter'});
   const seasonProduct = seasonProductData?.map(item => item.seasonProduct) ?? [];
-
+  
   return (
     <section>
       <SeasonSection seasonData = {seasonProduct} />
