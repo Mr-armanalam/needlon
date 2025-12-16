@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { productItems } from "@/db/schema/product-items";
 import { eq } from "drizzle-orm";
+import { cookies } from "next/headers";
 
 export async function getProductByType({
   type,
@@ -9,6 +10,8 @@ export async function getProductByType({
 }) {
   try {
     let data;
+    const cookie = await cookies();
+    const cookieStore = cookie.toString();
 
     switch (type) {
       case "premium":
@@ -21,7 +24,12 @@ export async function getProductByType({
       case "recommend":
         const recommendRes = await fetch(
           `${process.env.NEXT_PUBLIC_URL}/api/home-recommendation`,
-          { cache: "no-store" }
+          {
+            cache: "no-store",
+            headers: {
+              Cookie: cookieStore,
+            },
+          }
         );
 
         const { recommended } = await recommendRes.json();
