@@ -33,7 +33,7 @@ const CategoryView = () => {
   const { categories, category } = useParams<{
     category: string;
     categories: string;
-  }>();
+  }>();  
   const [products, setProducts] = useState<Product>({
     productData: [],
     productTagDes: {
@@ -42,7 +42,10 @@ const CategoryView = () => {
     },
   });
 
+  
+  
   const searchParams = useSearchParams();
+  console.log(searchParams.get("sbct"));
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -66,7 +69,7 @@ const CategoryView = () => {
 
   const productData = useCallback(async () => {
     await fetch(
-      `/api/products?category=${categories}&subcategory=${category}&sort=${sort}${
+      `/api/products?category=${categories}&subcategory=${category.replace('sbct%3D', '')}&sort=${sort}${
         material ? `&material=${material}` : ""
       }`,
       { cache: "no-store" } // always fresh

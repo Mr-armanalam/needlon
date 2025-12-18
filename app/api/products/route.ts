@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { NextResponse } from "next/server";
-import { eq, asc, desc, or } from "drizzle-orm";
+import { eq, asc, desc, or, ilike } from "drizzle-orm";
 import { productItems } from "@/db/schema/product-items";
 import { db } from "@/db";
 import { createClient } from "@supabase/supabase-js";
@@ -44,13 +44,25 @@ export async function GET(req: Request) {
   const category = searchParams.get("category");
   const subcategory = searchParams.get("subcategory");
   const sort = searchParams.get("sort") || "featured";
-  // const material = searchParams.get("material");
 
   let conditions: any[] = [];
 
+  // if (category) conditions.push(eq(productCategory.CatType, category));
+  // if (subcategory) conditions.push(eq(productCategory.category, subcategory));
+
   if (category) conditions.push(eq(productCategory.CatType, category));
   if (subcategory) conditions.push(eq(productCategory.category, subcategory));
-  // if (material) conditions.push(eq(productItems?.material, material));
+  if (subcategory)
+    conditions.push(
+      or(
+        ilike(productCategory?.category, `%${subcategory}%`),
+        ilike(productCategory?.SubCatType, `%${subcategory}%`),
+        ilike(productCategory?.CatType, `%${subcategory}%`)
+      )
+    );
+
+    console.log(conditions.join(','));
+    
 
   let orderBy;
   if (sort === "priceHigh") orderBy = desc(productItems.price);
@@ -64,6 +76,8 @@ export async function GET(req: Request) {
     .where(conditions.length ? or(...conditions) : undefined)
     .orderBy(orderBy);
 
+  console.log(products, "kjkj");
+
   const productData = products.map((item) => {
     const product = item.product_items;
     const category = item.product_category;
@@ -76,7 +90,7 @@ export async function GET(req: Request) {
       CatType: null,
       SubCatType: null,
       mrp_price: null,
-      seasonType: ""
+      seasonType: "",
     };
 
     if (category) {
@@ -96,7 +110,7 @@ export async function GET(req: Request) {
   return NextResponse.json({
     productData,
     productTagDes: {
-      contentTag: products[0].product_category?.contentTag,
+      contentTag: products[0]?.product_category?.contentTag,
       descriptiveContent: products[0].product_category?.descriptiveContent,
     },
   });

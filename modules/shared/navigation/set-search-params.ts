@@ -10,7 +10,7 @@ export const useCustomSearchParams = () => {
     params.set("sbct", value.replaceAll(" ", "_"));
 
     router.push(
-      navigate ? `${params.toString()}` : `${pathname}?${params.toString()}`
+      navigate ? `/explore/product?${params.toString()}` : `${pathname}?${params.toString()}`
     );
   };
 

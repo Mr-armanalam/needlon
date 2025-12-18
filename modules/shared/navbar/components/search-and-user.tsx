@@ -11,18 +11,19 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import UserSection from "../user-ui/user-section";
+import { NavSearch } from "./nav-search";
 
 const SearchAndUser = () => {
   const { data: session } = useSession();
 
   return (
     <div className="flex items-center space-x-4">
-      <div className="bg-black/10 backdrop-blur-md rounded-md flex items-center">
-        <Input
+      {/* <Input
           placeholder="Search"
           className="outline-none focus-visible:ring-0 rounded-full border-none "
-        />
-      </div>
+          />
+      */}
+      <NavSearch />
       <ModeToggle />
       {session?.user ? (
         <Popover>
