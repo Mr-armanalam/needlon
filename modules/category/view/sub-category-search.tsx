@@ -63,19 +63,19 @@ const CategoryView = () => {
 
   const sort = searchParams.get("sort") || "featured";
   const material = searchParams.get("material");
+  const sbct = searchParams.get("sbct");
 
   const productData = useCallback(async () => {
     await fetch(
-      `/api/products?category=${categories}&subcategory=${category}&sort=${sort}${
+      `/api/products?category=${categories}&subcategory=${category}&sbct=${sbct}&sort=${sort}${
         material ? `&material=${material}` : ""
       }`,
       { cache: "no-store" } // always fresh
     )
       .then(async (res) => await res.json())
       .then(setProducts);
-  }, [categories, category, material, sort]);
+  }, [categories, category, material, sbct, sort]);
 
-  
   useEffect(() => {
     productData();
   }, [category, sort, productData]);
@@ -106,15 +106,3 @@ const CategoryView = () => {
 };
 
 export default CategoryView;
-
-// pseudo-code inside your login success handler
-// const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-// await fetch("/api/cart/merge", {
-//   method: "POST",
-//   headers: { "Content-Type": "application/json" },
-//   body: JSON.stringify({ userId, localCart }),
-// });
-
-// // clear local cart
-// localStorage.removeItem("cart");

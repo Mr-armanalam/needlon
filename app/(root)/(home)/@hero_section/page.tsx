@@ -17,6 +17,7 @@ export type heroProps = {
   offer: string;
   slug: string;
   timestamp?: Date;
+  for_which?: string;
 }
 
 

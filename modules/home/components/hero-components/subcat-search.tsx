@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useCustomSearchParams } from "@/modules/shared/navigation/set-search-params";
 import React, { useEffect, useRef, useState } from "react";
 
-export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: Pick<heroProps, 'id' | 'name' | 'slug' | 'image' >[]}) {
+export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: Pick<heroProps, 'id' | 'name' | 'slug' | 'image' | 'for_which' >[]}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showAllSubcat, setshowAllSubcat] = useState(false);
   const [showLeftFade, setShowLeftFade] = useState(false);
@@ -27,6 +27,9 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
       if (el) el.removeEventListener("scroll", checkScroll);
     };
   }, []);
+
+  console.log(subCatSearchesItem, 'ss');
+  
 
   return (
     <div className="relative top-1">
@@ -54,7 +57,7 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
             className={cn("text-xs cursor-pointer hover:bg-zinc-300")}
             variant={"secondary"}
             size={"sm"}
-            onClick={() =>setParam(item.slug.toString(), true)
+            onClick={() =>setParam({value: item.slug.toString(), navigate: true, path: `${item.for_which}`})
             }
           >
             {item.name.toLowerCase()}

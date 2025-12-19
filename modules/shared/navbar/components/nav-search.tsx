@@ -64,7 +64,7 @@ export function NavSearch() {
               <CommandGroup heading={nav_data.category_name}>
                 {nav_data.items.map((item, k) => (
                   <CommandItem
-                    onSelect={(value) => setParam(value.toLowerCase().toString(), true)}
+                    onSelect={(value) => setParam({value: value.toLowerCase().toString(), navigate:true})}
                     className="mt-1"
                     key={`item-${i}-${k}`}
                   >
