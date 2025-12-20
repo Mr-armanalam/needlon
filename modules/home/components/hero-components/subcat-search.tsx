@@ -27,8 +27,6 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
       if (el) el.removeEventListener("scroll", checkScroll);
     };
   }, []);
-
-  console.log(subCatSearchesItem, 'ss');
   
 
   return (

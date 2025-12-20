@@ -3,12 +3,10 @@ import { db } from "@/db";
 import { productItems } from "@/db/schema/product-items";
 import { filterOptions } from "@/db/schema/filter-options";
 import { productFilterOptions } from "@/db/schema/product-filter-options";
-import { eq, inArray } from "drizzle-orm";
 
 export async function seedProductFilterOptions() {
   // 1. Fetch all products
   const products = await db.select().from(productItems);
-console.log('kjkjkkjklj');
 
   // 2. Fetch all filter options
   const options = await db.select().from(filterOptions);

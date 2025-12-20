@@ -85,8 +85,6 @@ export async function GET(req: NextRequest) {
       )
       .orderBy(orderBy);
 
-    console.log(results, "prodroute");
-
     if (results.length === 0) {
       return NextResponse.json({
         productData: [],

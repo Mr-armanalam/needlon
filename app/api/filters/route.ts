@@ -10,9 +10,7 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     // const categoryId = searchParams.get("categoryId");
-    const category = searchParams.get("category");
-    console.log(category,'category');
-    
+    const category = searchParams.get("category");    
 
     // 1️⃣ Validate
     if (!category) {
