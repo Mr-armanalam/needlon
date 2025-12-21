@@ -92,7 +92,7 @@ const ItemControl = ({ sort, category, setFilterOpen }: param) => {
             if (values.length > 0) return;
             newParams.set("sort", sortby);
             return router.push(
-              `/ready-to-wear/${category}?${newParams.toString()}`
+              `${category}?${newParams.toString()}`
             );
           }}
         >

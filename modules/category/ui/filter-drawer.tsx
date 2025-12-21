@@ -79,6 +79,8 @@ const FilterDrawer = ({
     checked: boolean
   ) => {
     const params = new URLSearchParams(searchParams.toString());
+    console.log(selectedFilters,'kj');
+        
 
     setSelectedFilters((prev) => {
       const existing = prev[groupSlug] || [];
@@ -87,13 +89,13 @@ const FilterDrawer = ({
         : existing.filter((v) => v !== optionSlug);
 
       if (updated.length > 0) {
-        params.set(category, updated.join(","));
+        params.set(groupSlug, updated.join(","));
       } else {
-        params.delete(category);
+        params.delete(groupSlug);
       }
       // router.push(`?${params.toString()}`);
 
-      return { ...prev, [category]: updated };
+      return { ...prev, [groupSlug]: updated };
     });
     router.push(`?${params.toString()}`);
   };
@@ -155,7 +157,7 @@ const FilterDrawer = ({
                             className="flex items-start gap-3"
                           >
                             <Checkbox
-                              checked={
+                              checked={                                
                                 selectedFilters[group.slug]?.includes(
                                   option.slug
                                 ) || false

@@ -1,14 +1,19 @@
+'use client'
 import RatingDisplay from "@/modules/shared/rating/ratingDisplay";
 import { ClientProductItem } from "@/types/product";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function ProductCardPreview({
   item
 }: {
   item: ClientProductItem;
 }) {
+
+  const router = useRouter();
+
   return (
-    <div className="h-fit cursor-pointer transition hover:transition-discrete hover:-translate-1 bg-gradient-to-br from-stone-100 to-stone-200 hover:from-stone-100 hover:to-stone-50 min-w-[340px] rounded-lg p-6 shadow-xl border border-gray-100 relative overflow-hidden flex flex-col md:flex-row gap-2">
+    <div onClick={() => router.push(`/product/${item.id}`)} className="h-fit cursor-pointer transition hover:transition-discrete hover:-translate-1 bg-gradient-to-br from-stone-100 to-stone-200 hover:from-stone-100 hover:to-stone-50 min-w-[340px] rounded-lg p-6 shadow-xl border border-gray-100 relative overflow-hidden flex flex-col md:flex-row gap-2">
       <div className="flex-1 mt-3">
         <div className="text-[10px] text-gray-600">
           <div className="flex gap-x-1 items-center font-semibold">

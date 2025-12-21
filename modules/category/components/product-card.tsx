@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { StarIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 type Product = {
@@ -43,6 +44,7 @@ const ProductCard = ({
   );
 
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const { data: session } = useSession();
   const userId = session?.user.id;
 
@@ -104,7 +106,7 @@ const ProductCard = ({
         onMouseMove={handleMouseMove}
         className="bg-[#EAEAEA] group relative "
       >
-        <div className="relative w-full h-[400px]">
+        <div onClick={() => router.push(`/product/${id}`)} className="relative w-full h-[400px]">
           <Image
             src={
               hoveredId
