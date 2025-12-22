@@ -1,6 +1,5 @@
-"use client";
 import { PlusIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -29,10 +28,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSession } from "next-auth/react";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { addOrUpdateAddress, fetchAddresses } from "@/features/address-slice";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { addOrUpdateAddressApi, fetchStatesApi } from "../server/api/address";
 
-// ✅ Zod schema
 export const FormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   phone: z.string().min(10, { message: "Number must be at least 10 digits." }),
@@ -69,12 +67,9 @@ const AddNewAddress = ({
   accordionValue,
 }: Props) => {
   const { data: session } = useSession();
-  const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.addresses);
+  const userId = session?.user.id;
+  const queryClient = useQueryClient();
 
-  const [allState, setAllState] = useState<
-    { name: string; state_code: string }[]
-  >([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -107,25 +102,39 @@ const AddNewAddress = ({
     }
   }, [editingAddress, form, setAccordionValue]);
 
+  const addOrUpdateMutation = useMutation({
+    mutationFn: addOrUpdateAddressApi,
+    onSuccess: () => {
+      toast.success("Address saved successfully!");
+      queryClient.invalidateQueries({
+        queryKey: ["addresses", userId],
+      });
+      clearAddressForm();
+    },
+    onError: () => {
+      toast.error("Something went wrong while saving the address.");
+    },
+  });
+
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const userId = session?.user.id;
     if (!userId) return toast.error("You must be logged in to save address.");
 
     try {
-      await dispatch(
-        addOrUpdateAddress({
+      addOrUpdateMutation.mutate({
+        userId,
+        data: {
+          ...data,
+          alternate_phone: data.alternate_phone ?? "",
           userId,
-          data: {
-            ...data,
-            alternate_phone: data.alternate_phone ?? "",
-            userId,
-          },
-          editingAddressId: editingAddress?.id,
-        })
-      ).unwrap();
+        },
+        editingAddressId: editingAddress?.id,
+      });
 
       toast.success("Address saved successfully!");
-      dispatch(fetchAddresses(userId));
+      queryClient.invalidateQueries({
+        queryKey: ['addresses', userId]
+      })
       clearAddressForm();
     } catch (error) {
       console.error(error);
@@ -133,16 +142,15 @@ const AddNewAddress = ({
     }
   };
 
-  const fetchState = async () => {
-    const res = await fetch("/api/state");
-    const data = await res.json();
-    if (data?.states?.length === null) return;
-    setAllState(data.states ?? []);
-  };
-
-  useEffect(() => {
-    fetchState();
-  }, []);
+  const {
+    data: allState = [],
+    // isLoading: stateLoading,
+    // error: stateError,
+  } = useQuery({
+    queryKey: ["states"],
+    queryFn: fetchStatesApi,
+    staleTime: Infinity,
+  });
 
   return (
     <Accordion
@@ -229,8 +237,11 @@ const AddNewAddress = ({
                       </FormControl>
                       <SelectContent>
                         {allState.length !== 0 &&
-                          allState.map((state, i) => (
-                            <SelectItem key={i} value={state.name}>
+                          allState.map((state) => (
+                            <SelectItem
+                              key={state.state_code}
+                              value={state.name}
+                            >
                               {state.name}
                             </SelectItem>
                           ))}
@@ -245,9 +256,9 @@ const AddNewAddress = ({
                 <Button
                   className="rounded-xs cursor-pointer w-fit"
                   type="submit"
-                  disabled={loading}
+                  disabled={addOrUpdateMutation.isPending}
                 >
-                  {loading ? "Saving..." : "Submit"}
+                  {addOrUpdateMutation.isPending ? "Saving..." : "Submit"}
                 </Button>
                 <Button
                   onClick={clearAddressForm}

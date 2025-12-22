@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -8,20 +7,22 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Address } from "@/features/address-slice";
+import { useQueryClient } from "@tanstack/react-query";
 
 type props = {
   addresses: Address[];
   currentAddress?: string;
-  setAddressChanged: React.Dispatch<React.SetStateAction<boolean>>;
-}
+  userId?: string;
+};
 
-export function ChooseAddress({ addresses,setAddressChanged, currentAddress}:props) {
-
-
+export function ChooseAddress({ addresses, userId, currentAddress }: props) {
+  const queryClient = useQueryClient();
   const handleAddressChange = (id: string) => {
     localStorage.setItem("current-addr", id);
-    setAddressChanged((prev) => !prev);
-  }
+    queryClient.invalidateQueries({
+      queryKey: ["addresses", userId],
+    });
+  };
 
   return (
     <Popover>

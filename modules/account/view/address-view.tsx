@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import AddNewAddress from "../ui/add-new-address";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
@@ -12,39 +12,48 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import NoUserAddress from "../shared/no-user-address";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { deleteAddress, fetchAddresses } from "@/features/address-slice";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { deleteAddressApi, getAddresses } from "../server/api/address";
 import AddressSkeleton from "./loadingAddress";
 
 const AddressView = () => {
-  const dispatch = useAppDispatch();
   const { data: session } = useSession();
-
-  const { addresses, loading, error } = useAppSelector(
-    (state) => state.addresses
-  );
+  const queryClient = useQueryClient();
+  const userId = session?.user.id;
 
   const [editingAddress, setEditingAddress] = useState<
     typeof userAddress.$inferSelect | null
   >(null);
-  const [accordionValue, setAccordionValue] = useState<string | undefined>(
-    undefined
-  );
+  const [accordionValue, setAccordionValue] = useState<string | undefined>();
 
-  useEffect(() => {
-    if (session?.user.id) {
-      dispatch(fetchAddresses(session.user.id));
-    }
-  }, [dispatch, session?.user.id]);
+  
+  const {
+    data: addresses = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["addresses", userId],
+    queryFn: () => getAddresses(userId!),
+    enabled: !!userId,
+  });
 
-  const onDeleteAddress = async (id: string) => {
-    try {
-      await dispatch(deleteAddress(id)).unwrap();
-      toast.success("Address deleted successfully!");
-    } catch (err) {
-      console.error(err);
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteAddressApi,
+    onSuccess: () => {
+      toast.success("Address deleted successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["addresses", userId],
+      });
+    },
+    onError: () => {
       toast.error("Failed to delete address");
-    }
+    },
+  });
+
+
+  const onDeleteAddress = (id: string) => {
+    deleteMutation.mutate(id);
   };
 
   const onEditAddress = (addr: typeof userAddress.$inferSelect) => {
@@ -82,15 +91,17 @@ const AddressView = () => {
       />
 
       <div className="mt-6">
-        {loading && <AddressSkeleton />}
+        {isLoading && <AddressSkeleton />}
 
-        {!loading && error && <p className="text-red-600 text-sm">{error}</p>}
+        {!isLoading && error && (
+          <p className="text-red-600 text-sm">{error.message}</p>
+        )}
 
-        {!loading && !error && addresses.length === 0 && (
+        {!isLoading && !error && addresses.length === 0 && (
           <NoUserAddress Icon={HomeIcon} description="No address saved" />
         )}
 
-        {!loading && addresses.length > 0 && (
+        {!isLoading && addresses.length > 0 && (
           <div className="border border-stone-200 rounded-xs">
             {addresses.map((addr) => (
               <div

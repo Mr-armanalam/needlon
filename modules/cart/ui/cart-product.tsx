@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import CartItems from "../components/cart-items";
 import { ChooseAddress } from "../components/choose-address";
 import { CartItem } from "@/features/cart-slice";
-import { useAppDispatch, useAppSelector } from "@/store/store";
-import { Address, fetchAddresses } from "@/features/address-slice";
+import { Address } from "@/features/address-slice";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
+import { getAddresses } from "@/modules/account/server/api/address";
 
 type props = {
   cart: CartItem[];
@@ -14,16 +15,15 @@ type props = {
 };
 
 const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
-  const dispatch = useAppDispatch();
   const { data: session } = useSession();
-
   const userId = session?.user.id ?? "";
-  const { addresses, loading } = useAppSelector((state) => state.addresses);
-  const [addressChanged, setAddressChanged] = useState<boolean>(false);
 
-  useEffect(() => {
-    dispatch(fetchAddresses(userId ?? ""));
-  }, [dispatch, userId, addressChanged]);
+  const {data: addresses = [], isLoading: loading} = useQuery({
+    queryKey: ['addresses', userId],
+    queryFn: () => getAddresses(userId),
+    enabled: !!userId 
+  })
+
 
   useEffect(() => {
     if (!addresses || addresses.length === 0) return;
@@ -67,9 +67,9 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
           </div>
         )}
         <ChooseAddress
+          userId= {userId}
           addresses={addresses}
           currentAddress={currentAddress?.address}
-          setAddressChanged={setAddressChanged}
         />
       </div>
       <div className="bg-white">

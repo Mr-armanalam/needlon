@@ -57,9 +57,9 @@ export function NavSearch() {
         onOpenChange={setOpen}
       >
         <CommandInput placeholder="Search clothes here..." />
-        <CommandList>
+        <CommandList className="no-scrollbar">
           <CommandEmpty>No results found.</CommandEmpty>
-          {Array.from({ length: 1 }).map((_, i) => (
+          {Array.from({ length: 2 }).map((_, i) => (
             <React.Fragment key={`group-${i}`}>
               <CommandGroup heading={nav_data.category_name}>
                 {nav_data.items.map((item, k) => (

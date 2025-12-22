@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import { Providers } from "@/store/providers";
+import TanStackProviders from "@/providers/tanstack-provider";
 
 const robotoSans = Roboto({
   variable: "--font-Inter-sans",
@@ -35,9 +36,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SessionProvider>
-            <Providers>{children}</Providers>
-          </SessionProvider>
+          <TanStackProviders>
+            <SessionProvider>
+              <Providers>{children}</Providers>
+            </SessionProvider>
+          </TanStackProviders>
           <Toaster position={"top-right"} />
         </ThemeProvider>
       </body>

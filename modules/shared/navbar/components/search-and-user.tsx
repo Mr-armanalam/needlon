@@ -1,5 +1,4 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import React from "react";
 import { ModeToggle } from "./theme-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -18,11 +17,6 @@ const SearchAndUser = () => {
 
   return (
     <div className="flex items-center space-x-4">
-      {/* <Input
-          placeholder="Search"
-          className="outline-none focus-visible:ring-0 rounded-full border-none "
-          />
-      */}
       <NavSearch />
       <ModeToggle />
       {session?.user ? (
