@@ -7,21 +7,15 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Address } from "@/features/address-slice";
-import { useQueryClient } from "@tanstack/react-query";
 
 type props = {
   addresses: Address[];
   currentAddress?: string;
-  userId?: string;
 };
 
-export function ChooseAddress({ addresses, userId, currentAddress }: props) {
-  const queryClient = useQueryClient();
+export function ChooseAddress({ addresses, currentAddress }: props) {
   const handleAddressChange = (id: string) => {
     localStorage.setItem("current-addr", id);
-    queryClient.invalidateQueries({
-      queryKey: ["addresses", userId],
-    });
   };
 
   return (
@@ -36,7 +30,7 @@ export function ChooseAddress({ addresses, userId, currentAddress }: props) {
           defaultValue={currentAddress}
           className="flex flex-col gap-y-4"
         >
-          {addresses?.map((item, i) => (
+          {addresses.length >=0 && addresses?.map((item, i) => (
             <div
               onClick={() => handleAddressChange(item.id)}
               key={i}

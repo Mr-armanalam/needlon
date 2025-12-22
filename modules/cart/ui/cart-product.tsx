@@ -25,20 +25,29 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
   })
 
 
-  useEffect(() => {
-    if (!addresses || addresses.length === 0) return;
+  // useEffect(() => {
+  //   if (!addresses || addresses.length === 0) return;
 
-    setCurrentAddress(() => {
-      const localAddress = localStorage.getItem("current-addr");
-      if (localAddress) {
-        const found = addresses.find(
-          (item: Address) => item.id === localAddress
-        );
-        if (found) return found;
-      }
-      return addresses.at(-1);
-    });
-  }, [addresses]);
+  //   setCurrentAddress(() => {
+  //     const localAddress = localStorage.getItem("current-addr");
+  //     if (localAddress) {
+  //       const found = addresses.find(
+  //         (item: Address) => item.id === localAddress
+  //       );
+  //       if (found) return found;
+  //     }
+  //     return addresses.at(-1);
+  //   });
+  // }, [addresses]);
+
+    useEffect(() => {
+    if (!addresses.length) return;
+
+    const savedId = localStorage.getItem("current-addr");
+    const found = addresses.find((a) => a.id === savedId);
+
+    setCurrentAddress(found ?? addresses.at(-1));
+  }, [addresses, setCurrentAddress]);
 
   return (
     <section>
@@ -67,7 +76,6 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
           </div>
         )}
         <ChooseAddress
-          userId= {userId}
           addresses={addresses}
           currentAddress={currentAddress?.address}
         />
