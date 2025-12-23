@@ -10,14 +10,15 @@ import { Address } from "@/features/address-slice";
 
 type props = {
   addresses: Address[];
-  currentAddress?: string;
+  currentAddressId?: string;
+  onSelectAddress: (address: Address) => void;
 };
 
-export function ChooseAddress({ addresses, currentAddress }: props) {
-  const handleAddressChange = (id: string) => {
-    localStorage.setItem("current-addr", id);
-  };
-
+export function ChooseAddress({
+  addresses,
+  currentAddressId,
+  onSelectAddress,
+}: props) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -27,36 +28,39 @@ export function ChooseAddress({ addresses, currentAddress }: props) {
       </PopoverTrigger>
       <PopoverContent align="center" className="w-[420px]">
         <RadioGroup
-          defaultValue={currentAddress}
+          value={currentAddressId}
           className="flex flex-col gap-y-4"
         >
-          {addresses.length >=0 && addresses?.map((item, i) => (
-            <div
-              onClick={() => handleAddressChange(item.id)}
-              key={i}
-              className="bg-stone-200 items-center gap-x-4 flex rounded-md py-3 px-4 cursor-pointer"
-            >
-              <RadioGroupItem
-                color="white"
-                value={item.address}
-                id={`id-${i}`}
-                className="bg-white border border-gray-400"
-              />
-              <Label
-                htmlFor={`id-${i}`}
-                className="flex flex-col cursor-pointer items-start"
+          {addresses.length >= 0 &&
+            addresses?.map((item, i) => (
+              <div
+                onClick={() => onSelectAddress(item)}
+                key={i}
+                className="bg-stone-200 items-center gap-x-4 flex rounded-md py-3 px-4 cursor-pointer"
               >
-                <p className="font-semibold text-gray-950">
-                  {item.name}, {item.pincode}
-                </p>
-                <p className="text-sm text-stone-600 line-clamp-1">
-                  {item.address},{item.phone}, {item.landmark}, {item.locality}
-                </p>
-              </Label>
-            </div>
-          ))}
+                <RadioGroupItem
+                  color="white"
+                  value={item.id}
+                  id={item.id}
+                  className="bg-white border border-gray-400"
+                />
+                <Label
+                  htmlFor={item.id}
+                  className="flex flex-col cursor-pointer items-start"
+                >
+                  <p className="font-semibold text-gray-950">
+                    {`${item.name}, ${item.pincode}`}
+                  </p>
+                  <p className="text-sm text-stone-600 line-clamp-1">
+                    {`${item.address},${item.phone}, ${item.landmark},${" "}
+                    ${item.locality}`}
+                  </p>
+                </Label>
+              </div>
+            ))}
         </RadioGroup>
       </PopoverContent>
     </Popover>
   );
 }
+

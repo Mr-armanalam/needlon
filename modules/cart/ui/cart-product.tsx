@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Activity, useEffect } from "react";
 import CartItems from "../components/cart-items";
 import { ChooseAddress } from "../components/choose-address";
 import { CartItem } from "@/features/cart-slice";
@@ -18,29 +18,13 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
   const { data: session } = useSession();
   const userId = session?.user.id ?? "";
 
-  const {data: addresses = [], isLoading: loading} = useQuery({
-    queryKey: ['addresses', userId],
+  const { data: addresses = [], isLoading: loading } = useQuery({
+    queryKey: ["addresses", userId],
     queryFn: () => getAddresses(userId),
-    enabled: !!userId 
-  })
+    enabled: !!userId,
+  });
 
-
-  // useEffect(() => {
-  //   if (!addresses || addresses.length === 0) return;
-
-  //   setCurrentAddress(() => {
-  //     const localAddress = localStorage.getItem("current-addr");
-  //     if (localAddress) {
-  //       const found = addresses.find(
-  //         (item: Address) => item.id === localAddress
-  //       );
-  //       if (found) return found;
-  //     }
-  //     return addresses.at(-1);
-  //   });
-  // }, [addresses]);
-
-    useEffect(() => {
+  useEffect(() => {
     if (!addresses.length) return;
 
     const savedId = localStorage.getItem("current-addr");
@@ -60,24 +44,29 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
             <Skeleton className="h-6 w-40" />
             <Skeleton className="h-4 w-full" />
           </div>
-        ) : (
-          <div className=" flex-1">
-            <div className="mb-1 text-gray-950 flex gap-x-4 items-center">
-              <p className="text-sm font-bold">Delivery To : </p>
-              <p className="font-semibold text-sm line-clamp-1  ">
-                {currentAddress?.name} {currentAddress?.pincode}
+        ) : ( 
+          <Activity mode={currentAddress ? 'visible' : 'hidden'}>
+            <div className=" flex-1">
+              <div className="mb-1 text-gray-950 flex gap-x-4 items-center">
+                <p className="text-sm font-bold">Delivery To : </p>
+                <p className="font-semibold text-sm line-clamp-1  ">
+                  {currentAddress?.name} {currentAddress?.pincode}
+                </p>
+              </div>
+              <p className=" text-sm line-clamp-1 text-stone-500 ">
+                {currentAddress?.address}, {currentAddress?.phone},{" "}
+                {currentAddress?.landmark}, {currentAddress?.locality}{" "}
               </p>
             </div>
-
-            <p className=" text-sm line-clamp-1 text-stone-500 ">
-              {currentAddress?.address}, {currentAddress?.phone},{" "}
-              {currentAddress?.landmark}, {currentAddress?.locality}{" "}
-            </p>
-          </div>
+          </Activity>
         )}
         <ChooseAddress
           addresses={addresses}
-          currentAddress={currentAddress?.address}
+          currentAddressId={currentAddress?.id}
+          onSelectAddress={(addr: Address) => {
+            setCurrentAddress(addr);
+            localStorage.setItem("current-addr", addr.id);
+          }}
         />
       </div>
       <div className="bg-white">

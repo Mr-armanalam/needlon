@@ -1,23 +1,12 @@
 "use client";
-import { Roboto, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import { Providers } from "@/store/providers";
 import TanStackProviders from "@/providers/tanstack-provider";
+import { ebGaramond, roboto } from "./fonts";
 
-const robotoSans = Roboto({
-  variable: "--font-Inter-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const EB_GaramondSans = EB_Garamond({
-  variable: "--font-EB-Garamond-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export default function RootLayout({
   children,
@@ -28,7 +17,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head />
       <body
-        className={`${robotoSans.variable} ${EB_GaramondSans.variable} font-sans`}
+        className={`${roboto.variable} ${ebGaramond.variable} font-sans`}
       >
         <ThemeProvider
           attribute="class"
