@@ -46,7 +46,7 @@ export async function GET(
       .leftJoin(userAddress, eq(orders.shipping_address, userAddress.id))
       .where(and(eq(orderItems.orderId, orderId), eq(orders.userId, userId)));
 
-    return Response.json({ order }, { status: 200 });
+    return Response.json( order , { status: 200 });
   } catch (error) {
     console.log(error);
     return Response.json(

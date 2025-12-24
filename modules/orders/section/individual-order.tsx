@@ -1,11 +1,13 @@
 import React from "react";
 import OrderDetails from "../components/oder-details";
 import OrderStatus from "../components/order-status";
-import { OrderItemProp } from "@/app/(root)/(account)/account/orders/[order]/page";
+import { OrderItemProp } from "@/types/product";
 
-
-const IndividualOrder = ({orderItem}: { orderItem: OrderItemProp[] | null }) => {
-
+const IndividualOrder = ({
+  orderItem,
+}: {
+  orderItem: OrderItemProp[] | null;
+}) => {
   const firstOrder = orderItem?.[0];
 
   return (
@@ -39,7 +41,6 @@ const IndividualOrder = ({orderItem}: { orderItem: OrderItemProp[] | null }) => 
               orderItemId={order.orderId}
             />
           ))}
-
         </>
       )}
     </div>

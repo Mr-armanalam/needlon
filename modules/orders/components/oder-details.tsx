@@ -1,6 +1,5 @@
-import { Address } from "@/features/address-slice";
+import { Address } from "@/types/address";
 import { format } from "date-fns";
-import React from "react";
 
 interface props {
   order_date: Date;
@@ -30,7 +29,7 @@ const OrderDetails = ({
     <div className="px-1 mb-4 text-gray-900">
       <div className="flex items-center text-sm gap-x-4">
         <p>Order placed {format(order_date, "dd MMMM yyyy")}</p>
-        <div className="h-[15px] w-0.5 bg-gray-300 border-l" />
+        <div className="h-3.75 w-0.5 bg-gray-300 border-l" />
         <p>Order number {order_id}</p>
       </div>
       <div className="flex border bg-gray-900 text-white rounded-md p-4 text-sm mt-2 gap-x-8 justify-between">
@@ -48,24 +47,24 @@ const OrderDetails = ({
           </p>
         </div>
         <div className="flex-1/3 bg-stone-200/50 text-gray-950 p-4 rounded-xl ">
-          <h4 className="font-semibold border-b-1 py-1 border-gray-900">Order Summary</h4>
+          <h4 className="font-semibold border-b py-1 border-gray-900">Order Summary</h4>
           <div className="text-xs flex flex-col gap-y">
-            <div className="flex border-b-1 py-1 border-gray-900 justify-between items-center">
+            <div className="flex border-b py-1 border-gray-900 justify-between items-center">
               <p>Item({noOfItem}) Subtotal:</p>
               <p>{noOfItem * itemPrice}</p>
             </div>
-            <div className="flex border-b-1 py-1 border-gray-900  justify-between items-center">
+            <div className="flex border-b py-1 border-gray-900  justify-between items-center">
               <p>Shipping({noOfItem}):</p>
               <p>{noOfItem * shippingCharge}</p>
             </div>
             {couponDiscount !==0 && (
-              <div className="flex border-b-1 py-1 border-gray-900  justify-between items-center">
+              <div className="flex border-b py-1 border-gray-900  justify-between items-center">
                 <p>Coupon Discount:</p>
                 <p className="text-green-500">-{couponDiscount}</p>
               </div>
             )}
             {pod_charge !==0 && (
-              <div className="flex border-b-1 py-1 border-gray-900  justify-between items-center">
+              <div className="flex border-b py-1 border-gray-900  justify-between items-center">
                 <p>Cash/Pay on Delivery fee:</p>
                 <p>{pod_charge}</p>
               </div>

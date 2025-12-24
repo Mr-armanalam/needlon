@@ -1,3 +1,5 @@
+import { Address } from "./address";
+
 export interface ClientProductItem {
   id: string;
   name: string;
@@ -16,4 +18,20 @@ export interface ClientProductItem {
   reviewCount: number;
   isPremium: boolean;
   seasonType?: string;
+}
+
+export interface OrderItemProp {
+  orderDate: Date;
+  orderId: string;
+  shippingAddress: Address;
+  paymentMode: string;
+  shippingCharge: number;
+  podCharge: number;
+  priceAtperchage: number;
+  productId: string;
+  image: string;
+  orderProperties?: string;
+  itemName: string;
+  couponDiscount: number;
+  totalPurchasePrice: number;
 }
