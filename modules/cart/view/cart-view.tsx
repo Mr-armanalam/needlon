@@ -4,9 +4,9 @@ import React, { useEffect } from "react";
 import PriceDetails from "../ui/price-details";
 import CartProduct from "../ui/cart-product";
 import Link from "next/link";
-import { Address } from "@/features/address-slice";
 import { useAppDispatch } from "@/store/store";
 import { CartItem, fetchCart } from "@/features/cart-slice";
+import { Address } from "@/types/address";
 
 interface CartViewProps {
   cart: CartItem[];

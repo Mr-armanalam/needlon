@@ -1,6 +1,7 @@
 import {
   fetchWishlist,
-  setGuestWishlist,
+  initializeGuestWishlist,
+  // setGuestWishlist,
   toggleGuestWishlist,
   toggleWishlist,
 } from "@/features/wishlist-slice";
@@ -64,7 +65,13 @@ const ProductCard = ({
     }
   };
 
-  const handleToggleWishlist = (productId: string, image: string, price: number, name: string, size?: string ) => {
+  const handleToggleWishlist = (
+    productId: string,
+    image: string,
+    price: number,
+    name: string,
+    size?: string
+  ) => {
     if (userId) {
       const exists = wishlist.some(
         (item) => item.productId === productId && item.size === size
@@ -90,7 +97,7 @@ const ProductCard = ({
       // Load from localStorage for guests
       const local = localStorage.getItem("wishlist");
       if (local) {
-        dispatch(setGuestWishlist(JSON.parse(local)));
+        dispatch(initializeGuestWishlist());
       }
     }
   }, [userId, dispatch]);
@@ -106,7 +113,10 @@ const ProductCard = ({
         onMouseMove={handleMouseMove}
         className="bg-[#EAEAEA] group relative "
       >
-        <div onClick={() => router.push(`/product/${id}`)} className="relative w-full h-[400px]">
+        <div
+          onClick={() => router.push(`/product/${id}`)}
+          className="relative w-full h-[400px]"
+        >
           <Image
             src={
               hoveredId
@@ -144,7 +154,9 @@ const ProductCard = ({
         )}
 
         <button
-          onClick={() => handleToggleWishlist(id, image, price, name, sizes?.at(0) )}
+          onClick={() =>
+            handleToggleWishlist(id, image, price, name, sizes?.at(0))
+          }
           aria-label="Toggle wishlist"
           className={`hidden group-hover:flex absolute right-6 top-6 text-white rounded-full hover:bg-black p-2 ${
             wishlistItems?.some((w) => w.productId === id)

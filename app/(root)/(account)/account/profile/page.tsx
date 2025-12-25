@@ -8,6 +8,7 @@ const page = async () => {
   const userId = session?.user?.id;
   
   let personalData = null;
+  
   if (userId) {
     const res = await getPersonalinfo(userId);
     personalData = res?.data ?? null;

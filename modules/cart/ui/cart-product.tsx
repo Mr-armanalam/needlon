@@ -2,11 +2,11 @@ import React, { Activity, useEffect } from "react";
 import CartItems from "../components/cart-items";
 import { ChooseAddress } from "../components/choose-address";
 import { CartItem } from "@/features/cart-slice";
-import { Address } from "@/features/address-slice";
 import { useSession } from "next-auth/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 import { getAddresses } from "@/modules/account/server/api/address";
+import { Address } from "@/types/address";
 
 type props = {
   cart: CartItem[];
