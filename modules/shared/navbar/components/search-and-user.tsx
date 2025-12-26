@@ -9,8 +9,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import UserSection from "../user-ui/user-section";
-import { NavSearch } from "./nav-search";
+import UserSection from "../ui/user-section";
+import { NavSearch } from "../ui/nav-search";
 
 const SearchAndUser = () => {
   const { data: session } = useSession();

@@ -35,3 +35,16 @@ export interface OrderItemProp {
   couponDiscount: number;
   totalPurchasePrice: number;
 }
+
+export interface suggestionAndRecentSearch {
+  id: string;
+  name: string;
+  category: string;
+  subcategory: string;
+}
+
+export interface searchSuggestionProps {
+  heading_name: string;
+  recent: suggestionAndRecentSearch[],
+  handleOnSelect: (item: suggestionAndRecentSearch) => void
+}
