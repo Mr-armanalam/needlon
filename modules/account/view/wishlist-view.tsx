@@ -13,10 +13,10 @@ import {
   initializeGuestWishlist,
   toggleGuestWishlist,
   toggleWishlist,
-  WishlistItem,
 } from "@/features/wishlist-slice";
 import NoUserAddress from "../shared/no-user-address";
 import { WishlistItemSkeleton } from "@/app/(root)/(account)/account/wishlist/wishlist_skeleton";
+import { WishlistItem } from "@/types/wishlist";
 
 interface Props {
   userId?: string;
@@ -43,13 +43,13 @@ const WishlistView = ({ userId }: Props) => {
   );
   const { cart } = useAppSelector((state) => state.cart);
 
-  // 1. Data Merging Logic: Decides what to show the user
+  //  Data Merging Logic
   const displayList = useMemo(() => {
     const sourceList = userId ? wishlist : guestWishlist;
     return (sourceList || []).map(normalizeItem);
   }, [userId, wishlist, guestWishlist]);
 
-  // 2. Initialization & Sync Logic
+  // Initialization & Sync Logic
   useEffect(() => {
     // Always load guest items from localStorage on mount
     dispatch(initializeGuestWishlist());
@@ -101,7 +101,7 @@ const WishlistView = ({ userId }: Props) => {
     );
   };
 
-  if (loading && displayList.length === 0) return <WishlistItemSkeleton />;
+  if (displayList.length === 0) return <WishlistItemSkeleton />;
 
   return (
     <div className="px-3">
