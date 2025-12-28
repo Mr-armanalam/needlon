@@ -78,11 +78,7 @@ export function NavSearch() {
         </Kbd>
       </div>
 
-      <CommandDialog 
-        open={open} 
-        onOpenChange={setOpen}
-        shouldFilter={false} 
-      >
+      <CommandDialog open={open} onOpenChange={setOpen} shouldFilter={false}>
         <CommandInput
           value={query}
           onValueChange={setQuery}
@@ -121,7 +117,9 @@ export function NavSearch() {
           )}
 
           {/* Search Results */}
-          {query && results && !isSearching && 
+          {query &&
+            results &&
+            !isSearching &&
             Object.entries(results).map(([categoryName, items], i) => (
               <SearchSuggestion
                 key={i}
@@ -129,11 +127,9 @@ export function NavSearch() {
                 recent={items}
                 handleOnSelect={handleSelect}
               />
-            ))
-          }
+            ))}
         </CommandList>
       </CommandDialog>
     </>
   );
 }
-

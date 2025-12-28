@@ -54,7 +54,7 @@ export const items = [
       {
         name: "Office Wear",
         description: "Formal Shirts & pants for Women's",
-        link: "/items-for-women/blouses",
+        link: "/items-for-women/formal",
       },
       {
         name: "Suits for Women",
