@@ -75,7 +75,10 @@ export async function GET(req: NextRequest) {
                   .split("-")
                   .map((word) =>
                     word.length > 3
-                      ? or(ilike(productCategory.SubCatType, `%${word}%`), ilike(productCategory.category, `%${word}%`))
+                      ? or(
+                          ilike(productCategory.SubCatType, `%${word}%`),
+                          ilike(productCategory.category, `%${word}%`)
+                        )
                       : undefined
                   )
                   .filter(Boolean) as any)
@@ -122,19 +125,20 @@ export async function GET(req: NextRequest) {
   }
 }
 
-
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
     const [category] = await db
-      .insert(productCategory)
-      .values({
-        category: body.category,
-        CatType: body.CatType,
-        SubCatType: body.SubCatType,
-      })
-      .returning();
+      .select()
+      .from(productCategory)
+      .where(
+        and(
+          ilike(productCategory.category, `%${body.category}%`),
+          ilike(productCategory.CatType, `%${body.CatType}%`),
+          ilike(productCategory.SubCatType, `%${body.SubCatType}%`)
+        )
+      );
 
     if (!category)
       return NextResponse.json(
@@ -190,8 +194,6 @@ export async function DELETE(req: Request) {
 
   return new Response("Deleted successfully");
 }
-
-
 
 // export async function GET(req: Request) {
 //   try {
