@@ -69,7 +69,7 @@ export const items = [
       {
         name: "Outerwear",
         description: "Ladies-jackets, Ladies-coats for all seasons",
-        link: "/items-for-women/outwear",
+        link: "/items-for-women/outerwears",
       },
     ],
   },

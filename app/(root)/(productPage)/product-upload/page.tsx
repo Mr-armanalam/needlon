@@ -64,9 +64,9 @@ export default function ProductUpload() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        category: "lahengas",
+        category: "outerwears",
         CatType: "Women",
-        SubCatType: "Lahenga",
+        SubCatType: "Coat",
         name: "Tailored grey men's Shirt",
         price: 1299.99,
         sizes: ["S", "M", "L", "XL"],

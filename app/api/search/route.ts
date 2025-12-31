@@ -3,7 +3,6 @@ import { db } from "@/db";
 import { ilike, desc, eq, or } from "drizzle-orm";
 import { productItems } from "@/db/schema/product-items";
 import { productCategory } from "@/db/schema/product-category";
-import { userViewHistory } from "@/db/schema/user-view-history";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
