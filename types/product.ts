@@ -48,3 +48,26 @@ export interface searchSuggestionProps {
   recent: suggestionAndRecentSearch[],
   handleOnSelect: (item: suggestionAndRecentSearch) => void
 }
+
+export interface ProductItemResult {
+  id: string;
+  categoryId: string;
+  name: string;
+  tagName: string;
+  mrp_price: string | null;
+  price: string;
+  image: string | null;
+  modalImage: string[] | null;
+  quantity: number;
+  averageRating: string;
+  reviewCount: number;
+  isPremium: boolean;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+}
+
+export interface ClientProductItemWithCategory extends ProductItemResult {
+  category: string | null;
+  CatType: string | null;
+  SubCatType: string | null;
+}

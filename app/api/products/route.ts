@@ -7,29 +7,6 @@ import { db } from "@/db";
 import { createClient } from "@supabase/supabase-js";
 import { productCategory } from "@/db/schema/product-category";
 
-interface ProductItemResult {
-  id: string;
-  categoryId: string;
-  name: string;
-  tagName: string;
-  mrp_price: string | null;
-  price: string;
-  image: string | null;
-  modalImage: string[] | null;
-  quantity: number;
-  averageRating: string;
-  reviewCount: number;
-  isPremium: boolean;
-  // seasonType: string | null;
-  createdAt?: Date | null;
-  updatedAt?: Date | null;
-}
-
-export interface ClientProductItemWithCategory extends ProductItemResult {
-  category: string | null;
-  CatType: string | null;
-  SubCatType: string | null;
-}
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -39,8 +16,8 @@ const supabase = createClient(
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  const categoryParam = searchParams.get("category"); // e.g., "items-for-men"
-  const subcategoryParam = searchParams.get("subcategory"); // e.g., "formal-shirt-stitching"
+  const categoryParam = searchParams.get("category"); //  "items-for-men"
+  const subcategoryParam = searchParams.get("subcategory"); 
   const sort = searchParams.get("sort") || "featured";
 
   const subcatSlug = subcategoryParam?.toLowerCase() || "";

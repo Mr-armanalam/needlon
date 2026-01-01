@@ -7,14 +7,12 @@ import { eq, desc, inArray, sql } from "drizzle-orm";
 import { buildUserPreferenceVector } from "@/lib/recommendation-item";
 import { auth } from "@/auth";
 
-// ----------------------------------------------------
-// 1️⃣ Trending Products
-// ----------------------------------------------------
+// Trending Products
 async function getTrendingProducts() {
   const res = await db
     .select({
       product: productItems,
-      count: sql<number>`COUNT(${orderItems.productId})`
+      count: sql<number>`COUNT(${orderItems.productId})`,
     })
     .from(orderItems)
     .innerJoin(productItems, eq(orderItems.productId, productItems.id))
@@ -25,9 +23,7 @@ async function getTrendingProducts() {
   return res.map((p) => p.product);
 }
 
-// ----------------------------------------------------
-// 2️⃣ New Arrivals
-// ----------------------------------------------------
+// New Arrivals
 async function getNewArrivalProducts() {
   return await db
     .select()
@@ -36,9 +32,7 @@ async function getNewArrivalProducts() {
     .limit(12);
 }
 
-// ----------------------------------------------------
-// 3️⃣ Top Rated Products
-// ----------------------------------------------------
+// Top Rated Products
 async function getTopRatedProducts() {
   return await db
     .select()
@@ -47,69 +41,67 @@ async function getTopRatedProducts() {
     .limit(12);
 }
 
-// ----------------------------------------------------
 // MAIN API ROUTE
-// ----------------------------------------------------
 export async function GET() {
-  const session = await auth();    
-  const userId = session?.user.id;
+  try {
+    const session = await auth();
+    const userId = session?.user.id;
 
-  let recommended: any[] = [];
-  let youMayLike: any[] = [];
+    let recommended: any[] = [];
+    let youMayLike: any[] = [];
 
-  // ----------------------------------------------------------------
-  // 🔴 IF USER IS **NOT LOGGED IN**
-  // → return generic data
-  // ----------------------------------------------------------------
-  if (!userId) {
-    return NextResponse.json({
-      recommended: await getTrendingProducts(),
-      youMayLike: await getNewArrivalProducts(),
-    });
+    // IF USER IS NOT LOGGED IN return generic data
+
+    if (!userId) {
+      return NextResponse.json({
+        recommended: await getTrendingProducts(),
+        youMayLike: await getNewArrivalProducts(),
+      });
+    }
+
+    // IF USER IS LOGGED IN → Personalized logic
+
+    const prefs = await buildUserPreferenceVector(userId);
+
+    // Recommended (PERSONALIZED)
+    if (prefs.topCategories.length > 0) {
+      recommended = await db
+        .select()
+        .from(productItems)
+        .where(inArray(productItems.categoryId, prefs.topCategories))
+        .orderBy(desc(productItems.averageRating))
+        .limit(10);
+    }
+
+    // fallback
+    if (recommended.length === 0) {
+      recommended = await getTopRatedProducts();
+    }
+
+    // You May Like (PERSONALIZED CATEGORY-WEIGHTED)
+    if (prefs.topCategories.length > 0) {
+      youMayLike = await db
+        .select()
+        .from(productItems)
+        .where(inArray(productItems.categoryId, prefs.topCategories))
+        .orderBy(desc(productItems.averageRating))
+        .limit(12);
+    }
+
+    // fallback
+    if (youMayLike.length === 0) {
+      youMayLike = await getNewArrivalProducts();
+    }
+
+    return NextResponse.json(
+      {
+        recommended,
+        youMayLike,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json("Something went wrong", { status: 501 });
   }
-
-  // ----------------------------------------------------------------
-  // 🔵 IF USER IS LOGGED IN → Personalized logic
-  // ----------------------------------------------------------------
-  const prefs = await buildUserPreferenceVector(userId);
-
-  // 1️⃣ Recommended (PERSONALIZED)
-  if (prefs.topCategories.length > 0) {
-    recommended = await db
-      .select()
-      .from(productItems)
-      .where(
-        inArray(productItems.categoryId, prefs.topCategories)
-      )
-      .orderBy(desc(productItems.averageRating))
-      .limit(10);
-  }
-
-  // fallback
-  if (recommended.length === 0) {
-    recommended = await getTopRatedProducts();
-  }
-
-  // 2️⃣ You May Like (PERSONALIZED CATEGORY-WEIGHTED)
-  if (prefs.topCategories.length > 0) {
-    youMayLike = await db
-      .select()
-      .from(productItems)
-      .where(
-        inArray(productItems.categoryId, prefs.topCategories)
-      )
-      .orderBy(desc(productItems.averageRating))
-      .limit(12);
-  }
-
-  // fallback
-  if (youMayLike.length === 0) {
-    youMayLike = await getNewArrivalProducts();
-  }
-
-  // Done ✔
-  return NextResponse.json({
-    recommended,
-    youMayLike,
-  });
 }

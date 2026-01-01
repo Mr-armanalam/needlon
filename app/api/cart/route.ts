@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { eq, and } from "drizzle-orm";
 import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
-import { auth } from "@/auth";
 
 export async function POST(req: NextRequest) {
   const { userId, cartItem, addQuantity = 0, removeQuantity = 0 } = await req.json();  
@@ -16,7 +15,7 @@ export async function POST(req: NextRequest) {
     .from(cartItems)
     .where(
       and(
-        eq(cartItems.productId, cartItem.productId), // ✅ use productId
+        eq(cartItems.productId, cartItem.productId), 
         eq(cartItems.userId, userId),
         eq(cartItems.size, cartItem.size)
       )
@@ -28,7 +27,7 @@ export async function POST(req: NextRequest) {
       .insert(cartItems)
       .values({
         userId,
-        productId: cartItem.productId, // ✅ real product id
+        productId: cartItem.productId, 
         size: cartItem.size,
         quantity: cartItem.quantity ?? 1,
       })
@@ -52,21 +51,5 @@ export async function POST(req: NextRequest) {
     .where(eq(cartItems.id, existingCart.id))
     .returning();
 
-  return NextResponse.json({ updated });
+  return NextResponse.json({ updated }, {status: 200});
 }
-
-
-// export const GET = async () => {
-//   // const { userId } = await req.json();
-//   const session = await auth();
-//   const userId = session?.user.id;
-
-//   if (!userId) return NextResponse.json({error: 'unauthorised access'}, {status: 401})
-
-//   const [cartItem] = await db
-//     .select()
-//     .from(cartItems)
-//     .where(eq(cartItems.userId, userId));
-
-//   return NextResponse.json(cartItem, { status: 200 });
-// };

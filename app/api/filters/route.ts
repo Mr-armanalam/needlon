@@ -9,10 +9,8 @@ import { productCategory } from "@/db/schema/product-category";
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    // const categoryId = searchParams.get("categoryId");
     const category = searchParams.get("category");    
 
-    // 1️⃣ Validate
     if (!category) {
       return NextResponse.json(
         { message: "category is required" },
@@ -31,7 +29,7 @@ export async function GET(req: Request) {
         { status: 400 }
       );
     }
-    // 2️⃣ Fetch filter groups for category
+    // Fetch filter groups for category
     const groups = await db
       .select()
       .from(filterGroups)
@@ -44,24 +42,15 @@ export async function GET(req: Request) {
       });
     }
 
-    // 3️⃣ Fetch filter options for those groups
+    // Fetch filter options for those groups
     const groupIds = groups.map((g) => g.id);
-
-    // const options = await db
-    //   .select()
-    //   .from(filterOptions)
-    //   .where(eq(filterOptions.filterGroupId, groupIds[0]) // temp
-    //     // replaced below
-    //   );
-
-    // 👇 Correct IN query
     const allOptions = await db
       .select()
       .from(filterOptions)
       .where(inArray(filterOptions.filterGroupId, groupIds))
       .orderBy(asc(filterOptions.sortOrder));
 
-    // 4️⃣ Map options under groups
+    // Map options under groups
     const optionsByGroup = allOptions.reduce<Record<string, any[]>>(
       (acc, opt) => {
         acc[opt.filterGroupId] ??= [];
@@ -75,7 +64,7 @@ export async function GET(req: Request) {
       {}
     );
 
-    // 5️⃣ Build response
+    // Build response
     const filters = groups.map((group) => ({
       id: group.id,
       name: group.name,
@@ -85,7 +74,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       filters,
-    });
+    }, {status: 200});
   } catch (error) {
     console.error("FILTER API ERROR:", error);
     return NextResponse.json(

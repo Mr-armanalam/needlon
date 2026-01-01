@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   if (action === "remove" && existing) {
     await db.delete(wishListItems).where(eq(wishListItems.id, existing.id));
-    return NextResponse.json({ removed: true });
+    return NextResponse.json({ removed: true }, { status: 200, statusText: 'Item is removed'});
   }
 
   if (action === "add" && !existing) {
@@ -28,8 +28,8 @@ export async function POST(req: NextRequest) {
       size,
       quantity: 1,
     }).returning();
-    return NextResponse.json({ created });
+    return NextResponse.json({ created }, {status: 200, statusText: 'Item added'});
   }
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true }, {status: 204});
 }

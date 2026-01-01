@@ -29,7 +29,11 @@ export function NavSearch() {
 
   const { data: suggestions } = useQuery<PreSuggestion>({
     queryKey: ["search-suggestions"],
-    queryFn: () => fetch("/api/search/suggestion").then((res) => res.json()),
+    queryFn: () => fetch("/api/search/suggestion", {
+      headers: {
+        
+      }
+    }).then((res) => res.json()),
     enabled: open,
     staleTime: 1000 * 60 * 5, // Cache for 5 mins
   });

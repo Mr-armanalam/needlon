@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     if (!userId)
       return NextResponse.json(
         { success: false, message: "User ID required" },
-        { status: 400 }
+        { status: 511 } // Network authentication required on client side
       );
 
     const addresses = await db
@@ -17,12 +17,12 @@ export async function GET(req: NextRequest) {
       .from(userAddress)
       .where(eq(userAddress.userId, userId));
 
-    return NextResponse.json({ success: true, addresses });
+    return NextResponse.json({ success: true, addresses }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { success: false, message: "Failed to fetch addresses" },
-      { status: 500 }
+      { status: 500 } // Internal server error
     );
   }
 }
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (!userId)
       return NextResponse.json(
         { success: false, message: "User ID required" },
-        { status: 400 }
+        { status: 401 } // unauthorised
       );
 
     if (editingAddressId) {
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -68,8 +68,15 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const { id } = await req.json();
+
+    if (!id)
+      return NextResponse.json(
+        { success: false, message: "Bad request" },
+        { status: 400 }
+      );
+
     await db.delete(userAddress).where(eq(userAddress.id, id));
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

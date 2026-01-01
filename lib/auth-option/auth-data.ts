@@ -1,26 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/db";
 import { and, DrizzleError, eq } from "drizzle-orm";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
-
-// Extend NextAuth types to include 'id' on User and Session
-import type { DefaultSession, DefaultUser, NextAuthOptions } from "next-auth";
+import type { NextAuthConfig } from "next-auth";
 import { usersTable } from "@/db/schema/users";
 
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string;
-    } & DefaultSession["user"];
-  }
-  interface User extends DefaultUser {
-    id: string;
-  }
-}
-
-export const authOptions:NextAuthOptions = {
+export const authOptions: NextAuthConfig = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -28,31 +14,38 @@ export const authOptions:NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
+     
       authorize: async (credentials) => {
         try {
-          if (credentials) {
-            const [user] = await db
-              .select()
-              .from(usersTable)
-              .where(
-                and(
-                  eq(usersTable.email, credentials.email),
-                  eq(usersTable.password, credentials.password)
-                )
-              );
-            if (user) {
-              return {
-                id: user.id,
-                email: user.email,
-                name: user?.name,
-                image: user?.imageUrl || "",
-              };
-            }
+          if (!credentials) return null;
+
+          const email = credentials.email;
+          const password = credentials.password;
+
+          if (typeof email !== "string" || typeof password !== "string") {
             return null;
           }
-          return null;
-        } catch (error: any) {
-          console.log(error.message);
+
+          const [user] = await db
+            .select()
+            .from(usersTable)
+            .where(
+              and(
+                eq(usersTable.email, email),
+                eq(usersTable.password, password)
+              )
+            );
+
+          if (!user) return null;
+
+          return {
+            id: user.id.toString(),
+            email: user.email,
+            name: user.name,
+            image: user.imageUrl ?? "",
+          };
+        } catch (error) {
+          console.error("Authorize error:", error);
           return null;
         }
       },
@@ -105,19 +98,22 @@ export const authOptions:NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email;
-        token.name = user?.name;
-        token.image = user?.image;
+        token.email = user.email!;
+        token.name = user.name;
+        token.image = user.image;
       }
-      return token;
+      return token as typeof token & NextAuthJWT;
     },
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.name = token?.name as string;
-        session.user.image = token?.image as string;
+      if (!token.id || !token.email) {
+        throw new Error("Invalid auth token");
       }
+
+      session.user.id = token.id as string;
+      session.user.email = token.email as string;
+      session.user.name = (token.name as string) ?? null;
+      session.user.image = (token.image as string) ?? null;
+
       return session;
     },
     async redirect({ url, baseUrl }) {
@@ -126,4 +122,52 @@ export const authOptions:NextAuthOptions = {
       return baseUrl;
     },
   },
-}
+};
+
+// async jwt({ token, user }) {
+//   if (user) {
+//     token.id = user.id;
+//     token.email = user.email;
+//     token.name = user?.name;
+//     token.image = user?.image;
+//   }
+//   return token;
+// },
+// async session({ session, token }) {
+//   if (token && session.user) {
+//     session.user.id = token.id as string;
+//     session.user.email = token.email as string;
+//     session.user.name = token?.name as string;
+//     session.user.image = token?.image as string;
+//   }
+//   return session;
+// },
+
+ // authorize: async (credentials) => {
+      //   try {
+      //     if (credentials) {
+      //       const [user] = await db
+      //         .select()
+      //         .from(usersTable)
+      //         .where(
+      //           and(
+      //             eq(usersTable.email, credentials.email),
+      //             eq(usersTable.password, credentials.password)
+      //           )
+      //         );
+      //       if (user) {
+      //         return {
+      //           id: user.id,
+      //           email: user.email,
+      //           name: user?.name,
+      //           image: user?.imageUrl || "",
+      //         };
+      //       }
+      //       return null;
+      //     }
+      //     return null;
+      //   } catch (error: any) {
+      //     console.log(error.message);
+      //     return null;
+      //   }
+      // },

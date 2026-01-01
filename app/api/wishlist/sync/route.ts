@@ -4,9 +4,7 @@ import { wishListItems } from "@/db/schema/wishlist-items";
 
 export async function POST(req: Request) {
   try {
-    const { userId, items } = await req.json();
-    console.log(userId, 'llkjlj');
-    
+    const { userId, items } = await req.json();    
 
     if (!userId || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json({ message: "No items to sync" }, { status: 200 });
@@ -22,7 +20,6 @@ export async function POST(req: Request) {
       updatedAt: new Date(),
     }));
 
-    // If a record with same userId + productId + size exists, update the updatedAt timestamp
     await db
       .insert(wishListItems)
       .values(valuesToInsert)

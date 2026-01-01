@@ -4,10 +4,19 @@ import { db } from "@/db";
 import { cartItems } from "@/db/schema/cart-items";
 import { productItems } from "@/db/schema/product-items";
 
-export async function GET( req: Request,
-  { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const { id } = await params;
+
+    if (!id)
+      return NextResponse.json(
+        { success: false, message: "Bad request" },
+        { status: 400 }
+      );
+
     const cartItem = await db
       .select({
         id: cartItems.id,
@@ -26,11 +35,11 @@ export async function GET( req: Request,
       })
       .from(cartItems)
       .where(eq(cartItems.userId, id))
-      .innerJoin(productItems, eq(cartItems.productId, productItems.id))
+      .innerJoin(productItems, eq(cartItems.productId, productItems.id));
 
-    return NextResponse.json(cartItem);
+    return NextResponse.json(cartItem, { status: 200 });
   } catch (error) {
     console.log(error);
-    return NextResponse.json([]);
+    return NextResponse.json([], { status: 204 }); // no-content in response body
   }
 }
