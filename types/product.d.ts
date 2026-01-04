@@ -71,3 +71,22 @@ export interface ClientProductItemWithCategory extends ProductItemResult {
   CatType: string | null;
   SubCatType: string | null;
 }
+
+type ProductData = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  modalImage?: string[] | null;
+  sizes?: string[];
+  category?: string;
+  catType?: string;
+};
+
+type Product = {
+  productData: ProductData[] | [];
+  productTagDes: {
+    descriptiveContent: string;
+    contentTag: string;
+  };
+};

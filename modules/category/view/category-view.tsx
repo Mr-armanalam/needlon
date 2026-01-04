@@ -9,25 +9,7 @@ import CheckoutPrompt from "../ui/checkout-prompt";
 import { useSession } from "next-auth/react";
 import { addToCart, fetchCart } from "@/features/cart-slice";
 import { useAppDispatch } from "@/store/store";
-
-type ProductData = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  modalImage?: string[] | null;
-  sizes?: string[];
-  category?: string;
-  catType?: string;
-};
-
-type Product = {
-  productData: ProductData[] | [];
-  productTagDes: {
-    descriptiveContent: string;
-    contentTag: string;
-  };
-};
+import { Product, ProductData } from "@/types/product";
 
 const CategoryView = () => {
   const { categories, category } = useParams<{
@@ -69,7 +51,7 @@ const CategoryView = () => {
       `/api/products?category=${categories}&subcategory=${category}&sort=${sort}${
         material ? `&material=${material}` : ""
       }`,
-      { cache: "no-store" } // always fresh
+      { cache: "no-store" } 
     )
       .then(async (res) => await res.json())
       .then(setProducts);
