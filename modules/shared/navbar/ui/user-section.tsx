@@ -50,8 +50,6 @@ const UserSection = ({ signOut }: Props) => {
   const router = useRouter();
   return (
     <div className="flex flex-col">
-      {/* <p className="text-sm font-semibold">{session?.user.name}</p>
-      <p className="text-xs text-gray-500">{session?.user.email}</p> */}
       <p className="mx-3.5 justify-start font-semibold text-md">Your Account</p>
       <p className="text-xs mx-3.5 text-gray-500">
         Everything you need, in one smart spot

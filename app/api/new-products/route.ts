@@ -44,8 +44,6 @@ export async function GET(req: NextRequest) {
         productTagDes: {
           // descriptiveContent: "No products found for this category.",
           // contentTag: "cleanSubcat",
-          // descriptiveContent: "",
-          // contentTag: "",
         },
       });
     }

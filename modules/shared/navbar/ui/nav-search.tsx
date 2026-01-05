@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Loader2, Search } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { useDebounce } from "@/hooks/use-debounce"; // path to hook above
+import { useDebounce } from "@/hooks/use-debounce"; 
 
 import {
   CommandDialog,
@@ -29,11 +29,10 @@ export function NavSearch() {
 
   const { data: suggestions } = useQuery<PreSuggestion>({
     queryKey: ["search-suggestions"],
-    queryFn: () => fetch("/api/search/suggestion", {
-      headers: {
-        
-      }
-    }).then((res) => res.json()),
+    queryFn: () =>
+      fetch("/api/search/suggestion", {
+        headers: {},
+      }).then((res) => res.json()),
     enabled: open,
     staleTime: 1000 * 60 * 5, // Cache for 5 mins
   });
@@ -73,7 +72,7 @@ export function NavSearch() {
     <>
       <div
         onClick={() => setOpen(true)}
-        className="bg-[#cccccc]/40 transition-all hover:bg-muted border py-1 pl-4 pr-2 min-w-[210px] backdrop-blur-md rounded-md flex items-center cursor-pointer text-sm text-muted-foreground"
+        className="bg-[#cccccc]/40 transition-all hover:bg-muted border py-1 pl-4 pr-2 h-8.5 min-w-52.5 backdrop-blur-md rounded-md flex items-center cursor-pointer text-sm text-muted-foreground"
       >
         <Search className="mr-2 h-4 w-4" />
         Search clothes...
@@ -88,7 +87,7 @@ export function NavSearch() {
           onValueChange={setQuery}
           placeholder="Search clothes here..."
         />
-        <CommandList className="no-scrollbar min-h-[300px]">
+        <CommandList className="no-scrollbar min-h-75">
           {/* Loading State */}
           {isSearching && (
             <div className="flex items-center justify-center p-6">

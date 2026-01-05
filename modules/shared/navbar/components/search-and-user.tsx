@@ -11,12 +11,14 @@ import {
 } from "@/components/ui/popover";
 import UserSection from "../ui/user-section";
 import { NavSearch } from "../ui/nav-search";
+import CartAndWishList from "./cart-and-wishlist";
 
 const SearchAndUser = () => {
   const { data: session } = useSession();
 
   return (
     <div className="flex items-center space-x-4">
+      <CartAndWishList />
       <NavSearch />
       <ModeToggle />
       {session?.user ? (
@@ -24,7 +26,7 @@ const SearchAndUser = () => {
           <PopoverTrigger>
             <Avatar
               // onClick={() => signOut()}
-              className="rounded-full cursor-pointer w-[37px] h-[37px]"
+              className="rounded-full cursor-pointer w-9.25 h-9.25"
             >
               <AvatarImage
                 src={
@@ -43,7 +45,7 @@ const SearchAndUser = () => {
       ) : (
         <Avatar
           onClick={() => signIn()}
-          className="rounded-full cursor-pointer w-[38px] h-[38px]"
+          className="rounded-full cursor-pointer w-9.5 h-9.5"
         >
           <AvatarFallback className="bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full">
             <User className="w-5 h-5" />

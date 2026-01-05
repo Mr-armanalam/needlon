@@ -99,26 +99,26 @@ export const items = [
       },
     ],
   },
-   {
-    name: "Our World",
-    link: "/our-world",
-    subNevigator: [
-      {
-        name: "Sustainability",
-        description: "Our commitment to sustainable fashion",
-        link: "/our-world/sustainability",
-      },
-      {
-        name: "Our Story",
-        description: "The art of our story and craftsmanship",
-        link: "/our-world/craftsmanship",
-      },
-      {
-        name: "Heritage",
-        description: "Our brand's heritage and story",
-        link: "/our-world/heritage",
-      },
-    ],
-  },
+  //  {
+  //   name: "Our World",
+  //   link: "/our-world",
+  //   subNevigator: [
+  //     {
+  //       name: "Sustainability",
+  //       description: "Our commitment to sustainable fashion",
+  //       link: "/our-world/sustainability",
+  //     },
+  //     {
+  //       name: "Our Story",
+  //       description: "The art of our story and craftsmanship",
+  //       link: "/our-world/craftsmanship",
+  //     },
+  //     {
+  //       name: "Heritage",
+  //       description: "Our brand's heritage and story",
+  //       link: "/our-world/heritage",
+  //     },
+  //   ],
+  // },
   { name: "About", link: "/about" },
 ];

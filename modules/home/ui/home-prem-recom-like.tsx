@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import ProductCardPreview from "../components/card/item-card";
 import { ClientProductItem } from "@/types/product";
@@ -19,7 +18,7 @@ const HomePremRecomLike = ({heading, items}:{heading: string, items:ClientProduc
         ))}
         <Button
           type="button"
-          className="my-auto -right-6 sticky text-2xl px-2.5 rounded-r-none cursor-pointer h-[120px]"
+          className="my-auto -right-6 sticky text-2xl px-2.5 rounded-r-none cursor-pointer h-30"
         >
           &gt;
         </Button>
