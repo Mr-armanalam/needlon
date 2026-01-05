@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store";
 import { Bell, Heart, ShoppingBagIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 const CartAndWishList = () => {
   const { cart } = useAppSelector((state) => state.cart);

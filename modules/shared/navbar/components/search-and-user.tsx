@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { ModeToggle } from "./theme-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signIn, signOut, useSession } from "next-auth/react";

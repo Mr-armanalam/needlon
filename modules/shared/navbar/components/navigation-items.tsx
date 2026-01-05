@@ -1,4 +1,3 @@
-import React from "react";
 import Navigationmenu from "./navigation-menu";
 import { items } from "@/lib/data/nav-data";
 import Link from "next/link";

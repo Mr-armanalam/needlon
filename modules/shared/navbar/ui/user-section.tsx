@@ -7,7 +7,6 @@ import {
   User,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 interface Props {
   signOut: () => void;

@@ -1,7 +1,5 @@
-import React from 'react'
 import NavigationItems from './components/navigation-items'
 import SearchAndUser from './components/search-and-user'
-import CartAndWishList from './components/cart-and-wishlist'
 
 const NavbarSection = () => {
   return (
