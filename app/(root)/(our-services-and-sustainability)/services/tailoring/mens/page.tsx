@@ -1,8 +1,11 @@
+import TailoringView from '@/modules/tailoring-services/view/tailoring-view'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <TailoringView />
+    </div>
   )
 }
 
