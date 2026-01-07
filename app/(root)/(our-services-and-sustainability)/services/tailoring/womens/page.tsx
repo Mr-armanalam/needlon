@@ -1,8 +1,9 @@
+import TailoringViewWomen from '@/modules/tailoring-services/view/tailoring-view-women'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <TailoringViewWomen />
   )
 }
 
