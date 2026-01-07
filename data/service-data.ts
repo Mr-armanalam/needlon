@@ -39,3 +39,49 @@ export const servicePillarsWomens = [
       imageUrl: "https://images.unsplash.com/photo-1764265148862-7ee72a4fb367?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxldmVuaW5nJTIwZ293biUyMGVsZWdhbnQlMjBkcmVzc3xlbnwxfHx8fDE3Njc2NTU5NDB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
     }
   ];
+
+  export const serviceStepWomens = [
+    {
+      step: '01' ,
+      name: 'Our Design Approach' ,
+      description: 'A collaborative journey that celebrates your unique style and needs.' ,
+    },
+    {
+      step: '02',
+      name: 'Body Mapping',
+      description: 'Comprehensive measurements and posture analysis ensure garments that flatter your unique form.',
+    },
+    {
+      step: '03',
+      name: 'Material & Design' ,
+      description: 'Select from curated fabrics and refine every design detail from buttons to linings.',
+    },
+    {
+      step: '04',
+      name: ' Creation & Refinement' ,
+      description: 'Progressive fittings perfect every seam, ensuring impeccable drape and comfort.',
+    },
+  ]
+
+  export const serviceStepMens = [
+    {
+      step: '01',
+      name: 'Consultation',
+      description: 'Discuss your vision, lifestyle, and specific requirements with our master tailor.'
+    },
+    {
+      step: '02',
+      name: 'Measurement',
+      description: 'Over 30 precise measurements ensure perfect fit across shoulders, chest, waist, and sleeves.'
+    },
+    {
+      step: '03',
+      name: 'Fabric Selection',
+      description: "Choose from hundreds of premium fabrics sourced from the world's finest mills."
+    },
+    {
+      step: '04',
+      name: 'Crafting & Fittings',
+      description: 'Multiple fittings refine every detail before your garment is completed to perfection.'
+    },
+  ]
