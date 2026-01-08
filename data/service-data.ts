@@ -153,23 +153,51 @@ export const whyChooseUsWedding = [
 
 export const weddingTimelinedata = [
   {
-    time: '6-9',
-    title: '6-9 Months Before',
-    description: 'Initial consultation to discuss vision, review fabric options, and take preliminary measurements. Perfect for bespoke suits and complex dress alterations.'
+    time: "6-9",
+    title: "6-9 Months Before",
+    description:
+      "Initial consultation to discuss vision, review fabric options, and take preliminary measurements. Perfect for bespoke suits and complex dress alterations.",
   },
   {
-    time: '3-4',
-    title: ' 3-4 Months Before',
-    description: "First fitting for bespoke garments. For alterations, bring in your wedding gown or suit once purchased. We'll assess the work needed and create a fitting schedule."
+    time: "3-4",
+    title: " 3-4 Months Before",
+    description:
+      "First fitting for bespoke garments. For alterations, bring in your wedding gown or suit once purchased. We'll assess the work needed and create a fitting schedule.",
   },
   {
-    time: '6-8',
-    title: '6-8 Weeks Before',
-    description: 'Second fitting and final adjustments. This is when we perfect every detail, from hem length to sleeve pitch, ensuring absolute comfort and style.'
+    time: "6-8",
+    title: "6-8 Weeks Before",
+    description:
+      "Second fitting and final adjustments. This is when we perfect every detail, from hem length to sleeve pitch, ensuring absolute comfort and style.",
   },
   {
-    time: '2-3',
-    title: '2-3 Weeks Before',
-    description: "Final fitting and collection. Your garments are ready, pressed, and perfect. We'll provide care instructions and ensure you're completely satisfied."
+    time: "2-3",
+    title: "2-3 Weeks Before",
+    description:
+      "Final fitting and collection. Your garments are ready, pressed, and perfect. We'll provide care instructions and ensure you're completely satisfied.",
   },
-]
+];
+
+export const servicePillarsAlternator = [
+  {
+    title: "Wardrobe Overhaul",
+    description:
+      "Reshaping vintage finds or off-the-rack purchases to match your unique proportions. Whether it's a thrift store treasure or a department store find that's almost perfect, we transform it into a custom-fitted piece. From shoulder adjustments to complete body contouring, we bring expert tailoring to garments at any price point.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1591380816222-28cec94b49c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjbG90aGluZyUyMGFsdGVyYXRpb25zJTIwc2V3aW5nfGVufDF8fHx8MTc2NzgzMDYwMXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+  {
+    title: "Express Hemming & Tapering",
+    description:
+      "Precision adjustments for trousers, sleeves, and skirts with original-edge finishes. Our hemming service preserves original stitching and finishes whenever possible. From blind hems to Euro hems, cuffed to plain, we ensure your garments maintain their intended look while achieving the perfect length. Tapering services create a modern, tailored silhouette without compromising comfort.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1634626857321-deb416dcdb00?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZW1taW5nJTIwdHJvdXNlcnMlMjB0YWlsb3Jpbmd8ZW58MXx8fHwxNzY3ODMwNjAyfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+  {
+    title: "Structural Repairs",
+    description:
+      "Expert relining, zipper replacements, and size adjustments (taking in or letting out). We handle complex structural work that extends the life of your favorite garments. From replacing worn linings to invisible zipper installations, resetting buttons to reattaching pockets—if it can be saved, we'll save it with meticulous attention to preserving the garment's original integrity.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1767678385577-716a48a85cc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXdpbmclMjBtYWNoaW5lJTIwemlwcGVyJTIwcmVwYWlyfGVufDF8fHx8MTc2NzgzMDYwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+];
