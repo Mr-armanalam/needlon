@@ -7,7 +7,7 @@ const ProcessSection = ({
   processStep,
 }: {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   processStep: typeof serviceStepMens;
 }) => {
   return (

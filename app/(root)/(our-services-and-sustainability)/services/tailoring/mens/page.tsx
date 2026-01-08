@@ -1,4 +1,4 @@
-import TailoringView from '@/modules/tailoring-services/view/tailoring-view'
+import TailoringView from '@/modules/tailoring-services/view/tailoring-view-men'
 import React from 'react'
 
 const page = () => {

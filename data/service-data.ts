@@ -23,65 +23,153 @@ export const servicePillarsMens = [
 ];
 
 export const servicePillarsWomens = [
-    {
-      title: "The Power Set",
-      description: "Impeccably tailored blazers and trousers that offer a sharp, professional edge without sacrificing comfort. Each piece is constructed with precision, featuring structured shoulders that frame your silhouette and a fit that moves with you throughout your day. Whether closing a deal or leading a meeting, our power sets are designed to command attention and respect.",
-      imageUrl: "https://images.unsplash.com/photo-1723277171985-07c20f1876e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21lbiUyMGJsYXplciUyMHRhaWxvcmVkJTIwZmFzaGlvbnxlbnwxfHx8fDE3Njc2NTU5Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-    },
-    {
-      title: "Custom Blouses & Silk Tops",
-      description: "Perfectly draped pieces in luxury silks and linens, designed to layer seamlessly. From classic button-downs in crisp poplin to flowing silk charmeuse, each blouse is cut to your exact measurements. Choose from an extensive collection of fabrics, necklines, and sleeve styles to create pieces that transition effortlessly from day to evening.",
-      imageUrl: "https://images.unsplash.com/photo-1761117228880-df2425bd70da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaWxrJTIwYmxvdXNlJTIwZWxlZ2FudCUyMGZhYnJpY3xlbnwxfHx8fDE3Njc2NTU5Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-    },
-    {
-      title: "Evening & Occasion",
-      description: "One-of-a-kind skirts and gowns tailored to accentuate your silhouette for your most important events. Our couture approach combines architectural precision with luxurious draping techniques. From cocktail dresses to full-length gowns, each garment is meticulously crafted to celebrate your individuality and ensure you feel extraordinary.",
-      imageUrl: "https://images.unsplash.com/photo-1764265148862-7ee72a4fb367?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxldmVuaW5nJTIwZ293biUyMGVsZWdhbnQlMjBkcmVzc3xlbnwxfHx8fDE3Njc2NTU5NDB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-    }
-  ];
+  {
+    title: "The Power Set",
+    description:
+      "Impeccably tailored blazers and trousers that offer a sharp, professional edge without sacrificing comfort. Each piece is constructed with precision, featuring structured shoulders that frame your silhouette and a fit that moves with you throughout your day. Whether closing a deal or leading a meeting, our power sets are designed to command attention and respect.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1723277171985-07c20f1876e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3b21lbiUyMGJsYXplciUyMHRhaWxvcmVkJTIwZmFzaGlvbnxlbnwxfHx8fDE3Njc2NTU5Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+  {
+    title: "Custom Blouses & Silk Tops",
+    description:
+      "Perfectly draped pieces in luxury silks and linens, designed to layer seamlessly. From classic button-downs in crisp poplin to flowing silk charmeuse, each blouse is cut to your exact measurements. Choose from an extensive collection of fabrics, necklines, and sleeve styles to create pieces that transition effortlessly from day to evening.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1761117228880-df2425bd70da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzaWxrJTIwYmxvdXNlJTIwZWxlZ2FudCUyMGZhYnJpY3xlbnwxfHx8fDE3Njc2NTU5Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+  {
+    title: "Evening & Occasion",
+    description:
+      "One-of-a-kind skirts and gowns tailored to accentuate your silhouette for your most important events. Our couture approach combines architectural precision with luxurious draping techniques. From cocktail dresses to full-length gowns, each garment is meticulously crafted to celebrate your individuality and ensure you feel extraordinary.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1764265148862-7ee72a4fb367?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxldmVuaW5nJTIwZ293biUyMGVsZWdhbnQlMjBkcmVzc3xlbnwxfHx8fDE3Njc2NTU5NDB8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+];
 
-  export const serviceStepWomens = [
-    {
-      step: '01' ,
-      name: 'Our Design Approach' ,
-      description: 'A collaborative journey that celebrates your unique style and needs.' ,
-    },
-    {
-      step: '02',
-      name: 'Body Mapping',
-      description: 'Comprehensive measurements and posture analysis ensure garments that flatter your unique form.',
-    },
-    {
-      step: '03',
-      name: 'Material & Design' ,
-      description: 'Select from curated fabrics and refine every design detail from buttons to linings.',
-    },
-    {
-      step: '04',
-      name: ' Creation & Refinement' ,
-      description: 'Progressive fittings perfect every seam, ensuring impeccable drape and comfort.',
-    },
-  ]
+export const serviceStepWomens = [
+  {
+    step: "01",
+    name: "Our Design Approach",
+    description:
+      "A collaborative journey that celebrates your unique style and needs.",
+  },
+  {
+    step: "02",
+    name: "Body Mapping",
+    description:
+      "Comprehensive measurements and posture analysis ensure garments that flatter your unique form.",
+  },
+  {
+    step: "03",
+    name: "Material & Design",
+    description:
+      "Select from curated fabrics and refine every design detail from buttons to linings.",
+  },
+  {
+    step: "04",
+    name: " Creation & Refinement",
+    description:
+      "Progressive fittings perfect every seam, ensuring impeccable drape and comfort.",
+  },
+];
 
-  export const serviceStepMens = [
-    {
-      step: '01',
-      name: 'Consultation',
-      description: 'Discuss your vision, lifestyle, and specific requirements with our master tailor.'
-    },
-    {
-      step: '02',
-      name: 'Measurement',
-      description: 'Over 30 precise measurements ensure perfect fit across shoulders, chest, waist, and sleeves.'
-    },
-    {
-      step: '03',
-      name: 'Fabric Selection',
-      description: "Choose from hundreds of premium fabrics sourced from the world's finest mills."
-    },
-    {
-      step: '04',
-      name: 'Crafting & Fittings',
-      description: 'Multiple fittings refine every detail before your garment is completed to perfection.'
-    },
-  ]
+export const serviceStepMens = [
+  {
+    step: "01",
+    name: "Consultation",
+    description:
+      "Discuss your vision, lifestyle, and specific requirements with our master tailor.",
+  },
+  {
+    step: "02",
+    name: "Measurement",
+    description:
+      "Over 30 precise measurements ensure perfect fit across shoulders, chest, waist, and sleeves.",
+  },
+  {
+    step: "03",
+    name: "Fabric Selection",
+    description:
+      "Choose from hundreds of premium fabrics sourced from the world's finest mills.",
+  },
+  {
+    step: "04",
+    name: "Crafting & Fittings",
+    description:
+      "Multiple fittings refine every detail before your garment is completed to perfection.",
+  },
+];
+
+export const servicePillarsWedding = [
+  {
+    title: "The Groom's Suite",
+    description:
+      "Fully bespoke or made-to-measure three-piece suits with personalized linings and monograms. Choose from the finest British and Italian wool suiting fabrics, then customize every detail—from lapel width to button style. Each suit is crafted to perfection with hand-stitched buttonholes, working sleeve buttons, and a custom lining featuring your initials and wedding date.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1529635229076-82fefed713c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwc3VpdCUyMHRocmVlJTIwcGllY2V8ZW58MXx8fHwxNzY3NjU2NDczfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+  {
+    title: "Bridal Refinement",
+    description:
+      "Expert adjustments for wedding gowns, ensuring every lace detail and silhouette is flawless. Our experienced seamstresses specialize in delicate fabrics, intricate beadwork, and complex constructions. From hemming to bustle creation, corseting to sleeve adjustments, we treat your gown with the reverence it deserves, ensuring you feel absolutely radiant on your special day.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1766104797322-3826d7158c64?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxicmlkZSUyMHdlZGRpbmclMjBkcmVzcyUyMGZpdHRpbmd8ZW58MXx8fHwxNzY3NjU2NDczfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+  {
+    title: "The Wedding Party",
+    description:
+      "Coordinated tailoring for bridesmaids, groomsmen, and parents of the couple for a cohesive aesthetic. We ensure everyone looks their best while maintaining a harmonious visual story. Whether matching groomsmen suits or coordinating bridesmaid dress alterations, we handle groups of any size with care and attention to individual fit, creating a polished and unified celebration.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1679599441409-5f814f7392ab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwcGFydHklMjBicmlkZXNtYWlkcyUyMGdyb29tc21lbnxlbnwxfHx8fDE3Njc2NTY0NzN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+];
+
+export const whyChooseUsWedding = [
+  {
+    step: "01",
+    name: "Personalized Care",
+    description:
+      "Your wedding is unique, and so is our approach. We take time to understand your vision and work closely with you to bring it to life.",
+  },
+  {
+    step: "02",
+    name: "Attention to Detail",
+    description:
+      "From intricate lace work to perfect trouser breaks, we obsess over every detail so you can focus on celebrating your love.",
+  },
+  {
+    step: "03",
+    name: "Group Coordination",
+    description:
+      "We expertly manage entire wedding parties, ensuring everyone looks cohesive while respecting individual fit and comfort needs.",
+  },
+  {
+    step: "04",
+    name: "Crafting & Fittings",
+    description:
+      "Multiple fittings refine every detail before your garment is completed to perfection.",
+  },
+];
+
+export const weddingTimelinedata = [
+  {
+    time: '6-9',
+    title: '6-9 Months Before',
+    description: 'Initial consultation to discuss vision, review fabric options, and take preliminary measurements. Perfect for bespoke suits and complex dress alterations.'
+  },
+  {
+    time: '3-4',
+    title: ' 3-4 Months Before',
+    description: "First fitting for bespoke garments. For alterations, bring in your wedding gown or suit once purchased. We'll assess the work needed and create a fitting schedule."
+  },
+  {
+    time: '6-8',
+    title: '6-8 Weeks Before',
+    description: 'Second fitting and final adjustments. This is when we perfect every detail, from hem length to sleeve pitch, ensuring absolute comfort and style.'
+  },
+  {
+    time: '2-3',
+    title: '2-3 Weeks Before',
+    description: "Final fitting and collection. Your garments are ready, pressed, and perfect. We'll provide care instructions and ensure you're completely satisfied."
+  },
+]
