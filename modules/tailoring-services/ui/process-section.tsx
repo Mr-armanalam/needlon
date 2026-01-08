@@ -5,13 +5,15 @@ const ProcessSection = ({
   title,
   subtitle,
   processStep,
+  bg
 }: {
   title: string;
   subtitle?: string;
   processStep: typeof serviceStepMens;
+  bg?: string;
 }) => {
   return (
-    <section id="process" className="bg-white py-24 px-6 lg:px-8">
+    <section id="process" className={`${bg ?? 'bg-white'} py-24 px-6 lg:px-8`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2

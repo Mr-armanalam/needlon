@@ -178,7 +178,7 @@ export const weddingTimelinedata = [
   },
 ];
 
-export const servicePillarsAlternator = [
+export const servicePillarsAlteration = [
   {
     title: "Wardrobe Overhaul",
     description:
@@ -199,5 +199,63 @@ export const servicePillarsAlternator = [
       "Expert relining, zipper replacements, and size adjustments (taking in or letting out). We handle complex structural work that extends the life of your favorite garments. From replacing worn linings to invisible zipper installations, resetting buttons to reattaching pockets—if it can be saved, we'll save it with meticulous attention to preserving the garment's original integrity.",
     imageUrl:
       "https://images.unsplash.com/photo-1767678385577-716a48a85cc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzZXdpbmclMjBtYWNoaW5lJTIwemlwcGVyJTIwcmVwYWlyfGVufDF8fHx8MTc2NzgzMDYwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+  },
+];
+
+export const alterationType = [
+  {
+    title: "Trouser Hemming",
+    description:
+      "Original, plain, or cuffed hems with precision length adjustment",
+    price: 18,
+  },
+  {
+    title: "Sleeve Shortening",
+    description:
+      "Jacket and shirt sleeves adjusted while preserving button placement",
+    price: 20,
+  },
+  {
+    title: "Waist Adjustment",
+    description: "Taking in or letting out trousers, skirts, and dresses",
+    price: 22,
+  },
+  {
+    title: "Tapering",
+    description: "Slimming trouser legs, shirt bodies, or jacket torsos",
+    price: 17,
+  },
+  {
+    title: "Zipper Replacement",
+    description: "Standard or invisible zipper installation in any garment",
+    price: 15,
+  },
+  {
+    title: "Jacket Relining",
+    description: "Complete lining replacement with premium materials",
+    price: 20,
+  },
+];
+
+export const alterationStep = [
+  {
+    step: "01",
+    name: "Drop Off",
+    description: "Bring in your garment. We'll assess what's needed and provide a quote on the spot.",
+  },
+  {
+    step: "02",
+    name: "Fitting & Pinning",
+    description: "Try on the garment while we mark exact adjustments for a perfect fit.",
+  },
+  {
+    step: "03",
+    name: "Expert Alteration",
+    description: "Our skilled tailors execute the work with precision and care.",
+  },
+  {
+    step: "04",
+    name: "Collection",
+    description: "Pick up your perfectly fitted garment, ready to wear with confidence.",
   },
 ];

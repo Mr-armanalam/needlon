@@ -6,7 +6,6 @@ const page = () => {
   return (
       <>
         <AlterationView />
-        <VibeStatement quote="True style isn't about standing out; it's about being remembered for the right reasons." />
       </>
   )
 }
