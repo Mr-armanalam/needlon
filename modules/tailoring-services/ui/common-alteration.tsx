@@ -1,8 +1,10 @@
+"use client";
 import { alterationType } from "@/data/service-data";
 import { ArrowRight } from "lucide-react";
-import React from "react";
+import { useRouter } from "next/navigation";
 
 const CommonAlteration = () => {
+  const router = useRouter();
   return (
     <section className="bg-white py-24 px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -36,7 +38,10 @@ const CommonAlteration = () => {
 
         <div className="text-center mt-12">
           <p className="text-gray-600 mb-4">Don't see what you need?</p>
-          <button className="text-[#D4AF37] hover:text-[#C5A028] transition-colors inline-flex items-center gap-2">
+          <button
+            onClick={() => router.push("/pricing")}
+            className="text-[#D4AF37] cursor-pointer hover:text-[#C5A028] transition-colors inline-flex items-center gap-2"
+          >
             <span>View Full Price List</span>
             <ArrowRight className="w-4 h-4" />
           </button>
