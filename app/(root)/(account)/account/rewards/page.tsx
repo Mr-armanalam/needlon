@@ -1,7 +1,5 @@
-// import RewardsView from '@/modules/rewards/view/rewards-view'
 import RewardsView from "@/modules/rewards/view/rewards-view";
 import { cookies } from "next/headers";
-import React from "react";
 
 export type Rewards = {
   id: string;
@@ -18,16 +16,21 @@ export type Rewards = {
 
 const page = async () => {
   const cookie = await cookies();
-  const cookieStore = cookie.toString();
-
   const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/rewards`, {
     cache: "no-store",
     headers: {
-      Cookie: cookieStore,
+      Cookie: cookie.toString(),
     },
   });
 
-  if (!response.ok) return alert("something went wrong !");
+  if (!response.ok) {
+    return (
+      <div className="px-8 py-4 text-red-500">
+        Something went wrong!
+      </div>
+    );
+  }
+
   const result = await response.json();
   const allRewards: Rewards[] = response.status !== 200 ? [] : result?.rewards;
 

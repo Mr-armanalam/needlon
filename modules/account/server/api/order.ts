@@ -1,4 +1,4 @@
-import { GroupedOrder } from "@/app/api/orders/route";
+import { GroupedOrder } from "@/types/order";
 import { OrderItemProp } from "@/types/product";
 
 export async function fetchOrders(search: string): Promise<GroupedOrder[]> {

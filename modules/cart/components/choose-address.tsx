@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Address } from "@/features/address-slice";
+import { Address } from "@/types/address";
 
 type props = {
   addresses: Address[];

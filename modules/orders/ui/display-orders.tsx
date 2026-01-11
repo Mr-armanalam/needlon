@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GroupedOrder } from "@/app/api/orders/route";
 import { Button } from "@/components/ui/button";
 import NoUserAddress from "@/modules/account/shared/no-user-address";
+import { GroupedOrder } from "@/types/order";
 import { format } from "date-fns";
 import { BoxIcon } from "lucide-react";
 import Image from "next/image";

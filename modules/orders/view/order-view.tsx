@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import SearchOrder from "../ui/search-order";
 import DisplayOrders from "../ui/display-orders";
 import { useRouter } from "next/navigation";
-import { GroupedOrder } from "@/app/api/orders/route";
 import { useQuery } from "@tanstack/react-query";
 import { fetchOrders } from "@/modules/account/server/api/order";
 import { useDebounce } from "@/hooks/use-debounce";
+import { GroupedOrder } from "@/types/order";
 
 type Props = {
   initialSearch: string;

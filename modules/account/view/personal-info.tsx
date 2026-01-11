@@ -16,7 +16,7 @@ type props = {
   phone: string | null;
   gender: "male" | "female";
 };
-const PersonalInfo = ({ serverData }: { serverData: props }) => {
+const PersonalInfo = ({ serverData }: { serverData: props }) => {  
   const { data: session } = useSession();
 
   const [personalData, setPersonalData] = useState({
@@ -25,7 +25,7 @@ const PersonalInfo = ({ serverData }: { serverData: props }) => {
     email: serverData?.email ?? "",
     number: serverData?.phone ?? "",
     gender: serverData?.gender ?? "male",
-  });
+  });  
 
   const [editSection, setEditSection] = useState<
     null | "personal" | "email" | "phone"

@@ -5,8 +5,6 @@ import { orders } from "@/db/schema/orders";
 import { and, eq, sql } from "drizzle-orm";
 import { coupons } from "@/db/schema/coupons";
 
-export const config = { api: { bodyParser: false } };
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 

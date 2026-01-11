@@ -4,6 +4,8 @@ import { Metadata } from "next";
 import SubcatSearch from "@/modules/home/components/hero-components/subcat-search";
 import HeroSlider from "@/modules/home/components/hero-components/hero-slider";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Needlon | home",
   description: "A fashionable clothing tailoring service",
