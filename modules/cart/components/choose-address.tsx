@@ -26,7 +26,7 @@ export function ChooseAddress({
           Change
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="center" className="w-[420px]">
+      <PopoverContent align="center" className="w-105">
         <RadioGroup
           value={currentAddressId}
           className="flex flex-col gap-y-4"

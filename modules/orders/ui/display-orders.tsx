@@ -27,7 +27,7 @@ const DisplayOrders = ({ loading, orders }: props) => {
                 key={index}
                 className={`border-y hover:shadow-md cursor-pointer border-stone-200 mb-1.5 hover:mb-2.5 flex`}
               >
-                <div className="relative w-[190px] h-[190px]">
+                <div className="relative w-47.5 h-47.5">
                   <Image src={order.items[0].image ?? ""} fill alt="wishlist items" />
                 </div>
                 <div className="relative w-full">
