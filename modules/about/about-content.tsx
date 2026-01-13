@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import React from "react";
 
 const AboutContent = () => {
@@ -34,7 +35,15 @@ const AboutContent = () => {
           the perfect fit is non-negotiable.
         </p>
       </div>
-      
+      <div className="flex justify-between mt-10 mb-4">
+        <Button
+          variant={"outline"}
+          className="cursor-pointer border-yellow-600 text-stone-700"
+        >
+          Explore our work
+        </Button>
+        <p className="text-yellow-600">Arman Alam</p>
+      </div>
     </div>
   );
 };

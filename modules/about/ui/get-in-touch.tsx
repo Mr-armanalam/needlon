@@ -24,7 +24,7 @@ const contactData = [
 ]
 const GetInTouch = () => {
  return (
-    <div className="flex mt-12 bg-stone-100 py-20 justify-center">
+    <div className="flex mt-12 bg-stone-100/80 py-20 justify-center">
       <div className='grid max-w-245 gap-x-8 flex-1 grid-cols-2 max-sm:grid-cols-1 max-lg:px-4 max-sm:gap-y-20'>
         <div>
           <div className='mb-8'>
