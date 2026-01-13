@@ -1,10 +1,14 @@
-import AboutView from '@/modules/about/about-view'
-import React from 'react'
+import AboutView from "@/modules/about/about-view";
+import IMap from "@/modules/about/ui/shop-map";
+import React from "react";
 
 const page = () => {
   return (
-    <AboutView />
-  )
-}
+    <>
+      <AboutView />
+      <IMap />
+    </>
+  );
+};
 
-export default page
+export default page;
