@@ -1,7 +1,10 @@
+'use client'
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const AboutContent = () => {
+  const router = useRouter();
   return (
     <div className="pt-20">
       <h1 className="font-garamond text-6xl font-semibold">
@@ -38,6 +41,7 @@ const AboutContent = () => {
       <div className="flex justify-between mt-10 mb-4">
         <Button
           variant={"outline"}
+          onClick={()=>router.push('/new-in/arrivals')}
           className="cursor-pointer border-yellow-600 text-stone-700 hover:bg-yellow-600 transition-colors delay-200 hover:text-white"
         >
           Explore our work
