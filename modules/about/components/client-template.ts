@@ -1,3 +1,4 @@
+'use server'
 const clientTemplate = (formData: { name: string; subject: string }) => `
 <div style="background-color: #f9f9f9; padding: 40px 20px; font-family: 'Times New Roman', Times, serif;">
   <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e0e0e0; padding: 50px;">

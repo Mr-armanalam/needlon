@@ -1,4 +1,5 @@
-const adminTemplate = (formData: { name: string; email: string; phone: string; subject: string; message: string }) => `
+'use server'
+const adminTemplate = (formData: { name: string; email: string; phone?: string; subject: string; message: string }) => `
 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; border: 1px solid #ddd; padding: 20px;">
   <div style="background-color: #443f38; color: #fff; padding: 15px; margin: -20px -20px 20px -20px;">
     <h2 style="margin: 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">New Website Inquiry</h2>
@@ -15,7 +16,7 @@ const adminTemplate = (formData: { name: string; email: string; phone: string; s
     </tr>
     <tr>
       <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Phone Number:</td>
-      <td style="padding: 10px; border-bottom: 1px solid #eee;">${formData.phone || 'Not Provided'}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee;">${formData?.phone || 'Not Provided'}</td>
     </tr>
     <tr>
       <td style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">Subject:</td>

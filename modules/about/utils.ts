@@ -1,23 +1,24 @@
+'use server'
 import nodemailer from 'nodemailer';
 
-export async function sendEmails(formData: { name: string; email: string; phone: string; subject: string; message: string }) {
+export async function sendEmails(formData: { name: string; email: string; phone?: string; subject: string; message: string }) {
   const transporter = nodemailer.createTransport({
-    service: 'gmail', // Or your SMTP provider
+    service: 'gmail', 
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
     },
   });
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: 'admin@needlon.com',
+    from: formData.email,
+    to: 'armanalam91174@gmail.com',
     subject: `NEW INQUIRY: ${formData.subject}`,
     html: adminTemplate(formData), 
   });
 
   await transporter.sendMail({
-    from: '"Needlon Bespoke" <noreply@needlon.com>',
+    from: '"Needlon Bespoke" <armanalam91174@.com>',
     to: formData.email,
     subject: 'Thank you for contacting Needlon',
     html: clientTemplate(formData), 

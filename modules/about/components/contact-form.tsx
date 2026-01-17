@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { sendEmails } from "../utils";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -31,8 +32,14 @@ const formSchema = z.object({
   }),
 });
 
-function onSubmit(values: z.infer<typeof formSchema>) {
-  console.log(values);
+async function onSubmit(values: z.infer<typeof formSchema>) {
+  if (values === undefined) return;
+  try {
+    await sendEmails(values);
+  } catch (error) {
+    console.log(error instanceof Error ? error.message : "Unknown error");
+    return
+  }
   
 }
 
