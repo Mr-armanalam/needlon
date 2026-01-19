@@ -14,7 +14,7 @@ const contactData = [
   {
     icon: TiMail,
     title: 'Write email',
-    type: 'needhelp@company.com'
+    type: 'needhelp@needleon.com'
   },
   {
     icon: FaTelegramPlane,

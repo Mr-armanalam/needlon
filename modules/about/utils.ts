@@ -1,5 +1,7 @@
 'use server'
 import nodemailer from 'nodemailer';
+import { adminTemplate } from './components/admin-template';
+import { clientTemplate } from './components/client-template';
 
 export async function sendEmails(formData: { name: string; email: string; phone?: string; subject: string; message: string }) {
   const transporter = nodemailer.createTransport({

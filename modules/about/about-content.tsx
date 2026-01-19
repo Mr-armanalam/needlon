@@ -1,5 +1,6 @@
 'use client'
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -38,7 +39,7 @@ const AboutContent = () => {
           the perfect fit is non-negotiable.
         </p>
       </div>
-      <div className="flex justify-between mt-10 mb-4">
+      <div className="flex justify-between items-center  mb-4">
         <Button
           variant={"outline"}
           onClick={()=>router.push('/new-in/arrivals')}
@@ -46,7 +47,9 @@ const AboutContent = () => {
         >
           Explore our work
         </Button>
-        <p className="text-yellow-600">Arman Alam</p>
+        <div className="text-yellow-600 relative w-40 aspect-3/2">
+          <Image src={'/images/arman_new_signature.png'} alt="signature" fill />
+        </div>
       </div>
     </div>
   );

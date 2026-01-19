@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { sendEmails } from "../utils";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -32,17 +33,6 @@ const formSchema = z.object({
   }),
 });
 
-async function onSubmit(values: z.infer<typeof formSchema>) {
-  if (values === undefined) return;
-  try {
-    await sendEmails(values);
-  } catch (error) {
-    console.log(error instanceof Error ? error.message : "Unknown error");
-    return
-  }
-  
-}
-
 const ContactForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,6 +44,19 @@ const ContactForm = () => {
       message: "",
     },
   });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+  if (values === undefined) return;
+  try {
+    await sendEmails(values);
+    toast("Thank you for reach out to us");
+    form.reset();
+  } catch (error) {
+    console.log(error instanceof Error ? error.message : "Unknown error");
+    toast("Something went wrong!");
+    return;
+  }
+}
   return (
     <Form {...form}>
       <form
