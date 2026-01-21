@@ -1,8 +1,11 @@
 import React from 'react'
+import ProductShowcase from '../sections/product-showcase'
 
 const ProductPage = () => {
   return (
-    <div>ProductPage</div>
+    <div className='px-8'>
+      <ProductShowcase />
+    </div>
   )
 }
 
