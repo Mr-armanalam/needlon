@@ -1,9 +1,11 @@
-import React from 'react'
+import ProductCourusel from "../ui/product-courusel";
 
 const ProductShowcase = () => {
   return (
-    <div>ProductShowcase</div>
-  )
-}
+    <section className="relative">
+      <ProductCourusel />
+    </section>
+  );
+};
 
-export default ProductShowcase
+export default ProductShowcase;
