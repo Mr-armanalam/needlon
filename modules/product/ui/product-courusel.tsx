@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -8,33 +7,41 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import ProductDescriptionn from "../components/product-description";
+import { individualProduct, productDataType } from "@/types/product";
 
-const ProductCourusel = () => {
+const ProductCourusel = ({ productItem }: { productItem: productDataType }) => {
+  const corouselImages = [productItem.image, ...productItem.modalImage];
   return (
-    <Carousel className="h-134">
+    <Carousel
+      opts={{
+        align: "start",
+        loop: true,
+      }}
+      className="h-150 relative"
+    >
       <CarouselContent className="pl-1">
-        {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index} className="basis-1/3 pl-4 ol-1">
-              <Card className="rounded-xs bg-[#eaeaea] p-20 border-0 py-0">
-                <CardContent className="flex relative h-100 items-center justify-center p-6">
-                  <Image
-                    src={"/images/image1.png"}
-                    alt="product image"
-                    fill
-                  />
-
-                  {/* {index !== 0 && (
-                    <div className="bg-zinc-0 absolute w-full h-full bg-clip-padding backdrop-filter backdrop-blur-sm " />
-                  )} */}
+        {corouselImages.length !== 0 &&
+          corouselImages.map((image, index) => (
+            <CarouselItem key={index} className="basis-1/3 pl-4 ol-1">
+              <Card className="rounded-xs bg-[#eaeaea] h-150 p-10 border-0 py-0">
+                <CardContent className="flex relative mt-auto h-140 items-center justify-center p-6">
+                  <Image src={image} alt="product image" fill />
                 </CardContent>
               </Card>
-          </CarouselItem>
-        ))}
+            </CarouselItem>
+          ))}
       </CarouselContent>
-      {/* <CarouselPrevious /> */}
-      {/* <CarouselNext /> */}
+      <CarouselPrevious
+        size={"xl"}
+        className="border-none cursor-pointer shadow-lg left-2"
+      />
+      <CarouselNext
+        size={"xl"}
+        className=" left-98 cursor-pointer border-none shadow-lg"
+      />
+      <ProductDescriptionn />
     </Carousel>
   );
 };

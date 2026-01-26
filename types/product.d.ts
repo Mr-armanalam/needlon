@@ -1,20 +1,38 @@
 import { Address } from "./address";
 
+export interface productDataType {
+  id: string;
+  categoryId: string;
+  name: string;
+  tagName: string;
+  mrp_price: string | null;
+  price: string;
+  image: string ;
+  modalImage: string[];
+  sizes: string[] | null;
+  quantity: number;
+  averageRating: string;
+  reviewCount: number;
+  isPremium: boolean;
+  createdAt: Date | null;
+  updatedAt: Date | null;
+}
+
 export interface ClientProductItem {
   id: string;
   name: string;
   tagName: string;
   createdAt: Date | null;
   updatedAt: Date | null;
-  categoryId: string,
-  mrp_price: string | null; 
+  categoryId: string;
+  mrp_price: string | null;
   price: string;
   quantity: number;
   material?: string | null;
-  sizes?: string[] | null; 
-  image: string | null;       
-  modalImage: string[] | null; 
-  averageRating: string; 
+  sizes?: string[] | null;
+  image: string | null;
+  modalImage: string[] | null;
+  averageRating: string;
   reviewCount: number;
   isPremium: boolean;
   seasonType?: string;
@@ -45,8 +63,8 @@ export interface suggestionAndRecentSearch {
 
 export interface searchSuggestionProps {
   heading_name: string;
-  recent: suggestionAndRecentSearch[],
-  handleOnSelect: (item: suggestionAndRecentSearch) => void
+  recent: suggestionAndRecentSearch[];
+  handleOnSelect: (item: suggestionAndRecentSearch) => void;
 }
 
 export interface ProductItemResult {
@@ -90,3 +108,15 @@ type Product = {
     contentTag: string;
   };
 };
+
+interface individualProduct {
+  product_items: productDataType;
+  product_category: {
+    id: string;
+    category: string;
+    CatType: string;
+    SubCatType: string;
+    contentTag: string | null;
+    descriptiveContent: string | null;
+  } | null;
+}
