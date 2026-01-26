@@ -9,25 +9,46 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import ProductDescriptionn from "../components/product-description";
-import { individualProduct, productDataType } from "@/types/product";
+import { individualProduct } from "@/types/product";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
-const ProductCourusel = ({ productItem }: { productItem: productDataType }) => {
-  const corouselImages = [productItem.image, ...productItem.modalImage];
+const ProductCourusel = () => {
+  const {item: productId} = useParams();
+  
+  const {data, status } = useQuery({
+    queryKey: ["individual-product"],
+    queryFn: async (): Promise<individualProduct> => {
+      const response = await fetch(
+        `/api/products/${productId}`,
+      );
+      const {productItem} = await response.json();
+      return productItem ;
+    },
+  });
+
+  const corouselImages = [data?.product_items.image, ...(data?.product_items.modalImage)?? []];
   return (
     <Carousel
       opts={{
         align: "start",
         loop: true,
+        skipSnaps: false,
+        containScroll: false,
       }}
       className="h-150 relative"
     >
-      <CarouselContent className="pl-1">
+      <CarouselContent className="pl-1 ">
         {corouselImages.length !== 0 &&
           corouselImages.map((image, index) => (
             <CarouselItem key={index} className="basis-1/3 pl-4 ol-1">
-              <Card className="rounded-xs bg-[#eaeaea] h-150 p-10 border-0 py-0">
-                <CardContent className="flex relative mt-auto h-140 items-center justify-center p-6">
-                  <Image src={image} alt="product image" fill />
+              <Card className="rounded-xs bg-[#eaeaea] py-0 border-0">
+                <CardContent className="flex relative mt-auto h-150 items-center justify-center">
+                  <Image
+                    src={image ?? "/images/image1.png"}
+                    alt="product image"
+                    fill
+                  />
                 </CardContent>
               </Card>
             </CarouselItem>
@@ -41,7 +62,7 @@ const ProductCourusel = ({ productItem }: { productItem: productDataType }) => {
         size={"xl"}
         className=" left-98 cursor-pointer border-none shadow-lg"
       />
-      <ProductDescriptionn />
+      {data && <ProductDescriptionn productData={data} />}
     </Carousel>
   );
 };

@@ -1,13 +1,10 @@
 import ProductShowcase from '../sections/product-showcase'
 
-const ProductPage = async({productId}:{productId: string}) => {
-    
-  const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/products/${productId}`);
-  const {productItem} = await response.json();
+const ProductPage = () => {
 
   return (
     <div className='px-8'>
-      <ProductShowcase productItem={productItem} />
+      <ProductShowcase />
     </div>
   )
 }
