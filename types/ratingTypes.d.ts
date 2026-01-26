@@ -1,4 +1,3 @@
-
 export interface RatingData {
   id: number;
   rating: number; // Individual rating from 1 to 5
@@ -11,4 +10,5 @@ export interface RatingComponentProps {
   maxRating?: number; // Default to 5
   size?: number;
   color?: string;
+  className?: string;
 }

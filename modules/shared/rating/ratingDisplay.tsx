@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { RatingComponentProps } from "@/types/ratingTypes";
 import { calculateRatingMetrics } from "@/utils/calculate-rating-metrics";
 import { StarHalfIcon, StarIcon } from "lucide-react";
@@ -28,7 +29,7 @@ const Star = ({ type, color, size }: { type: "full" | "half" | "empty" , color?:
   }
 };
 
-const RatingDisplay = ({ color='#FFDF00', avgRating,  ratings,size}: RatingComponentProps) => {
+const RatingDisplay = ({ color='#FFDF00', avgRating, className,  ratings, size}: RatingComponentProps) => {
   const { fullStars, halfStar, emptyStars } =
     calculateRatingMetrics(ratings, 5, avgRating);
 
@@ -37,7 +38,7 @@ const RatingDisplay = ({ color='#FFDF00', avgRating,  ratings,size}: RatingCompo
   const emptyStarElements = Array(emptyStars).fill(undefined).map((_, i) => (<Star key={`empty-${i}`} color={color} size={size} type="empty" />));
 
   return (
-    <div className="flex flex-col gap-[5px]">
+    <div className={cn(className, "flex flex-col gap-1.25")}>
       <div style={{color: color}} className=" leading-1 flex">
         {fullStarElements}
         {halfStarElements}
