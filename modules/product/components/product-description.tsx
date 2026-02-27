@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import RatingDisplay from "@/modules/shared/rating/ratingDisplay";
 import { individualProduct } from "@/types/product";
@@ -12,7 +13,11 @@ const ProductDescriptionn = ({
   const productItem = {
     ...productData.product_items,
     ...productData.product_category,
+    filter: productData.productFilterData,
   };
+
+  console.log(productItem);
+
   return (
     <div className="absolute p-6 top-16 border border-stone-100 bottom-16 rounded-sm right-10 left-123 bg-stone-50">
       <span className="font-garamond text-sm font-semibold bg-stone-200 px-4 rounded-md py-2">{`${(productItem.CatType ?? "").charAt(0).toUpperCase() + (productItem.CatType ?? "").slice(1)}'s ${(productItem.SubCatType ?? "").toLowerCase()}`}</span>
@@ -30,9 +35,24 @@ const ProductDescriptionn = ({
         {productItem.tagName}
       </h2>
 
-      <div className="flex ml-2 texg-sm mt-2 items-center text-gray-500 gap-x-1 ">
+      <div className="flex w-full line-clamp-1 gap-x-6 ml-2 text-sm font-garamond text-gray-500 mt-2">
+        {productItem.filter.length > 0 &&
+          productItem.filter.map((data, i) => (
+            <p key={i}>
+              <span className="font-semibold text-gray-600">
+                {Object.keys(data)}:{" "}
+              </span>
+              {Object.values(data)}
+              {}
+            </p>
+          ))}
+      </div>
+
+      <div className="flex ml-2 text-sm mt-2 items-center text-gray-500 gap-x-1 ">
         <RatingDisplay size={12} avgRating={productItem.averageRating} />
-        <span className="ml-2 text-sm text-gray-700">{productItem.averageRating} /{productItem.reviewCount}</span>
+        <span className="ml-2 text-sm text-gray-700">
+          {productItem.averageRating} /{productItem.reviewCount}
+        </span>
       </div>
 
       <div className="flex">
@@ -52,6 +72,10 @@ const ProductDescriptionn = ({
         </p>
       </div>
 
+      <div className="mt-8 w-full flex gap-x-12 ">
+        <Button type="button" className="h-12 w-60 bg-stone-800 rounded-full" >Customize</Button>
+        <Button type="button" className="h-12 w-60 bg-stone-700 rounded-full" >Add to Cart</Button>
+      </div>
     </div>
   );
 };

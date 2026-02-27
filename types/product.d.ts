@@ -119,4 +119,5 @@ interface individualProduct {
     contentTag: string | null;
     descriptiveContent: string | null;
   } | null;
+  productFilterData: {[x: string]: string}[];
 }

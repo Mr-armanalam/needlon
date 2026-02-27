@@ -43,12 +43,20 @@ export const GET = async (
       [data.filter_groups.name]: data.filter_options.value,
     }));
 
-    console.log(productFilterData);
+    // const productFilterData = filter.reduce((acc: Record<string, string>, data) => {
+    //   acc[data.filter_groups.name] = data.filter_options.value;
+    //   return acc;
+    // }, {});
+
+    // console.log(productFilterData, 'kjkjk');
 
     if (!product)
       return NextResponse.json({ productItem: null }, { status: 500 });
 
-    return NextResponse.json({ productItem: product }, { status: 200 });
+    return NextResponse.json(
+      { productItem: { ...product, productFilterData } },
+      { status: 200 },
+    );
   } catch (error) {
     console.log(error);
     return NextResponse.json(

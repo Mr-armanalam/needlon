@@ -28,6 +28,7 @@ const ProductCourusel = () => {
   });
 
   const corouselImages = [data?.product_items.image, ...(data?.product_items.modalImage)?? []];
+  
   return (
     <Carousel
       opts={{
