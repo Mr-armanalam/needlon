@@ -18,7 +18,7 @@ type Product = {
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes?: string[];
+  sizes?: string[] | undefined | null;
   category?: string;
   catType?: string;
 };

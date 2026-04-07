@@ -6,7 +6,7 @@ export interface productDataType {
   name: string;
   tagName: string;
   mrp_price: string | null;
-  price: string;
+  price: number;
   image: string ;
   modalImage: string[];
   sizes: string[] | null;
@@ -25,8 +25,8 @@ export interface ClientProductItem {
   createdAt: Date | null;
   updatedAt: Date | null;
   categoryId: string;
-  mrp_price: string | null;
-  price: string;
+  mrp_price: number | null;
+  price: number;
   quantity: number;
   material?: string | null;
   sizes?: string[] | null;
@@ -72,8 +72,8 @@ export interface ProductItemResult {
   categoryId: string;
   name: string;
   tagName: string;
-  mrp_price: string | null;
-  price: string;
+  mrp_price: number | null;
+  price: number;
   image: string | null;
   modalImage: string[] | null;
   quantity: number;
@@ -96,7 +96,7 @@ type ProductData = {
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes?: string[];
+  sizes?: string[] | null;
   category?: string;
   catType?: string;
 };

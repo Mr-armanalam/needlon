@@ -1,9 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { addToCart, fetchCart } from "@/features/cart-slice";
+import {
+  fetchWishlist,
+  initializeGuestWishlist,
+  toggleGuestWishlist,
+  toggleWishlist,
+} from "@/features/wishlist-slice";
 import RatingDisplay from "@/modules/shared/rating/ratingDisplay";
-import { individualProduct } from "@/types/product";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { individualProduct, ProductData } from "@/types/product";
 import { Heart, Share2Icon } from "lucide-react";
-import React from "react";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 const ProductDescriptionn = ({
   productData,
@@ -16,6 +26,97 @@ const ProductDescriptionn = ({
     filter: productData.productFilterData,
   };
 
+  const { wishlist, guestWishlist, loading } = useAppSelector(
+    (state) => state.wishlist,
+  );
+
+  const { cart } = useAppSelector((state) => state.cart);
+
+  const dispatch = useAppDispatch();
+  const pathname = usePathname();
+  const url = `${process.env.NEXT_PUBLIC_URL}${pathname}`;
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+  const wishlistItems = wishlist.length > 0 ? wishlist : guestWishlist;
+
+  const handleToggleWishlist = (
+    productId: string,
+    image: string,
+    price: number,
+    name: string,
+    size?: string,
+  ) => {
+    if (userId) {
+      const exists = wishlist.some(
+        (item) => item.productId === productId && item.size === size,
+      );
+      dispatch(toggleWishlist({ userId, productId, size, exists }));
+    } else {
+      dispatch(
+        toggleGuestWishlist({
+          productId: productId,
+          name,
+          price: Number(price),
+          image: image,
+          size: size,
+        }),
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchWishlist(userId));
+    } else {
+      // Load from localStorage for guests
+      const local = localStorage.getItem("wishlist");
+      if (local) {
+        dispatch(initializeGuestWishlist());
+      }
+    }
+  }, [userId, dispatch]);
+
+  const handleAddToCart = (product: ProductData, size: string) => {
+    dispatch(
+      addToCart({
+        userId: session?.user.id,
+        product: { ...product, size, quantity: 1 },
+        size,
+      }),
+    );
+    dispatch(fetchCart(session?.user.id ?? ""));
+  };
+
+  const handleShare = async () => {
+    // 1. Check if the browser supports the API
+    if (typeof window !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({
+          title: productItem.name,
+          text: productItem.contentTag!,
+          url: url,
+        });
+        console.log("Content shared successfully");
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          console.error("Error sharing:", error);
+        }
+      }
+    } else {
+      // 2. Fallback logic (e.g., copy to clipboard)
+      alert("Web Share API not supported. Copying link instead.");
+      navigator.clipboard.writeText(url);
+    }
+  };
+
+  // 1. Define the selected size
+  const selectedSize = productItem?.sizes?.at(0) ?? "S";
+
+  // 2. Check if it exists in the cart
+  const isAlreadyInCart = cart.some(
+    (item) => item.productId === productData.product_items.id && item.size === selectedSize,
+  );
+
   console.log(productItem);
 
   return (
@@ -24,9 +125,29 @@ const ProductDescriptionn = ({
       <div className="flex gap-4 justify-between">
         <h1 className="font-garamond mt-6 text-5xl">{productItem.name}</h1>
         <div className="flex gap-4 mt-auto bg-stone-200 text-black py-2 px-4 rounded-full">
-          <Share2Icon size={20} />
+          <Share2Icon
+            onClick={handleShare}
+            className="cursor-pointer"
+            size={20}
+          />
           <div className="w-px bg-black" />
-          <Heart size={20} />
+          <Heart
+            onClick={() =>
+              handleToggleWishlist(
+                productItem.id,
+                productItem.image,
+                Number(productItem.price),
+                productItem.name,
+                productItem.sizes?.at(0),
+              )
+            }
+            size={20}
+            className={`cursor-pointer ${
+              wishlistItems?.some((w) => w.productId === productItem.id)
+                ? "fill-black"
+                : ""
+            }`}
+          />
         </div>
       </div>
       <Separator className="mt-5 " />
@@ -39,7 +160,7 @@ const ProductDescriptionn = ({
         {productItem.filter.length > 0 &&
           productItem.filter.map((data, i) => (
             <p key={i}>
-              <span className="font-semibold text-gray-600">
+              <span className="font-semibold capitalize  text-gray-600">
                 {Object.keys(data)}:{" "}
               </span>
               {Object.values(data)}
@@ -73,8 +194,25 @@ const ProductDescriptionn = ({
       </div>
 
       <div className="mt-8 w-full flex gap-x-12 ">
-        <Button type="button" className="h-12 w-60 bg-stone-800 rounded-full" >Customize</Button>
-        <Button type="button" className="h-12 w-60 bg-stone-700 rounded-full" >Add to Cart</Button>
+        <Button
+          type="button"
+          className="h-12 w-60 cursor-pointer bg-stone-800 rounded-full"
+        >
+          Customize
+        </Button>
+        <Button
+          onClick={() =>
+            handleAddToCart(
+              productData.product_items,
+              productItem?.sizes?.at(0) ?? "S",
+            )
+          }
+          disabled={isAlreadyInCart}
+          type="button"
+          className={`h-12 w-60 cursor-pointer ${isAlreadyInCart && "opacity-50"} bg-stone-700 rounded-full`}
+        >
+          Add to Cart
+        </Button>
       </div>
     </div>
   );
