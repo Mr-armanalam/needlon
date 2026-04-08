@@ -8,7 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Image from "next/image";
-import ProductDescriptionn from "../components/product-description";
+import ProductDescriptionn from "./product-description";
 import { individualProduct } from "@/types/product";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
