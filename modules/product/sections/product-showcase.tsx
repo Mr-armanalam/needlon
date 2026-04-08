@@ -1,10 +1,10 @@
 import { individualProduct } from "@/types/product";
 import ProductCourusel from "../ui/product-courusel";
 
-const ProductShowcase = () => {  
+const ProductShowcase = ({productData}:{productData: individualProduct}) => {  
   return (
     <section className="relative">
-      <ProductCourusel />
+      {productData && <ProductCourusel productData={productData} />}
     </section>
   );
 };

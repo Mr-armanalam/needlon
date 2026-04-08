@@ -10,25 +10,17 @@ import {
 import Image from "next/image";
 import ProductDescriptionn from "./product-description";
 import { individualProduct } from "@/types/product";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 
-const ProductCourusel = () => {
-  const {item: productId} = useParams();
-  
-  const {data, status } = useQuery({
-    queryKey: ["individual-product"],
-    queryFn: async (): Promise<individualProduct> => {
-      const response = await fetch(
-        `/api/products/${productId}`,
-      );
-      const {productItem} = await response.json();
-      return productItem ;
-    },
-  });
+const ProductCourusel = ({
+  productData: data,
+}: {
+  productData: individualProduct;
+}) => {
+  const corouselImages = [
+    data.product_items.image,
+    ...(data.product_items.modalImage ?? []),
+  ];
 
-  const corouselImages = [data?.product_items.image, ...(data?.product_items.modalImage)?? []];
-  
   return (
     <Carousel
       opts={{
