@@ -4,19 +4,32 @@ import React from "react";
 
 type productDescriptioncatProp = {
   productItem: productDataType;
-  productFilterData: {[x: string]: string}[];
+  productFilterData: { [x: string]: string }[];
 };
 
-const ProductDescriptionCat = ({productItem, productFilterData }:productDescriptioncatProp) => {
+const ProductDescriptionCat = ({
+  productItem,
+  productFilterData,
+}: productDescriptioncatProp) => {
+  const seenKeys = new Set();
+  const filteredData = productFilterData.filter((obj) => {
+    const key = Object.keys(obj)[0];
+    if (seenKeys.has(key)) {
+      return false;
+    }
+    seenKeys.add(key);
+    return true;
+  });
+
   return (
     <>
       <h2 className="mt-4 ml-2 text-stone-700 font-garamond line-clamp-1">
         {productItem.tagName}
       </h2>
 
-      <div className="flex w-full line-clamp-1 gap-x-6 ml-2 text-sm font-garamond text-gray-500 mt-2">
-        {productFilterData.length > 0 &&
-          productFilterData.map((data, i) => (
+      <div className="flex w-full line-clamp-1 flex-wrap gap-x-6 ml-2 text-sm font-garamond text-gray-500 mt-2">
+        {filteredData.length > 0 &&
+          filteredData.map((data, i) => (
             <p key={i}>
               <span className="font-semibold capitalize  text-gray-600">
                 {Object.keys(data)}:{" "}
