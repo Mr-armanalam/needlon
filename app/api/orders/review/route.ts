@@ -2,8 +2,9 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { orderItems } from "@/db/schema/order-items";
 import { orders } from "@/db/schema/orders";
+import { productItems } from "@/db/schema/product-items";
 import { productReview } from "@/db/schema/product-review";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
@@ -13,7 +14,7 @@ export const POST = async (req: NextRequest) => {
     if (!orderItemId || !productId || !rating) {
       return NextResponse.json(
         { error: "Unauthorized access" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -58,19 +59,34 @@ export const POST = async (req: NextRequest) => {
       if (!updateOrderItem)
         return NextResponse.json(
           { error: "Failed to update order rating" },
-          { status: 500 }
+          { status: 500 },
+        );
+
+      const [updateProductItem] = await db
+        .update(productItems)
+        .set({
+          reviewCount: sql`${productItems.reviewCount} + 1`,
+          averageRating: sql`(${productItems.averageRating} * ${productItems.reviewCount} + ${rating}) / (${productItems.reviewCount} + 1)`,
+        })
+        .where(eq(productItems.id, productId))
+        .returning();
+
+      if (!updateProductItem)
+        return NextResponse.json(
+          { error: "Failed to update ProductItem review" },
+          { status: 500 },
         );
 
       return NextResponse.json(
         { review: createRating, orderItemId },
-        { status: 200 }
+        { status: 200 },
       );
     }
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       { error: "something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 };
@@ -103,7 +119,16 @@ export async function GET() {
     console.log(error);
     return NextResponse.json(
       { error: "something went wrong fetching user review" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
+
+/*
+
+New average = ((current avg x current count) + new rating)/(current count + 1)
+
+
+
+
+*/
