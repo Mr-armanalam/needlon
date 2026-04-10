@@ -37,7 +37,7 @@ const ProductDetails = ({
       </div>
       <div className="flex flex-col gap-y-8 items-center">
         <p className="font-semibold  ml-auto border-b">Available</p>
-        <p className="text-xs">
+        <div className="text-xs">
           {mergedProductFilterData.length > 0 &&
             mergedProductFilterData.map((data, i) => (
               <p key={i}>
@@ -48,7 +48,7 @@ const ProductDetails = ({
                 {}
               </p>
             ))}
-        </p>
+        </div>
       </div>
     </section>
   );
