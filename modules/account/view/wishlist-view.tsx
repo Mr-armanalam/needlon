@@ -17,6 +17,7 @@ import {
 import NoUserAddress from "../shared/no-user-address";
 import { WishlistItemSkeleton } from "@/app/(root)/(account)/account/wishlist/wishlist_skeleton";
 import { WishlistItem } from "@/types/wishlist";
+import Link from "next/link";
 
 interface Props {
   userId?: string;
@@ -39,7 +40,7 @@ const normalizeItem = (item: any): WishlistItem => ({
 const WishlistView = ({ userId }: Props) => {
   const dispatch = useAppDispatch();
   const { wishlist, guestWishlist, loading } = useAppSelector(
-    (state) => state.wishlist
+    (state) => state.wishlist,
   );
   const { cart } = useAppSelector((state) => state.cart);
 
@@ -71,7 +72,7 @@ const WishlistView = ({ userId }: Props) => {
           productId: item.productId,
           size: item.size,
           exists: true,
-        })
+        }),
       );
     } else {
       dispatch(
@@ -81,7 +82,7 @@ const WishlistView = ({ userId }: Props) => {
           price: Number(item.price),
           image: item.image ?? "",
           size: item.size,
-        })
+        }),
       );
     }
   };
@@ -97,7 +98,7 @@ const WishlistView = ({ userId }: Props) => {
           image: item.image ?? "",
         },
         size: item.size ?? "s",
-      })
+      }),
     );
   };
 
@@ -123,7 +124,10 @@ const WishlistView = ({ userId }: Props) => {
               className="border-y gap-x-8 border-stone-200 mb-1.5 flex overflow-hidden"
             >
               {/* Product Image */}
-              <div className="relative w-[180px] h-[180px] shrink-0">
+              <Link
+                href={`/product/${item.productId}`}
+                className="relative w-[180px] h-[180px] shrink-0"
+              >
                 {item.image ? (
                   <Image
                     src={item.image}
@@ -136,7 +140,7 @@ const WishlistView = ({ userId }: Props) => {
                     No Image
                   </div>
                 )}
-              </div>
+              </Link>
 
               {/* Product Details */}
               <div className="my-4 flex-1 text-stone-800 relative">
@@ -150,7 +154,7 @@ const WishlistView = ({ userId }: Props) => {
                   <Button
                     disabled={
                       !!cart.find(
-                        (cartItem) => cartItem.productId === item.productId
+                        (cartItem) => cartItem.productId === item.productId,
                       )
                     }
                     onClick={() => handleAddToCart(item)}

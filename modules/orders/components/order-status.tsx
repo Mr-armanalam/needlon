@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import OrderRating from "../ui/order-rating";
+import Link from "next/link";
 
 type props = {
   image?: string;
@@ -37,13 +38,13 @@ const OrderStatus = ({
   return (
     <div className="border bg-white rounded-sm mt-0.5 mx-1">
       <div className="m-4 flex gap-x-4 ">
-        <div className="relative h-[140px] w-[130px]">
+        <Link href={`/product/${productId}`} className="relative h-[140px] w-[130px]">
           {image ? (
             <Image className="rounded-md " fill alt="order_image" src={image} />
           ) : (
             <div className="bg-white rounded h-[140px] w-[130px]" />
           )}
-        </div>
+        </Link>
         <div>
           <h2 className="text-xl line-clamp-2 text-gray-900 font-semibold">
             {itemName}

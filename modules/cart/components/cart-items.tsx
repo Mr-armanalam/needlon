@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Trash2Icon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -38,9 +39,12 @@ const CartItems = ({
     <div
       className={`border-y overflow-y-scroll no-scrollbar gap-x-8 border-stone-200 mb-1.5 flex`}
     >
-      <div className="relative w-[180px] h-[180px]">
+      <Link
+        href={`/product/${productId}`}
+        className="relative w-[180px] h-[180px]"
+      >
         <Image src={image ?? ""} fill alt="wishlist " />
-      </div>
+      </Link>
       <div className="my-4 relative flex-1 text-stone-800">
         <h1 className="font-semibold">{name}</h1>
         <p className="text-sm pl-0.5 lowercase text-stone-600">Size: {size}</p>
@@ -58,9 +62,9 @@ const CartItems = ({
                   productId,
                   size: size,
                   exists: !!wishlist.find(
-                    (item) => item.productId === productId
+                    (item) => item.productId === productId,
                   ),
-                })
+                }),
               )
             }
             className="text-xs cursor-pointer rounded-full mt-3"
