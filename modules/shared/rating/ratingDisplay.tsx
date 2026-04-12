@@ -30,7 +30,6 @@ const Star = ({ type, color, size }: { type: "full" | "half" | "empty" , color?:
 };
 
 const RatingDisplay = ({ color='#FFDF00', avgRating, className,  ratings, size}: RatingComponentProps) => {
-  console.log(avgRating, 'avgrating');
   
   const { fullStars, halfStar, emptyStars } =
     calculateRatingMetrics(ratings, 5, avgRating);

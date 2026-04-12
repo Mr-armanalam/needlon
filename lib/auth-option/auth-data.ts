@@ -1,10 +1,11 @@
 import { db } from "@/db";
-import { and, DrizzleError, eq } from "drizzle-orm";
+import { DrizzleError, eq } from "drizzle-orm";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import type { NextAuthConfig } from "next-auth";
 import { usersTable } from "@/db/schema/users";
+import { bcryptCompare } from "../bcrypt";
 
 export const authOptions: NextAuthConfig = {
   providers: [
@@ -14,7 +15,7 @@ export const authOptions: NextAuthConfig = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-
+   
       authorize: async (credentials) => {
         try {
           if (!credentials) return null;
@@ -22,21 +23,30 @@ export const authOptions: NextAuthConfig = {
           const email = credentials.email;
           const password = credentials.password;
 
+          if (!credentials?.email || !credentials?.password) {
+            throw new Error("Email and password are required.");
+          }
+
           if (typeof email !== "string" || typeof password !== "string") {
-            return null;
+            throw new Error("Invalid email or password.");
           }
 
           const [user] = await db
             .select()
             .from(usersTable)
-            .where(
-              and(
-                eq(usersTable.email, email),
-                eq(usersTable.password, password)
-              )
-            );
+            .where(eq(usersTable.email, email));
 
-          if (!user) return null;
+          if (!user) {
+            throw new Error("No user found with this email.");
+          }
+
+          const isPasswordValid = await bcryptCompare(password, user.password!);
+
+          if (!isPasswordValid) throw new Error("Invalid password.");
+
+          if (user.password !== credentials.password) {
+            throw new Error("Invalid password.");
+          }
 
           return {
             id: user.id.toString(),
@@ -44,9 +54,9 @@ export const authOptions: NextAuthConfig = {
             name: user.name,
             image: user.imageUrl ?? "",
           };
-        } catch (error) {
+        } catch (error: any) {
           console.error("Authorize error:", error);
-          return null;
+          throw new Error(error.message);
         }
       },
     }),
