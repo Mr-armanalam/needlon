@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import FacebookProvider from "next-auth/providers/facebook";
 import type { NextAuthConfig } from "next-auth";
 import { usersTable } from "@/db/schema/users";
-import { bcryptCompare } from "../bcrypt";
+import { bcryptCompare } from "../../../lib/bcrypt";
 
 export const authOptions: NextAuthConfig = {
   providers: [
@@ -15,7 +15,7 @@ export const authOptions: NextAuthConfig = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
-   
+
       authorize: async (credentials) => {
         try {
           if (!credentials) return null;
@@ -40,13 +40,14 @@ export const authOptions: NextAuthConfig = {
             throw new Error("No user found with this email.");
           }
 
+          console.log(email, password, 'auth-data1');
+          
+
           const isPasswordValid = await bcryptCompare(password, user.password!);
+          console.log(isPasswordValid, 'auth-data2');
+          
 
           if (!isPasswordValid) throw new Error("Invalid password.");
-
-          if (user.password !== credentials.password) {
-            throw new Error("Invalid password.");
-          }
 
           return {
             id: user.id.toString(),

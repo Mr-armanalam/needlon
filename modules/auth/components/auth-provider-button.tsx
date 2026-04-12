@@ -1,26 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
-import React from "react";
+import { Dispatch, SetStateAction } from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 
-const AuthProviderButton = () => {
+const AuthProviderButton = ({
+  setIsLoading,
+  loading,
+}: {
+  loading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+}) => {
+  const handleSignIn = (provider: string) => {
+    signIn(provider, { callbackUrl: "/" });
+    setIsLoading(false);
+  };
   return (
     <div className="flex mt-3 text-gray-800 justify-between">
       <Button
         variant={"outline"}
+        disabled={loading}
         className="hover:bg-transparent cursor-pointer"
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={() => handleSignIn("google")}
       >
         <FaGoogle className="w-4 h-4" />
-        Sign In with Google
+        {loading ? "Please wait..." : "Sign In with Google"}
       </Button>
       <Button
         variant={"outline"}
+        disabled={loading}
         className="hover:bg-transparent cursor-pointer"
-        onClick={() => signIn("facebook", { callbackUrl: "/" })}
+        onClick={() => handleSignIn("facebook")}
       >
         <FaFacebook className="w-4 h-4 " />
-        Sign In with Facebook
+        {loading ? "Please wait..." : "Sign In with Facebook"}
       </Button>
     </div>
   );

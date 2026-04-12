@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  Form,
-} from "@/components/ui/form";
-import {
-  getSignUp,
-  isRegistered,
-} from "@/modules/signup/server/sign-up";
+import { Form } from "@/components/ui/form";
+import { getSignUp } from "@/modules/auth/server/sign-up";
 import { signIn } from "next-auth/react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,20 +10,20 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { sendStyledOtpEmail } from "@/modules/shared/navbar/components/email-template";
-import SwitchSignup from "@/modules/signup/components/switch-signup";
-import FirstAndLastName from "@/modules/signup/components/first-last-name";
-import { signupSchema } from "@/modules/signup/schema/signupSchema";
-import { signInSchema } from "@/modules/signup/schema/signInSchema";
+import SwitchSignup from "@/modules/auth/components/switch-signup";
+import FirstAndLastName from "@/modules/auth/components/first-last-name";
+import { signupSchema } from "@/modules/auth/schema/signupSchema";
+import { signInSchema } from "@/modules/auth/schema/signInSchema";
 import { AuthFormValues } from "@/types/auth-form";
-import EmailOtpPassword from "@/modules/signup/components/email-otp-password";
-import AuthProviderButton from "@/modules/signup/components/auth-provider-button";
-import CredentialAuthButton from "@/modules/signup/components/credential-auth-button";
-import MobileSwitchSignup from "@/modules/signup/components/mobile-switch-signup";
-
+import EmailOtpPassword from "@/modules/auth/components/email-otp-password";
+import AuthProviderButton from "@/modules/auth/components/auth-provider-button";
+import CredentialAuthButton from "@/modules/auth/components/credential-auth-button";
+import MobileSwitchSignup from "@/modules/auth/components/mobile-switch-signup";
 
 const SignIn = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [isOtp, setIsOtp] = useState(false);
+  const [loading, setIsloading] = useState(false);
   const router = useRouter();
 
   const schema = useMemo(
@@ -53,46 +48,38 @@ const SignIn = () => {
   });
 
   const handleSignIn = async (data: z.infer<typeof signInSchema>) => {
-  const { email, password } = data;
+    const { email, password } = data;
 
-  try {
-    const registrationCheck = await isRegistered({ email, password });
-
-    if (!registrationCheck.success) {
-      form.setError("email", { 
-        message: registrationCheck.message || "Invalid credentials." 
+    try {
+      // Attempt NextAuth Sign In
+      setIsloading(true);
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: "/",
       });
-      return;
+      setIsloading(false);
+
+      //  Handle NextAuth errors
+      if (result?.error) {
+        console.error("Sign In Error:", result.error);
+        form.setError("email", {
+          message: "Email or password is not correct.",
+        });
+        return;
+      }
+
+      // Success handling
+      toast.success("Sign In successful, redirecting...");
+      setTimeout(() => {
+        router.push("/");
+      }, 1000);
+    } catch (error: any) {
+      console.error("Unexpected Error during sign in:", error);
+      toast.error("A network error occurred. Please try again.");
     }
-
-    // Attempt NextAuth Sign In
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-      callbackUrl: "/",
-    });
-
-    //  Handle NextAuth errors
-    if (result?.error) {
-      console.error("Sign In Error:", result.error);
-      form.setError("email", { 
-        message: "Email or password is not correct." 
-      });
-      return;
-    }
-
-    // Success handling
-    toast.success("Sign In successful, redirecting...");
-    setTimeout(() => {
-      router.push("/");
-    }, 1000);
-
-  } catch (error: any) {
-    console.error("Unexpected Error during sign in:", error);
-    toast.error("A network error occurred. Please try again.");
-  }
-};
+  };
 
   const handleSignUp = async (data: z.infer<typeof signupSchema>) => {
     const { firstname, lastname, email, password, pin } = data;
@@ -100,9 +87,11 @@ const SignIn = () => {
     // Handle OTP Request
     if (!isOtp) {
       try {
+        setIsloading(true);
         await sendStyledOtpEmail(email);
         form.setValue("pin", "");
         setIsOtp(true);
+        setIsloading(false);
         toast.success("OTP sent to your email!");
         return; // STOP HERE. Wait for user to enter PIN and click button again.
       } catch (error: any) {
@@ -118,6 +107,7 @@ const SignIn = () => {
     if (pin) {
       try {
         // NOTE: Verify PIN and Hash Password INSIDE this function (Server Side)
+        setIsloading(true);
         const result = await getSignUp({
           firstname: firstname ?? "",
           lastname: lastname ?? "",
@@ -141,6 +131,8 @@ const SignIn = () => {
             return;
           }
 
+          setIsloading(false);
+
           toast.success("Sign Up successful! Redirecting...");
 
           // Next.js router.push; 1000ms is good for the user to read the toast
@@ -148,6 +140,8 @@ const SignIn = () => {
             router.push("/");
           }, 1000);
         } else {
+          setIsloading(false);
+
           // Handle known backend errors (like "User already exists")
           form.setError("email", {
             type: "manual",
@@ -165,28 +159,40 @@ const SignIn = () => {
   return (
     <div className=" flex justify-center items-center h-[80vh] max-md:px-4 md:px-12 ">
       <div className="grid border shadow-inne shadow-[12px_12px_35px_rgba(0,0,0,0.25)] h-fit w-full grid-cols-2 rounded-3xl bg-white max-sm:grid-cols-1 max-sm:p-10 sm:p-16 lg:w-[72vw]">
-        <SwitchSignup isSignUp={isSignUp} setIsSignUp={setIsSignUp} />
+        <SwitchSignup
+          setIsOtp={setIsOtp}
+          isSignUp={isSignUp}
+          setIsSignUp={setIsSignUp}
+        />
 
         <div>
-          <Form key={isSignUp ? "signup" : "signin"} {...form}>
+          <Form
+            // key={isSignUp ? "signup" : "signin"}
+            {...form}
+          >
             <form
               className="flex flex-col gap-2"
               onSubmit={form.handleSubmit(
                 isSignUp ? handleSignUp : handleSignIn,
               )}
             >
-
               {isSignUp && !isOtp && <FirstAndLastName form={form} />}
-              <EmailOtpPassword isOtp={isOtp} form={form} />
-              <CredentialAuthButton isSignUp={isSignUp} />
-
+              <EmailOtpPassword
+                setIsOtp={setIsOtp}
+                setIsSignUp={setIsSignUp}
+                isOtp={isOtp}
+                form={form}
+              />
+              <CredentialAuthButton loading={loading} isSignUp={isSignUp} />
             </form>
           </Form>
 
-          {!isSignUp && <AuthProviderButton />}
+          {!isSignUp && (
+            <AuthProviderButton setIsLoading={setIsloading} loading={loading} />
+          )}
 
           {/* extra for responsive */}
-         <MobileSwitchSignup isSignUp={isSignUp} setIsSignUp={setIsSignUp}/>
+          <MobileSwitchSignup isSignUp={isSignUp} setIsSignUp={setIsSignUp} />
         </div>
       </div>
     </div>

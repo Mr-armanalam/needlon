@@ -41,7 +41,7 @@ export async function sendStyledOtpEmail(email: string) {
   const htmlContent = `
     <div style="max-width:600px;margin:auto;font-family:sans-serif;border:1px solid #e2e2e2;">
       <div style="background-color:#232f3e;padding:20px;text-align:center;">
-        <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_smile-header-desktop-en-white_59x35.png" alt="logo" style="height:35px;" />
+       <h1 style="color:#fff; font-weight:bold;">Needlon</h1>
       </div>
       <div style="padding:30px;">
         <h2 style="margin-bottom:10px;">Verify your identity</h2>
@@ -82,3 +82,4 @@ export async function sendStyledOtpEmail(email: string) {
     }
   });
 }
+      // <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_smile-header-desktop-en-white_59x35.png" alt="logo" style="height:35px;" />
