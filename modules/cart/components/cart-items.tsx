@@ -25,7 +25,7 @@ const CartItems = ({
   image,
   name = "Beautiful Luxury Pants",
   size = "s",
-  price = 400,
+  price,
   updatedAt = new Date(),
 }: cartItemProps) => {
   const { wishlist } = useAppSelector((state) => state.wishlist);

@@ -18,7 +18,7 @@ type Product = {
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes?: string[] | undefined | null;
+  sizes?: string[] | null;
   category?: string;
   catType?: string;
 };
@@ -41,7 +41,7 @@ const ProductCard = ({
   >({});
   //  const { wishlist,guestWishlist, toggleWishlist } = useWishlist();
   const { wishlist, guestWishlist, loading } = useAppSelector(
-    (state) => state.wishlist
+    (state) => state.wishlist,
   );
 
   const dispatch = useAppDispatch();
@@ -70,11 +70,11 @@ const ProductCard = ({
     image: string,
     price: number,
     name: string,
-    size?: string
+    size?: string,
   ) => {
     if (userId) {
       const exists = wishlist.some(
-        (item) => item.productId === productId && item.size === size
+        (item) => item.productId === productId && item.size === size,
       );
       dispatch(toggleWishlist({ userId, productId, size, exists }));
     } else {
@@ -85,7 +85,7 @@ const ProductCard = ({
           price: Number(price),
           image: image,
           size: size,
-        })
+        }),
       );
     }
   };
@@ -121,8 +121,8 @@ const ProductCard = ({
             src={
               hoveredId
                 ? hoverSide === "left"
-                  ? modalImage?.[0] ?? image
-                  : modalImage?.[1] ?? image
+                  ? (modalImage?.[0] ?? image)
+                  : (modalImage?.[1] ?? image)
                 : image
             }
             alt={name}
@@ -155,7 +155,7 @@ const ProductCard = ({
 
         <button
           onClick={() =>
-            handleToggleWishlist(id, image, price, name, sizes?.at(0))
+            handleToggleWishlist(id, image, Number(price), name, sizes?.at(0))
           }
           aria-label="Toggle wishlist"
           className={`hidden group-hover:flex absolute right-6 top-6 text-white rounded-full hover:bg-black p-2 ${
