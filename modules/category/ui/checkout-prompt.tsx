@@ -21,7 +21,7 @@ const CheckoutPrompt = ({
   const dispatch = useAppDispatch()
 
   const subtotal = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + Number(item.price) * item.quantity,
     0
   );
 

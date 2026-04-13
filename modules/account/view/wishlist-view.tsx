@@ -27,7 +27,7 @@ const normalizeItem = (item: any): WishlistItem => ({
   id: item.id ?? "",
   productId: item.productId ?? item.product_id ?? "",
   name: item.name ?? "Unknown Product",
-  price: String(item.price ?? "0"),
+  price: item.price ?? 0,
   quantity:
     typeof item.quantity === "number"
       ? item.quantity

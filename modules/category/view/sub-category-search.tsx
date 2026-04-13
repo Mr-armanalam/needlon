@@ -16,7 +16,7 @@ type ProductData = {
   price: number;
   image: string;
   modalImage?: string[] | null;
-  sizes?: string[];
+  sizes?: string[] | null;
   category?: string;
   catType?: string;
 };
@@ -55,7 +55,7 @@ const CategoryView = () => {
         userId: session?.user.id,
         product: { ...product, size, quantity: 1 },
         size,
-      })
+      }),
     );
     dispatch(fetchCart(session?.user.id ?? ""));
     setOpen(true);
@@ -70,7 +70,7 @@ const CategoryView = () => {
       `/api/products?category=${categories}&subcategory=${category}&sbct=${sbct}&sort=${sort}${
         material ? `&material=${material}` : ""
       }`,
-      { cache: "no-store" } // always fresh
+      { cache: "no-store" }, // always fresh
     )
       .then(async (res) => await res.json())
       .then(setProducts);

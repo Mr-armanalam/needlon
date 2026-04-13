@@ -34,7 +34,7 @@ export default function ProductCard({
         <Image src={image || ""} alt={title} fill className="object-contain" />
       </motion.div>
       <p className="mt-3 text-sm font-medium">{title}</p>
-      <p className=" text-md font-medium">{ offer}</p>
+      <p className=" text-md font-medium">{offer}</p>
     </div>
   );
 }

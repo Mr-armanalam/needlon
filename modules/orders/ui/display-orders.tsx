@@ -28,18 +28,32 @@ const DisplayOrders = ({ loading, orders }: props) => {
                 className={`border-y hover:shadow-md cursor-pointer border-stone-200 mb-1.5 hover:mb-2.5 flex`}
               >
                 <div className="relative w-47.5 h-47.5">
-                  <Image src={order.items[0].image ?? ""} fill alt="wishlist items" />
-                  {order.items.length > 1 &&
-                  <div className="absolute z-15 bottom-2 p-1 bg-white border-white right-2 size-16 border rounded">
-                    <Image src={order.items[1].image!} fill alt="wishlist 2nd item" />
-                  </div>}
-                  {order.items.length > 2 &&
-                  <p className="absolute bottom-4 bg-white p-[2px] font-semibold rounded-full text-xs right-4 z-20">+{order.items.length - 1}</p>}
+                  <Image
+                    src={order.items[0].image ?? ""}
+                    fill
+                    alt="wishlist items"
+                  />
+                  {order.items.length > 1 && (
+                    <div className="absolute z-15 bottom-2 p-1 bg-white border-white right-2 size-16 border rounded">
+                      <Image
+                        src={order.items[1].image!}
+                        fill
+                        alt="wishlist 2nd item"
+                      />
+                    </div>
+                  )}
+                  {order.items.length > 2 && (
+                    <p className="absolute bottom-4 bg-white p-[2px] font-semibold rounded-full text-xs right-4 z-20">
+                      +{order.items.length - 1}
+                    </p>
+                  )}
                 </div>
 
                 <div className="relative w-full">
                   <div className="my-6 ml-6 flex-1 text-stone-800">
-                    <h1 className="font-semibold">{order.items[0].productName}</h1>
+                    <h1 className="font-semibold">
+                      {order.items[0].productName}
+                    </h1>
                     <p className="text-sm pl-0.5 lowercase text-stone-600">
                       Size: {order.items[0].properties}
                     </p>
@@ -50,12 +64,16 @@ const DisplayOrders = ({ loading, orders }: props) => {
                       <Button className="text-xs rounded-full mt-3">
                         Order placed
                       </Button>
-                      <Button variant={"outline"} className="text-xs rounded-full mt-3">
+                      <Button
+                        variant={"outline"}
+                        className="text-xs rounded-full mt-3"
+                      >
                         Prepaid
                       </Button>
                     </div>
                     <p className="absolute bottom-6 right-4 text-stone-500 text-xs ">
-                      Delivery expected on {format(String(order.createdAt), "dd MMMM")}
+                      Delivery expected on{" "}
+                      {format(String(order.createdAt), "dd MMMM")}
                     </p>
                   </div>
                 </div>

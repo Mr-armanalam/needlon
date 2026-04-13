@@ -8,10 +8,10 @@ export interface CartItem {
   quantity: number;
   size: string;
   name: string;
-  price: number | string;
+  price: number;
   mrp_price?: number;
   image: string;
-  updatedAt?: Date ;
+  updatedAt?: Date;
   shippingCharge?: number;
 }
 
@@ -31,16 +31,20 @@ export const fetchCart = createAsyncThunk(
   async (userId: string) => {
     const res = await fetch(`/api/cart/${userId}`);
     return (await res.json()) as CartItem[];
-  }
+  },
 );
 
 // ✅ Add to cart
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async (
-    { userId, product, size }: { userId?: string; product: CartItem; size: string },
-    { dispatch }
-  ) => {    
+    {
+      userId,
+      product,
+      size,
+    }: { userId?: string; product: CartItem; size: string },
+    { dispatch },
+  ) => {
     if (userId) {
       const res = await fetch(`/api/cart`, {
         method: "POST",
@@ -62,15 +66,19 @@ export const addToCart = createAsyncThunk(
       toast("Item added locally");
       return updated;
     }
-  }
+  },
 );
 
 // ✅ Remove from cart
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async (
-    { userId, productId, size }: { userId?: string; productId: string; size: string },
-    { dispatch }
+    {
+      userId,
+      productId,
+      size,
+    }: { userId?: string; productId: string; size: string },
+    { dispatch },
   ) => {
     if (userId) {
       await fetch(`/api/cart`, {
@@ -92,7 +100,7 @@ export const removeFromCart = createAsyncThunk(
           .map((item) =>
             item.productId === productId && item.size === size
               ? { ...item, quantity: item.quantity - 1 }
-              : item
+              : item,
           )
           .filter((item) => item.quantity > 0);
         localStorage.setItem("cart", JSON.stringify(updated));
@@ -100,7 +108,7 @@ export const removeFromCart = createAsyncThunk(
         return updated;
       }
     }
-  }
+  },
 );
 
 // ✅ Slice
@@ -117,10 +125,13 @@ const cartSlice = createSlice({
       .addCase(fetchCart.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchCart.fulfilled, (state, action: PayloadAction<CartItem[]>) => {
-        state.loading = false;
-        state.cart = action.payload;
-      })
+      .addCase(
+        fetchCart.fulfilled,
+        (state, action: PayloadAction<CartItem[]>) => {
+          state.loading = false;
+          state.cart = action.payload;
+        },
+      )
       .addCase(addToCart.fulfilled, (state, action) => {
         if (Array.isArray(action.payload)) state.cart = action.payload;
       })

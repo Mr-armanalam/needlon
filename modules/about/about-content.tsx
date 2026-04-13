@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -42,13 +42,13 @@ const AboutContent = () => {
       <div className="flex justify-between items-center  mb-4">
         <Button
           variant={"outline"}
-          onClick={()=>router.push('/new-in/arrivals')}
+          onClick={() => router.push("/new-in/arrivals")}
           className="cursor-pointer border-yellow-600 text-stone-700 hover:bg-yellow-600 transition-colors delay-200 hover:text-white"
         >
           Explore our work
         </Button>
         <div className="text-yellow-600 relative w-40 aspect-3/2">
-          <Image src={'/images/arman_new_signature.png'} alt="signature" fill />
+          <Image src={"/images/arman_new_signature.png"} alt="signature" fill />
         </div>
       </div>
     </div>

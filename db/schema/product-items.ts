@@ -22,8 +22,8 @@ export const productItems = pgTable("product_items", {
   name: text("name").notNull(),
   tagName: text("tag_name").notNull(),
 
-  mrp_price: numeric("mrp_price", { precision: 10, scale: 2 }),
-  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
+  mrp_price: integer("mrp_price"),
+  price: integer("price").notNull(),
 
   image: text("image"),
   modalImage: text("modal_image").array(),

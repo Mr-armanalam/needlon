@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import React from "react";
@@ -32,15 +32,23 @@ const OrderStatus = ({
   properties,
   itemName,
   productId,
-  orderItemId
+  orderItemId,
 }: props) => {
   const router = useRouter();
   return (
     <div className="border bg-white rounded-sm mt-0.5 mx-1">
       <div className="m-4 flex gap-x-4 ">
-        <Link href={`/product/${productId}`} className="relative h-[140px] w-[130px]">
+        <Link
+          href={`/product/${productId}`}
+          className="relative h-[140px] w-[130px]"
+        >
           {image ? (
-            <Image className="rounded-md " fill alt="order_image" src={image} />
+            <Image
+              className="rounded-md "
+              fill
+              alt="order_image"
+              src={image}
+            />
           ) : (
             <div className="bg-white rounded h-[140px] w-[130px]" />
           )}
@@ -86,10 +94,7 @@ const OrderStatus = ({
       </div>
       <Separator orientation="horizontal" className="bg-gray-100" />
 
-      <OrderRating
-        orderItemId={orderItemId}
-        productId={productId}
-      />
+      <OrderRating orderItemId={orderItemId} productId={productId} />
     </div>
   );
 };

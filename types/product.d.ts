@@ -5,11 +5,11 @@ export interface productDataType {
   categoryId: string;
   name: string;
   tagName: string;
-  mrp_price: string | null;
+  mrp_price: string | null | number;
   price: number;
-  image: string ;
+  image: string;
   modalImage: string[];
-  sizes: string[] | null;
+  sizes: string[];
   quantity: number;
   averageRating: string;
   reviewCount: number;
@@ -102,7 +102,7 @@ type ProductData = {
 };
 
 type Product = {
-  productData: ProductData[] | [];
+  productData: ProductData[];
   productTagDes: {
     descriptiveContent: string;
     contentTag: string;
@@ -119,5 +119,5 @@ interface individualProduct {
     contentTag: string | null;
     descriptiveContent: string | null;
   } | null;
-  productFilterData: {[x: string]: string}[];
+  productFilterData: { [x: string]: string }[];
 }
