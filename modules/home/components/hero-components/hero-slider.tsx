@@ -13,11 +13,13 @@ import Image from "next/image";
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect, useState } from "react";
 import { heroProps } from "@/app/(root)/(home)/@hero_section/page";
+import { useRouter } from "next/navigation";
 
 
 const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
   const [current, setCurrent] = useState(0);
   const [api, setApi] = useState<any>(null);
+  const router = useRouter();
   
   useEffect(() => {
     if (!api) return;
@@ -49,7 +51,7 @@ const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
           {tailoringServices.map((item, index) => (
             <CarouselItem className="flex justify-center pr-1" key={index}>
               <Card className="w-[90vw] rounded-none shadow-none border-none bg-gray-90">
-                <CardContent className=" flex gap-x-36 aspect-auto text-white w-full items-center px-28 py-6">
+                <CardContent onClick={() => router.push(`/product/${item.id}`)} className=" flex gap-x-36 aspect-auto text-white w-full items-center px-28 py-6">
                   <div className="flex-1">
                     <h1 className="text-6xl font-garamond">{item.name}</h1>
                     <p className="text-sm mt-8 pl-3 text-white/70">
