@@ -2,38 +2,46 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { filterOptions } from "@/db/schema/filter-options";
-import { eq, asc, inArray } from "drizzle-orm";
+import { eq, asc, inArray, sql } from "drizzle-orm";
 import { filterGroups } from "@/db/schema/filter-group";
 import { productCategory } from "@/db/schema/product-category";
 
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
-    const category = searchParams.get("category");    
+    const category = searchParams.get("category");
 
     if (!category) {
       return NextResponse.json(
         { message: "category is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const [{ categoryId }] = await db
+    const clientInput = category.toLowerCase();
+
+    const [categoryId] = await db
       .select({ categoryId: productCategory.id })
       .from(productCategory)
-      .where(eq(productCategory.category, category.toLowerCase()));
+      // Use sql template to check if the input contains the column value
+      .where(
+        sql`${clientInput} ILIKE '%' || ${productCategory.category} || '%'`,
+      );
 
-      if (!categoryId) {
+    const cat_id = categoryId.categoryId;
+
+    if (!cat_id) {
       return NextResponse.json(
-        { message: "categoryId is required" },
-        { status: 400 }
+        { message: "something is wrong" },
+        { status: 501 },
       );
     }
+
     // Fetch filter groups for category
     const groups = await db
       .select()
       .from(filterGroups)
-      .where(eq(filterGroups.categoryId, categoryId))
+      .where(eq(filterGroups.categoryId, cat_id))
       .orderBy(asc(filterGroups.sortOrder));
 
     if (!groups.length) {
@@ -61,7 +69,7 @@ export async function GET(req: Request) {
         });
         return acc;
       },
-      {}
+      {},
     );
 
     // Build response
@@ -72,14 +80,22 @@ export async function GET(req: Request) {
       options: optionsByGroup[group.id] ?? [],
     }));
 
-    return NextResponse.json({
-      filters,
-    }, {status: 200});
+    return NextResponse.json(
+      {
+        filters,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error("FILTER API ERROR:", error);
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
+
+// const [{ categoryId }] = await db
+//   .select({ categoryId: productCategory.id })
+//   .from(productCategory)
+//   .where(eq(productCategory.category, category.toLowerCase()));
