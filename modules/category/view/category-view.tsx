@@ -79,24 +79,12 @@ const CategoryView = () => {
       {open && <CheckoutPrompt setOpen={setOpen} />}
 
       <FilterDrawer
-        filterOpen={filterOpen}
+        isOpen={filterOpen}
         category={category}
-        setFilterOpen={setFilterOpen}
+        onClose={() => setFilterOpen(false)} 
       />
     </div>
   );
 };
 
 export default CategoryView;
-
-// pseudo-code inside your login success handler
-// const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-// await fetch("/api/cart/merge", {
-//   method: "POST",
-//   headers: { "Content-Type": "application/json" },
-//   body: JSON.stringify({ userId, localCart }),
-// });
-
-// // clear local cart
-// localStorage.removeItem("cart");
