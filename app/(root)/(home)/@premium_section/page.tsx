@@ -9,7 +9,7 @@ const page = async() => {
   
   return (
     <section >
-      <HomePremRecomLike items={premiumItems} heading={"Premium Items"} />
+      <HomePremRecomLike navigateTo="/premium-product" items={premiumItems} heading={"Premium Items"} />
     </section>
   );
 };

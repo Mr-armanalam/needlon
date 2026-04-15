@@ -8,7 +8,7 @@ const page = async() => {
   const userLikeItem = await getProductByType({type: 'user_like'}) || [];
   return (
     <section>
-      <HomePremRecomLike items={userLikeItem} heading={"You may like"} />
+      <HomePremRecomLike navigateTo="/you-may-like" items={userLikeItem} heading={"You may like"} />
     </section>
   );
 };

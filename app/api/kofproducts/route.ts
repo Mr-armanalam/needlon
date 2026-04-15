@@ -1,15 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  eq,
-  desc,
-  or,
-  ilike,
-  sql,
-  aliasedTable,
-  inArray,
-} from "drizzle-orm";
+import { eq, desc, or, ilike, sql, aliasedTable, inArray } from "drizzle-orm";
 import { productItems } from "@/db/schema/product-items";
 import { db } from "@/db";
 import { productCategory } from "@/db/schema/product-category";
@@ -18,6 +10,7 @@ import { filterOptions } from "@/db/schema/filter-options";
 import { orderItems } from "@/db/schema/order-items";
 import { buildUserPreferenceVector } from "@/lib/recommendation-item";
 import { auth } from "@/auth";
+import { getSeasonProduct } from "@/modules/shared/product-items/server/get-season-product";
 
 const categoryMap: Record<string, string> = {
   "items-for-men": "men",
@@ -40,7 +33,7 @@ export async function GET(req: NextRequest) {
     searchParams.forEach((value, key) => {
       if (!["filterType", "sort"].includes(key)) dynamicFilters[key] = value;
     });
-    
+
     let results: any[] = [];
     let productTagDes = { descriptiveContent: "", contentTag: "" };
 
@@ -48,13 +41,10 @@ export async function GET(req: NextRequest) {
     // 2. CORE LOGIC: DETERMINING THE DATA SOURCE
     // ------------------------------------------------------------------
 
-    if (
-      filterType === "recommendate-product" ||
-      filterType === "you-may-like"
-    ) {
+    if (filterType === "recom-product" || filterType === "you-may-like") {
       // PERSONALIZATION LOGIC
       results = await handlePersonalizedFetch(userId, filterType);
-    } else if (filterType === "priumproduct") {
+    } else if (filterType === "premium-product") {
       // PREMIUM LOGIC
       results = await db
         .select({ product: productItems, category: productCategory })
@@ -64,9 +54,16 @@ export async function GET(req: NextRequest) {
           eq(productItems.categoryId, productCategory.id),
         )
         .where(eq(productItems.isPremium, true));
+    } else if (filterType === "season-product") {
+      // SEASON LOGIC
+      const seasonProductData = await getSeasonProduct({
+        seasonType: "winter",
+      });
+      results =
+        seasonProductData?.map((item) => ({ product: item.seasonProduct })) ??
+        [];
     } else {
-      // CATEGORY / SUBCATEGORY / SEASON LOGIC
-      // We check if filterType matches CatType or SubCatType
+      // CATEGORY / SUBCATEGORY
       const dbValue = categoryMap[filterType || ""] || filterType || "";
       const baseQuery = db
         .select({ product: productItems, category: productCategory })
@@ -89,14 +86,16 @@ export async function GET(req: NextRequest) {
       } else {
         results = await baseQuery;
       }
-      
-      // Capture SEO/Heading data from the first matched category
-      if (results.length > 0) {
-        productTagDes = {
-          descriptiveContent: results[0].category.descriptiveContent || "",
-          contentTag: results[0].category.contentTag || "",
-        };
-      }
+    }
+    // Capture SEO/Heading data from the first matched category
+    if (results.length > 0) {
+      productTagDes = {
+        descriptiveContent:
+          results[0]?.category?.descriptiveContent ||
+          "Discover the shirt that redefines the male wardrobe. Using superior cottons and precise construction, our shirts offer a fit that is both contemporary and comfortable, carrying the wearer from morning commitment to evening engagement with flawless style.",
+        contentTag:
+          results[0]?.category?.contentTag || results[0]?.product?.tagName,
+      };
     }
 
     // 3. DATA TRANSFORMATION (Standardized Output)

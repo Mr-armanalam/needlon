@@ -10,7 +10,7 @@ const page = async() => {
   
   return (
     <section>
-      <SeasonSection seasonData = {seasonProduct} />
+      <SeasonSection navigateTo='/season-product' seasonData = {seasonProduct} />
     </section>
   )
 }

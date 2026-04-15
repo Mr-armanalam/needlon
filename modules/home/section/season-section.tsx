@@ -1,14 +1,17 @@
+'use client'
 import React from 'react'
 import SeasonCard from '../ui/season-card'
 import { Button } from '@/components/ui/button'
 import { ClientProductItem } from '@/types/product'
+import { useRouter } from 'next/navigation'
 
 type seasonDataProps = {
-  seasonData : ClientProductItem[]
+  seasonData : ClientProductItem[],
+  navigateTo: string
 }
 
-const SeasonSection = ({seasonData}: seasonDataProps) => {
-  
+const SeasonSection = ({seasonData, navigateTo}: seasonDataProps) => {
+  const router = useRouter();
   return (
     <div className='py-16'>
       <h1 className='text-center text-4xl text-gray-900 font-bold font-garamond '>This Season</h1>
@@ -17,7 +20,7 @@ const SeasonSection = ({seasonData}: seasonDataProps) => {
         {seasonData.map((item, k)=>(
           <SeasonCard key={k} productData={item} />
         ))}
-        <Button variant={'secondary'} className='sticky rounded-r-none right-0 top-1/2 -translate-y-1/2 h-[150px] px-2.5 text-2xl'>&gt;</Button>
+        <Button onClick={() => router.push(navigateTo)} variant={'secondary'} className='sticky rounded-r-none right-0 top-1/2 -translate-y-1/2 h-[150px] px-2.5 text-2xl'>&gt;</Button>
       </div>
     </div>
   )

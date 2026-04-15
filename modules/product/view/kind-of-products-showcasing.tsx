@@ -76,9 +76,9 @@ const KindOfProductShowcasing = () => {
     },
   });
 
-  console.log(data);
+  console.log(data, 'data');
 
-  return (
+  return ( data &&
     <div className="px-6 py-8">
       <Heading productTagDes={data?.productTagDes!} />
       <ItemControl
@@ -101,6 +101,7 @@ const KindOfProductShowcasing = () => {
         category={category}
         onClose={() => setFilterOpen(false)} 
       /> */}
+
     </div>
   );
 };
