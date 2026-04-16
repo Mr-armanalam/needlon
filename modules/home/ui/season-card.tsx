@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const SeasonCard = ({ productData }: { productData: ClientProductItem }) => {
   return (
-    <div className=" flex-1 min-w-85 flex flex-col py-10 bg-linear-to-tl rounded-lg from-gray-950 to-gray-900 dark:from-black dark:to-white/4">
+    <div className=" flex-1 min-w-85 flex flex-col py-10 bg-linear-to-tl rounded-lg from-gray-950 to-gray-900 dark:from-black dark:border dark:to-white/4">
       <div className="relative mx-8 rounded-2xl box-border min-h-75 flex-1">
         <Image
           src={productData.image ?? "/images/image2.png"}
