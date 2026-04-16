@@ -1,4 +1,11 @@
 "use client";
+
+/*
+
+  > fetch cart & notification unread count from redux store
+
+*/
+
 import { fetchCart } from "@/features/cart-slice";
 import {
   fetchNotifications,
@@ -29,7 +36,7 @@ const CartAndWishList = () => {
           href={`/account/wishlist`}
           className="flex cursor-pointer items-center space-x-2"
         >
-          <Heart className="w-4 h-4" />
+          <Heart className="w-4 h-4 hover:scale-110" />
         </Link>
         <Link href={"/cart"} className="relative cursor-pointer">
           {cart?.length !== 0 && (
@@ -37,7 +44,7 @@ const CartAndWishList = () => {
               {cart.length}
             </span>
           )}
-          <ShoppingBagIcon className="w-4 h-4" />
+          <ShoppingBagIcon className="w-4 h-4 hover:scale-110" />
         </Link>
         <Link
           href={"/account/updates"}
@@ -48,7 +55,7 @@ const CartAndWishList = () => {
               {unreadCount}
             </span>
           )}
-          <Bell className="w-4 h-4 " />
+          <Bell className="w-4 h-4 hover:scale-110" />
         </Link>
       </div>
     </div>

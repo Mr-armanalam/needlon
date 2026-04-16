@@ -1,7 +1,12 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React, { useRef } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useQuery } from "@tanstack/react-query";
+import { X, RotateCcw, Filter } from "lucide-react";
+import { useFilterState } from "@/hooks/useFilterState";
+
 import {
   Accordion,
   AccordionContent,
@@ -11,12 +16,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useRouter, useSearchParams } from "next/navigation";
 
 interface FilterDrawerProps {
   category: string;
-  setFilterOpen: (data: boolean) => void;
-  filterOpen: boolean;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 interface FilterOption {
@@ -33,164 +37,186 @@ interface FilterGroup {
   options: FilterOption[];
 }
 
-const FilterDrawer = ({
+interface FiltersApiResponse {
+  filters: FilterGroup[];
+}
+
+const FilterDrawer: React.FC<FilterDrawerProps> = ({
   category,
-  setFilterOpen,
-  filterOpen,
-}: FilterDrawerProps) => {
-  const [filters, setFilters] = useState<FilterGroup[]>([]);
-  const [totalResults, setTotalResults] = useState(0);
+  isOpen,
+  onClose,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
-  const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string[]>
-  >({});
+  const { selectedFilters, updateFilter, clearAll } = useFilterState();
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  /* ---------------- FETCH FILTERS ---------------- */
-  useEffect(() => {
-    const fetchFilters = async () => {
+  // 1. Data Fetching with TanStack Query (Server-state management)
+  const { data, isLoading } = useQuery<FiltersApiResponse>({
+    queryKey: ["filters", category],
+    queryFn: async (): Promise<FiltersApiResponse> => {
       const res = await fetch(`/api/filters?category=${category}`);
-      const data = await res.json();
+      if (!res.ok) throw new Error("Network response was not ok");
+      return res.json();
+    },
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
 
-      setFilters(data.filters);
-      setTotalResults(data.totalResults);
-    };
+  
+  useGSAP(
+    () => {
+      if (isOpen) {
+        const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
 
-    fetchFilters();
-  }, [category]);
-
-  /* ---------------- SYNC FROM URL ---------------- */
-  useEffect(() => {
-    const params: Record<string, string[]> = {};
-
-    searchParams.forEach((value, key) => {
-      params[key] = value.split(",");
-    });
-
-    setSelectedFilters(params);
-  }, [searchParams]);
-
-  /* ---------------- HANDLE CHECKBOX ---------------- */
-  const handleFilterChange = (
-    groupSlug: string,
-    optionSlug: string,
-    checked: boolean
-  ) => {
-    const params = new URLSearchParams(searchParams.toString());
-    console.log(selectedFilters,'kj');
-        
-
-    setSelectedFilters((prev) => {
-      const existing = prev[groupSlug] || [];
-      const updated = checked
-        ? [...existing, optionSlug]
-        : existing.filter((v) => v !== optionSlug);
-
-      if (updated.length > 0) {
-        params.set(groupSlug, updated.join(","));
+        tl.to(overlayRef.current, { opacity: 1, duration: 0.4 })
+          .to(drawerRef.current, { x: 0, duration: 0.6 }, "-=0.3")
+          .from(
+            ".stagger-item",
+            {
+              x: 20,
+              opacity: 0,
+              stagger: 0.05,
+              duration: 0,
+            },
+            "-=0.1",
+          );
       } else {
-        params.delete(groupSlug);
+        gsap.to(drawerRef.current, {
+          x: "100%",
+          duration: 0.1,
+          ease: "expo.in",
+        });
+        gsap.to(overlayRef.current, { opacity: 0, duration: 0.05 });
       }
-      // router.push(`?${params.toString()}`);
+    },
+    { dependencies: [isOpen], scope: containerRef },
+  );
 
-      return { ...prev, [groupSlug]: updated };
-    });
-    router.push(`?${params.toString()}`);
-  };
+  if (!isOpen && !containerRef.current) return null;
 
   return (
-    <AnimatePresence>
-      {filterOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex justify-end"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div
-            className="absolute inset-0 bg-black/30"
-            onClick={() => setFilterOpen(false)}
-          />
+    <div
+      ref={containerRef}
+      className={`fixed inset-0 z-100 flex justify-end ${!isOpen && "pointer-events-none"}`}
+    >
+      {/* Background Overlay */}
+      <div
+        ref={overlayRef}
+        className="absolute inset-0 bg-black/50 opacity-0 backdrop-blur-[2px]"
+        onClick={onClose}
+      />
 
-          <motion.div
-            className="relative w-80 bg-white h-full py-6 z-50 overflow-y-auto"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "tween", duration: 0.3 }}
-          >
-            <div className="flex px-6 justify-between items-center">
-              <h2 className="text-lg font-bold">
-                FILTER – {category.replace("-", " ")}
-              </h2>
-              <button
-                onClick={() => setFilterOpen(false)}
-                className="text-xl font-bold"
-              >
-                ×
-              </button>
-            </div>
+      {/* Main Drawer */}
+      <div
+        ref={drawerRef}
+        className="relative w-full max-w-85 bg-white h-full shadow-2xl translate-x-full flex flex-col"
+      >
+        {/* Header */}
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center mb-1">
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <Filter size={20} />
+              Filter – {category.replace("-", " ")}
+            </h2>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-slate-100 rounded-full transition-all"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <p className="text-sm text-slate-500">
+            {isLoading
+              ? "Updating results..."
+              : `${data?.filters.length || 0} items found for ${category}`}
+          </p>
+        </div>
 
-            <p className="mb-4 px-6">{totalResults} Results</p>
-            <Separator />
-
-            <div className="flex flex-col px-6">
-              {filters.map((group) => (
-                <div key={group.id}>
-                  <Accordion
-                    defaultValue={filters[0].slug}
-                    type="single"
-                    collapsible
-                    className="w-full"
-                  >
-                    <AccordionItem value={group.slug}>
-                      <AccordionTrigger className="hover:no-underline">
-                        {group.name}
-                      </AccordionTrigger>
-
-                      <AccordionContent className="flex flex-col gap-3">
-                        {group.options.map((option) => (
-                          <div
-                            key={option.id}
-                            className="flex items-start gap-3"
-                          >
-                            <Checkbox
-                              checked={                                
-                                selectedFilters[group.slug]?.includes(
-                                  option.slug
-                                ) || false
-                              }
-                              onCheckedChange={(checked) =>
-                                handleFilterChange(
-                                  group.slug,
-                                  option.slug,
-                                  Boolean(checked)
-                                )
-                              }
-                            />
-                            <Label>
-                              {option.label}
-                              {option.count !== undefined && (
-                                <span className="ml-2 text-muted-foreground">
-                                  ({option.count})
-                                </span>
-                              )}
-                            </Label>
-                          </div>
-                        ))}
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                  <Separator />
-                </div>
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto py-4 no-scrollbar">
+          {isLoading ? (
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="h-12 w-full bg-slate-100 animate-pulse rounded"
+                />
               ))}
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          ) : (
+            data?.filters.map((group: FilterGroup) => (
+              <div key={group.id} className="stagger-item mb-2">
+                <Accordion
+                  defaultValue={data.filters[0]?.slug}
+                  type="single"
+                  collapsible
+                  className="w-full"
+                >
+                  <AccordionItem
+                    value={group.slug}
+                    className="border-none px-6"
+                  >
+                    <AccordionTrigger className="hover:no-underline font-medium py-3">
+                      {group.name}
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-2 pb-4 space-y-4">
+                      {group.options.map((option: any) => (
+                        <div
+                          key={option.id}
+                          className="flex items-center space-x-3 group"
+                        >
+                          <Checkbox
+                            id={option.id}
+                            checked={
+                              selectedFilters[group.slug]?.includes(
+                                option.slug,
+                              ) || false
+                            }
+                            onCheckedChange={(checked) =>
+                              updateFilter(group.slug, option.slug, !!checked)
+                            }
+                          />
+                          <Label
+                            htmlFor={option.id}
+                            className="text-sm font-normal cursor-pointer flex-1 group-hover:text-blue-600 transition-colors"
+                          >
+                            {option.label}
+                            {option.count && (
+                              <span className="ml-2 text-slate-400">
+                                ({option.count})
+                              </span>
+                            )}
+                          </Label>
+                        </div>
+                      ))}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+                <Separator className="opacity-60" />
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Footer Actions */}
+        <div className="p-6 border-t bg-slate-50 grid grid-cols-2 gap-4">
+          <button
+            onClick={clearAll}
+            className="flex items-center justify-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900"
+          >
+            <RotateCcw size={16} />
+            Reset
+          </button>
+          <button
+            onClick={onClose}
+            className="bg-black text-white py-3 rounded-lg font-bold text-sm hover:bg-slate-800 transition-colors shadow-lg"
+          >
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

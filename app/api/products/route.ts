@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
   const categoryParam = searchParams.get("category"); //  "items-for-men"
   const subcategoryParam = searchParams.get("subcategory"); 
   const sort = searchParams.get("sort") || "featured";
+  
 
   const subcatSlug = subcategoryParam?.toLowerCase() || "";
   const cleanCatType = categoryParam?.split("-").pop()?.toLowerCase();

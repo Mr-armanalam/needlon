@@ -1,9 +1,12 @@
+'use client'
 import { Button } from "@/components/ui/button";
 import ProductCardPreview from "../components/card/item-card";
 import { ClientProductItem } from "@/types/product";
+import { useRouter } from "next/navigation";
 
 
-const HomePremRecomLike = ({heading, items}:{heading: string, items:ClientProductItem[]}) => {
+const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:ClientProductItem[], navigateTo: string}) => {
+  const router = useRouter();
   return (
     <div className="bg-white">
       <h1 className="pt-8 pl-8 text-3xl font-semibold font-garamond text-gray-950">
@@ -18,6 +21,7 @@ const HomePremRecomLike = ({heading, items}:{heading: string, items:ClientProduc
         ))}
         <Button
           type="button"
+          onClick={() => router.push(navigateTo) }
           className="my-auto -right-6 sticky text-2xl px-2.5 rounded-r-none cursor-pointer h-30"
         >
           &gt;
