@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
+
+/*
+
+  > Implemented shadcn Carousel, with looped swap, autoplay, delay 4sec
+  > Showcasing Product Images, name, description, offer
+
+*/
+
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -45,7 +53,7 @@ const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
             stopOnInteraction: false, // autoplay continues after swipe
           }),
         ]}
-        className="min-w-[95vw] bg-gradient-to-r from-stone-950 to-stone-800 rounded-sm flex relative h-[400px] mt-10 max-w-xs"
+        className="min-w-[95vw] bg-linear-to-r from-stone-950 to-stone-800 dark:border dark:from-stone-950/30 dark:to-stone-800/30 rounded-sm flex relative h-100 mt-10 max-w-xs"
       >
         <CarouselContent>
           {tailoringServices.map((item, index) => (
@@ -62,7 +70,7 @@ const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
                       {item?.offer ?? "no offer"}
                     </div>
                   </div>
-                  <div className="w-[300px] rounded-t-full rounded-b-3xl h-[300px] flex justify-center relative text-white">
+                  <div className="w-75 rounded-t-full rounded-b-3xl h-75 flex justify-center relative text-white">
                     <Image
                       className="z-50 absolute"
                       fill
@@ -75,8 +83,8 @@ const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="absolute border-none rounded-l-none text-gray-950 bg-zinc-100 rounded-r-sm h-[100px] left-0" />
-        <CarouselNext className="absolute border-none rounded-r-none text-gray-950 rounded-l-sm bg-zinc-100 h-[100px] right-0" />
+        <CarouselPrevious className="absolute border-none rounded-l-none text-gray-950 bg-zinc-100 rounded-r-sm h-25 left-0 dark:text-white dark:border cursor-pointer" />
+        <CarouselNext className="absolute border-none rounded-r-none text-gray-950 rounded-l-sm bg-zinc-100 h-25 right-0 dark:text-white dark:border cursor-pointer" />
       </Carousel>
 
       {/* Dots indicator */}

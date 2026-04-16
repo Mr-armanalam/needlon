@@ -1,4 +1,14 @@
 "use client";
+
+/* 
+
+  > Add Cart, wishlist & notification component
+  > Add NavSearch component
+  > Add Theme toggler
+  > Add Auth user UI
+
+*/
+
 import { ModeToggle } from "./theme-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signIn, signOut, useSession } from "next-auth/react";
@@ -24,8 +34,7 @@ const SearchAndUser = () => {
         <Popover>
           <PopoverTrigger>
             <Avatar
-              // onClick={() => signOut()}
-              className="rounded-full cursor-pointer w-9.25 h-9.25"
+              className="rounded-full cursor-pointer hover:scale-110 w-9.25 h-9.25"
             >
               <AvatarImage
                 src={
@@ -44,7 +53,7 @@ const SearchAndUser = () => {
       ) : (
         <Avatar
           onClick={() => signIn()}
-          className="rounded-full cursor-pointer w-9.5 h-9.5"
+          className="rounded-full hover:scale-110 cursor-pointer w-9.5 h-9.5"
         >
           <AvatarFallback className="bg-black/10 hover:bg-black/20 backdrop-blur-md rounded-full">
             <User className="w-5 h-5" />

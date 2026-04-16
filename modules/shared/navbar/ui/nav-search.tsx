@@ -1,5 +1,16 @@
 "use client";
 
+/*
+
+ > hit endpoint '/api/search/suggestion' get data as suggestion, cached 5 mins
+ > hit endpoint '/api/search?q=debouncequery' get matched search results
+ > Add Keyboarc cmd + 'k' shortcut events
+ > During every search loading spinner is shown, if searching state, result and query isn't present than showing 'NOT FOUND' to the client
+ > By default, we show suggestion initially as a recent or suggested product item if no search query
+ > Search result show with category name and product name 
+
+*/
+
 import * as React from "react";
 import { Loader2, Search } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -72,7 +83,7 @@ export function NavSearch() {
     <>
       <div
         onClick={() => setOpen(true)}
-        className="bg-[#cccccc]/40 transition-all hover:bg-muted border py-1 pl-4 pr-2 h-8.5 min-w-52.5 backdrop-blur-md rounded-md flex items-center cursor-pointer text-sm text-muted-foreground"
+        className="bg-[#cccccc]/40 dark:bg-black dark:hover:bg-white/4 transition-all hover:bg-muted border py-1 pl-4 pr-2 h-8.5 min-w-52.5 backdrop-blur-md rounded-md flex items-center cursor-pointer text-sm text-muted-foreground"
       >
         <Search className="mr-2 h-4 w-4" />
         Search clothes...

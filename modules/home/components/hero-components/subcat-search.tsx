@@ -32,7 +32,7 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
   return (
     <div className="relative top-1">
       {showLeftFade && (
-        <div className="absolute left-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-r from-white to-transparent pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-12 z-10 bg-linear-to-r from-white to-transparent pointer-events-none" />
       )}
 
       <div
@@ -41,7 +41,7 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
       >
         <Button
           className={cn(
-            "text-xs cursor-pointer bg-gray-900 text-white hover:bg-black disabled:bg-black"
+            "text-xs cursor-pointer bg-gray-900 text-white dark:border hover:bg-black disabled:bg-black"
           )}
           variant={"secondary"}
           size={"sm"}
@@ -52,7 +52,7 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
         {subCatSearchesItem.slice(0, showAllSubcat ? -1 : 5).map((item, i) => (
           <Button
             key={i}
-            className={cn("text-xs cursor-pointer hover:bg-zinc-300")}
+            className={cn("text-xs cursor-pointer dark:border dark:hover:bg-black dark:bg-white/5 hover:bg-zinc-300")}
             variant={"secondary"}
             size={"sm"}
             onClick={() =>setParam({value: item.slug.toString(), navigate: true, path: `${item.for_which}`})
@@ -63,7 +63,7 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
         ))}
 
         <Button
-          className={cn("text-xs cursor-pointer hover:bg-zinc-300")}
+          className={cn("text-xs cursor-pointer dark:border dark:hover:bg-black dark:bg-white/5 hover:bg-zinc-300")}
           variant={"secondary"}
           size={"sm"}
           onClick={() => setshowAllSubcat((previousState) => !previousState)}
@@ -73,7 +73,7 @@ export default function SubcatSearch({subCatSearchesItem}:{subCatSearchesItem: P
       </div>
 
       {showRightFade && (
-        <div className="absolute right-0 top-0 bottom-0 w-12 z-10 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 z-10 bg-linear-to-l from-white to-transparent pointer-events-none" />
       )}
     </div>
   );
