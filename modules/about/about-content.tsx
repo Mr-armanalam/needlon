@@ -43,7 +43,7 @@ const AboutContent = () => {
         <Button
           variant={"outline"}
           onClick={() => router.push("/new-in/arrivals")}
-          className="cursor-pointer border-yellow-600 text-stone-700 hover:bg-yellow-600 transition-colors delay-200 hover:text-white"
+          className="cursor-pointer border-yellow-600 text-stone-700 dark:text-white hover:bg-yellow-600 transition-colors delay-200 hover:text-white"
         >
           Explore our work
         </Button>
