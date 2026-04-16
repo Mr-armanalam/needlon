@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 const CommonAlteration = () => {
   const router = useRouter();
   return (
-    <section className="bg-white py-24 px-6 lg:px-8">
+    <section className="bg-white dark:bg-white/3 py-24 px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="text-[#1A1D2E] mb-4 text-4xl md:text-5xl"
+            className="text-[#1A1D2E] dark:text-white mb-4 text-4xl md:text-5xl"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Most Requested Services
@@ -23,9 +23,9 @@ const CommonAlteration = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {alterationType.map((item, i) => (
-            <div key={i} className="p-6 bg-[#F5F3EF] rounded-sm">
+            <div key={i} className="p-6 bg-[#F5F3EF] dark:bg-white/3 rounded-sm">
               <h4
-                className="text-[#1A1D2E] mb-2"
+                className="text-[#1A1D2E] mb-2 dark:text-white"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {item.title}

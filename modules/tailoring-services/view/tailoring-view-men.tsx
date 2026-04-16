@@ -7,7 +7,7 @@ import { servicePillarsMens, serviceStepMens } from "@/data/service-data";
 
 export default function TailoringView() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-transparent">
       <ServiceHeroSection
         bespokeType="Men's"
         title="The Modern Standard of Masculine Elegance"

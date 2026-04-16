@@ -50,7 +50,7 @@ export function ServicePillar({
         </div>
 
         <h3
-          className="text-[#1A1D2E] mb-4 text-3xl"
+          className="text-[#1A1D2E] dark:text-white mb-4 text-3xl"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
           {title}

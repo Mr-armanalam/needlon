@@ -7,7 +7,7 @@ import ServiceImageGallery from "../ui/service-image-gallery";
 
 export default function TailoringViewWomen() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen dark:bg-transparent bg-white">
       <ServiceHeroSection
         bespokeType="Women's"
         title=" Precision Tailoring for the Modern Woman"
@@ -31,11 +31,11 @@ export default function TailoringViewWomen() {
       />
 
       {/* Why Choose Us */}
-      <section className="py-24 px-6 lg:px-8 bg-[#F5F3EF]">
+      <section className="py-24 px-6 lg:px-8 dark:bg-white/3 bg-[#F5F3EF]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2
-              className="text-[#1A1D2E] mb-4 text-4xl md:text-5xl"
+              className="text-[#1A1D2E] dark:text-white mb-4 text-4xl md:text-5xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Designed for Your Life
@@ -48,7 +48,7 @@ export default function TailoringViewWomen() {
                 <div className="w-12 h-1 bg-[#D4AF37]" />
               </div>
               <h3
-                className="text-[#1A1D2E] mb-3 text-xl"
+                className="text-[#1A1D2E] dark:text-white/80 mb-3 text-xl"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Versatility
@@ -65,7 +65,7 @@ export default function TailoringViewWomen() {
                 <div className="w-12 h-1 bg-[#D4AF37]" />
               </div>
               <h3
-                className="text-[#1A1D2E] mb-3 text-xl"
+                className="text-[#1A1D2E] dark:text-white/80 mb-3 text-xl"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Empowerment
@@ -81,7 +81,7 @@ export default function TailoringViewWomen() {
                 <div className="w-12 h-1 bg-[#D4AF37]" />
               </div>
               <h3
-                className="text-[#1A1D2E] mb-3 text-xl"
+                className="text-[#1A1D2E] dark:text-white/80 mb-3 text-xl"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Craftsmanship

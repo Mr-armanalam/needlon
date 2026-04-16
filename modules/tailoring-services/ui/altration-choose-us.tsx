@@ -3,11 +3,11 @@ import React from "react";
 
 const AlterationChooseUs = () => {
   return (
-    <section className="bg-white py-24 px-6 lg:px-8">
+    <section className="bg-white dark:bg-white/1 py-24 px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="text-[#1A1D2E] mb-4 text-4xl md:text-5xl"
+            className="text-[#1A1D2E] dark:text-white mb-4 text-4xl md:text-5xl"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Why Trust Us
@@ -20,7 +20,7 @@ const AlterationChooseUs = () => {
               <Ruler className="w-8 h-8 text-[#D4AF37]" />
             </div>
             <h3
-              className="text-[#1A1D2E] mb-3 text-xl"
+              className="text-[#1A1D2E] dark:text-white/80 mb-3 text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Precision First
@@ -36,7 +36,7 @@ const AlterationChooseUs = () => {
               <Zap className="w-8 h-8 text-[#D4AF37]" />
             </div>
             <h3
-              className="text-[#1A1D2E] mb-3 text-xl"
+              className="text-[#1A1D2E] dark:text-white/80 mb-3 text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Quick Turnaround
@@ -52,7 +52,7 @@ const AlterationChooseUs = () => {
               <Settings className="w-8 h-8 text-[#D4AF37]" />
             </div>
             <h3
-              className="text-[#1A1D2E] mb-3 text-xl"
+              className="text-[#1A1D2E] dark:text-white/80 mb-3 text-xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               All Garments Welcome

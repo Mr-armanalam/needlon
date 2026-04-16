@@ -2,11 +2,11 @@ import { weddingTimelinedata } from "@/data/service-data";
 
 const WeddingTimeline = () => {
   return (
-    <section id="timeline" className="bg-[#F5F3EF] py-20 px-6 lg:px-8">
+    <section id="timeline" className="bg-[#F5F3EF] dark:bg-white/3 py-20 px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="text-[#1A1D2E] mb-4 text-4xl md:text-5xl"
+            className="text-[#1A1D2E] dark:text-white mb-4 text-4xl md:text-5xl"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Your Wedding Timeline
@@ -33,7 +33,7 @@ const WeddingTimeline = () => {
                 </div>
                 <div className="flex-1 pt-2">
                   <h4
-                    className="text-[#1A1D2E] mb-2 text-xl"
+                    className="text-[#1A1D2E] dark:text-white/80 mb-2 text-xl"
                     style={{ fontFamily: "'Playfair Display', serif" }}
                   >
                     {data.title}
