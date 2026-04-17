@@ -110,7 +110,7 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
       {/* Main Drawer */}
       <div
         ref={drawerRef}
-        className="relative w-full max-w-85 bg-white h-full shadow-2xl translate-x-full flex flex-col"
+        className="relative w-full max-w-85 bg-white dark:bg-black dark:border-l h-full shadow-2xl translate-x-full flex flex-col"
       >
         {/* Header */}
         <div className="p-6 border-b">
@@ -200,17 +200,17 @@ const FilterDrawer: React.FC<FilterDrawerProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="p-6 border-t bg-slate-50 grid grid-cols-2 gap-4">
+        <div className="p-6 border-t bg-slate-50 dark:bg-yellow-700 grid grid-cols-2 gap-4">
           <button
             onClick={clearAll}
-            className="flex items-center justify-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-900"
+            className="flex items-center justify-center gap-2 text-sm font-semibold text-slate-600 dark:text-white cursor-pointer hover:text-slate-900"
           >
             <RotateCcw size={16} />
             Reset
           </button>
           <button
             onClick={onClose}
-            className="bg-black text-white py-3 rounded-lg font-bold text-sm hover:bg-slate-800 transition-colors shadow-lg"
+            className="bg-black cursor-pointer text-white py-3 rounded-lg font-bold text-sm hover:bg-slate-800 transition-colors shadow-lg"
           >
             Apply Filters
           </button>

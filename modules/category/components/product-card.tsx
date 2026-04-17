@@ -115,7 +115,7 @@ const ProductCard = ({
       >
         <div
           onClick={() => router.push(`/product/${id}`)}
-          className="relative w-full h-[400px]"
+          className="relative w-full h-100"
         >
           <Image
             src={
@@ -133,7 +133,7 @@ const ProductCard = ({
         </div>
 
         {hoveredId === id && Array.isArray(sizes) && sizes.length > 0 && (
-          <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2 bg-white/80 py-2">
+          <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-2 dark:bg-black/10 bg-white/80 py-2">
             {sizes.map((size) => (
               <button
                 key={size}
@@ -141,10 +141,10 @@ const ProductCard = ({
                   setSelectedSizeById((s) => ({ ...s, [id]: size }));
                   onAddToCart({ id, name, price, image }, size);
                 }}
-                className={`px-2 py-1 text-sm border rounded ${
+                className={`px-2 py-1 text-sm border cursor-pointer rounded ${
                   selectedSizeById[id] === size
-                    ? "bg-black text-white"
-                    : "bg-white hover:bg-gray-200"
+                    ? "bg-black dark:bg-yellow-600 text-white"
+                    : "bg-white dark:bg-black dark:hover:bg-black/70 hover:bg-gray-200"
                 }`}
               >
                 {size}
@@ -175,7 +175,7 @@ const ProductCard = ({
         </button>
       </div>
 
-      <p className="mt-4 px-4 text-xl text-zinc-600 font-garamond font-semibold">
+      <p className="mt-4 px-4 text-xl text-zinc-600 dark:text-gray-100 font-garamond font-semibold">
         {name}
       </p>
       <p className="font-semibold text-gray-500 px-4">${price}</p>

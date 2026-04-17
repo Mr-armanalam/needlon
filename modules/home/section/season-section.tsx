@@ -19,7 +19,7 @@ const SeasonSection = ({seasonData, navigateTo}: seasonDataProps) => {
         {seasonData.map((item, k)=>(
           <SeasonCard key={k} productData={item} />
         ))}
-        <Button onClick={() => router.push(navigateTo)} variant={'secondary'} className='sticky rounded-r-none right-0 top-1/2 -translate-y-1/2 h-[150px] px-2.5 text-2xl'>&gt;</Button>
+        <Button onClick={() => router.push(navigateTo)} variant={'secondary'} className='sticky rounded-r-none right-0 top-1/2 -translate-y-1/2 h-37.5 px-2.5 text-2xl'>&gt;</Button>
       </div>
     </div>
   )
