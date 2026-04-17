@@ -29,7 +29,7 @@ const ProductDescriptionEvent = ({dispatch, userId, productItem}:{dispatch: any,
     <div className="mt-8 w-full flex gap-x-12 ">
       <Button
         type="button"
-        className="h-12 w-60 cursor-pointer bg-stone-800 rounded-full"
+        className="h-12 w-60 cursor-pointer dark:bg-white/10 dark:text-white dark:border bg-stone-800 rounded-full"
       >
         Customize
       </Button>
@@ -42,7 +42,7 @@ const ProductDescriptionEvent = ({dispatch, userId, productItem}:{dispatch: any,
         }
         disabled={isAlreadyInCart}
         type="button"
-        className={`h-12 w-60 cursor-pointer ${isAlreadyInCart && "opacity-50"} bg-stone-700 rounded-full`}
+        className={`h-12 w-60 cursor-pointer ${isAlreadyInCart && "opacity-50"} dark:bg-white/6 dark:border dark:text-white bg-stone-700 rounded-full`}
       >
         Add to Cart
       </Button>

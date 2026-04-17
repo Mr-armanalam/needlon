@@ -50,7 +50,7 @@ export default function OrderTimeline() {
       {orderSteps.map((order, i) => (
         <li key={i} className="mb-4 ms-4">
           <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
-          <time className="mt-4 text-stone-800 font-semibold text-ms">
+          <time className="mt-4 text-stone-800 dark:text-yellow-700 font-semibold text-ms">
             {order.title}{" "}
             <span className="text-xs italic font-mono font-thin text-gray-500">
               {order.date}

@@ -76,7 +76,7 @@ const ProductDescriptionHeading = ({
   };
   return (
     <>
-      <span className="font-garamond text-sm font-semibold bg-stone-200 px-4 rounded-md py-2">{`${(CatType ?? "").charAt(0).toUpperCase() + (CatType ?? "").slice(1)}'s ${(SubCatType ?? "").toLowerCase()}`}</span>
+      <span className="font-garamond text-sm font-semibold dark:bg-white/10 bg-stone-200 px-4 rounded-md py-2">{`${(CatType ?? "").charAt(0).toUpperCase() + (CatType ?? "").slice(1)}'s ${(SubCatType ?? "").toLowerCase()}`}</span>
 
       <div className="flex gap-4 justify-between">
         <h1 className="font-garamond mt-6 text-5xl">{productItem.name}</h1>

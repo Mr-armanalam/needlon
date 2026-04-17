@@ -35,7 +35,7 @@ const ProductCourusel = ({
         {corouselImages.length !== 0 &&
           corouselImages.map((image, index) => (
             <CarouselItem key={index} className="basis-1/3 pl-4 ol-1">
-              <Card className="rounded-xs bg-[#eaeaea] py-0 border-0">
+              <Card className="rounded-xs bg-[#eaeaea] dark:bg-white/6 py-0 border-0">
                 <CardContent className="flex relative mt-auto h-150 items-center justify-center">
                   <Image
                     src={image ?? "/images/image1.png"}
@@ -49,11 +49,11 @@ const ProductCourusel = ({
       </CarouselContent>
       <CarouselPrevious
         size={"xl"}
-        className="border-none cursor-pointer shadow-lg left-2"
+        className="border-none dark:bg-black cursor-pointer shadow-lg left-2"
       />
       <CarouselNext
         size={"xl"}
-        className=" left-98 cursor-pointer border-none shadow-lg"
+        className=" left-98 dark:bg-black cursor-pointer border-none shadow-lg"
       />
       {data && <ProductDescriptionn productData={data} />}
     </Carousel>

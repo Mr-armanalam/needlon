@@ -90,14 +90,14 @@ const ApplyCoupon = ({
               <FormControl>
                 <InputGroup className="border border-x-0 focus-visible:ring-0 rounded-none shadow-none border-dashed h-16">
                   <InputGroupInput
-                    className="border px-5 text-stone-800 font-bold border-none"
+                    className="border px-5 dark:text-white text-stone-800 font-bold border-none"
                     placeholder="Coupon code"
                     {...field}
                   />
                   <InputGroupAddon align="inline-end">
                     <InputGroupButton
                       type="submit"
-                      className="h-full text-stone-900 font-bold px-3"
+                      className="h-full dark:text-white/90 text-stone-900 font-bold px-3"
                     >
                       Apply
                     </InputGroupButton>

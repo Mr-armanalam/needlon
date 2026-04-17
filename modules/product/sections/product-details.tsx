@@ -28,10 +28,10 @@ const ProductDetails = ({
   return (
     <section className="h-130 grid grid-cols-2 gap-0 items-center rounded p-8">
       <div className="">
-        <h1 className="text-3xl font-garamond font-semibold mb-8 text-gray-900">
+        <h1 className="text-3xl font-garamond font-semibold mb-8 dark:text-white text-gray-900">
           About this {productData.product_category?.SubCatType}
         </h1>
-        <p className="font-roboto-sans text-sm text-stone-500">
+        <p className="font-roboto-sans text-sm dark:text-white/80 text-stone-500">
           {productData.product_category?.descriptiveContent}
         </p>
       </div>

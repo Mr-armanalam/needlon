@@ -36,11 +36,11 @@ const OrderStatus = ({
 }: props) => {
   const router = useRouter();
   return (
-    <div className="border bg-white rounded-sm mt-0.5 mx-1">
+    <div className="border dark:bg-white/6 bg-white rounded-sm mt-0.5 mx-1">
       <div className="m-4 flex gap-x-4 ">
         <Link
           href={`/product/${productId}`}
-          className="relative h-[140px] w-[130px]"
+          className="relative h-35 w-32.5"
         >
           {image ? (
             <Image
@@ -50,17 +50,17 @@ const OrderStatus = ({
               src={image}
             />
           ) : (
-            <div className="bg-white rounded h-[140px] w-[130px]" />
+            <div className="bg-white dark:bg-white/6 rounded h-35 w-32.5" />
           )}
         </Link>
         <div>
-          <h2 className="text-xl line-clamp-2 text-gray-900 font-semibold">
+          <h2 className="text-xl line-clamp-2 dark:text-white text-gray-900 font-semibold">
             {itemName}
           </h2>
           <p className="text-sm">
             {size && `size: ${size}`} {properties}
           </p>
-          <p className="font-medium text-stone-700 mt-2">₹ {itemPrice}</p>
+          <p className="font-medium dark:text-white/70 text-stone-700 mt-2">₹ {itemPrice}</p>
           <div className="flex gap-x-6">
             <Button
               onClick={() => router.push(`/product/${productId}`)}
@@ -75,7 +75,7 @@ const OrderStatus = ({
           </div>
         </div>
       </div>
-      <Separator orientation="horizontal" className="bg-gray-100" />
+      <Separator orientation="horizontal" className="bg-gray-100 dark:bg-gray-800" />
       <div className="px-4">
         <Accordion
           type="single"
@@ -86,13 +86,13 @@ const OrderStatus = ({
             <AccordionTrigger className="font-semibold cursor-pointer text-blue-700">
               See All Updates -&gt;
             </AccordionTrigger>
-            <AccordionContent className="p-4 bg-white rounded-md mb-4">
+            <AccordionContent className="p-4 bg-white dark:bg-black rounded-md mb-4">
               <OrderTimeline />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
       </div>
-      <Separator orientation="horizontal" className="bg-gray-100" />
+      <Separator orientation="horizontal" className="bg-gray-100 dark:bg-gray-800" />
 
       <OrderRating orderItemId={orderItemId} productId={productId} />
     </div>

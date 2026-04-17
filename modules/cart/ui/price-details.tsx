@@ -70,11 +70,11 @@ const PriceDetails = ({
 
   return (
     <section>
-      <h1 className="px-4 py-4 text-md text-stone-500 font-semibold font-garamond border-b">
+      <h1 className="px-4 py-4 text-md dark:text-white text-stone-500 font-semibold font-garamond border-b">
         PRICE DETAILS
       </h1>
       <div className="mx-4">
-        <table className="w-full border-separate border-spacing-y-4 text-stone-600 font-roboto-sans">
+        <table className="w-full border-separate border-spacing-y-4 dark:text-white text-stone-600 font-roboto-sans">
           <tbody className="">
             <tr className="my-3">
               <td>Price ({cart.length ?? 0} item)</td>
@@ -105,7 +105,7 @@ const PriceDetails = ({
         <ApplyCoupon setCouponDiscount={setCouponDiscount} />
       )}
 
-      <div className="flex px-4 py-5 border-y border-dashed justify-between font-bold text-lg text-gray-800">
+      <div className="flex px-4 py-5 border-y border-dashed justify-between font-bold text-lg dark:text-white/90 text-gray-800">
         <span>Total Amount</span>
         <span>₹{price - totalCouponDiscount}</span>
       </div>
