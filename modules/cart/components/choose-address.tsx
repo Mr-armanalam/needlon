@@ -36,7 +36,7 @@ export function ChooseAddress({
               <div
                 onClick={() => onSelectAddress(item)}
                 key={i}
-                className="bg-stone-200 items-center gap-x-4 flex rounded-md py-3 px-4 cursor-pointer"
+                className="bg-stone-200 dark:bg-black items-center gap-x-4 flex rounded-md py-3 px-4 cursor-pointer"
               >
                 <RadioGroupItem
                   color="white"
@@ -48,7 +48,7 @@ export function ChooseAddress({
                   htmlFor={item.id}
                   className="flex flex-col cursor-pointer items-start"
                 >
-                  <p className="font-semibold text-gray-950">
+                  <p className="font-semibold dark:text-white text-gray-950">
                     {`${item.name}, ${item.pincode}`}
                   </p>
                   <p className="text-sm text-stone-600 line-clamp-1">

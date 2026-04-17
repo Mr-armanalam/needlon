@@ -5,7 +5,7 @@ import { Rewards } from "@/app/(root)/(account)/account/rewards/page";
 export default function RewardsView({allRewards}:{allRewards: Rewards[]}) {  
   return (
     <section>
-      <h1 className="font-garamond text-2xl font-semibold text-gray-900">
+      <h1 className="font-garamond text-2xl font-semibold dark:text-white text-gray-900">
         Your rewards & coupons
       </h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-7">
@@ -14,7 +14,7 @@ export default function RewardsView({allRewards}:{allRewards: Rewards[]}) {
             <CouponCard key={coupon.id} coupon={coupon} />
           ))}
       </div>
-      <p className="font-garamond mx-auto text-center w-full mt-[100px] text-gray-500 font-semibold text-xl">
+      <p className="font-garamond mx-auto text-center w-full mt-25 text-gray-500 font-semibold text-xl">
         End Here
       </p>
     </section>

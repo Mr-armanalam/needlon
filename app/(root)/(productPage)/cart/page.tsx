@@ -22,7 +22,7 @@ export default async function Page() {
   const cart = await fetchCartSSR(userId);
 
   return (
-    <div className="lg:px-20 bg-zinc-100 min-h-[100vh]">
+    <div className="lg:px-20 bg-zinc-100 dark:bg-black min-h-screen">
       <CartView cart={cart} userId={userId} />
     </div>
   );

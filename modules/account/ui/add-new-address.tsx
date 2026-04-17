@@ -154,7 +154,7 @@ const AddNewAddress = ({
 
   return (
     <Accordion
-      className="border bg-stone-100 rounded-xs px-3"
+      className="border bg-stone-100 dark:bg-black rounded-xs px-3"
       type="single"
       collapsible
       value={accordionValue}
@@ -166,7 +166,7 @@ const AddNewAddress = ({
           <h2 className="font-semibold">ADD NEW ADDRESS</h2>
         </AccordionTrigger>
 
-        <AccordionContent className="max-w-[800px]">
+        <AccordionContent className="max-w-200">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}

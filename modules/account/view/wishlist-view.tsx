@@ -121,12 +121,12 @@ const WishlistView = ({ userId }: Props) => {
           {displayList.map((item) => (
             <div
               key={`${item.productId}-${item.size}`}
-              className="border-y gap-x-8 border-stone-200 mb-1.5 flex overflow-hidden"
+              className="border-y gap-x-8 border-stone-200 dark:border-stone-900 mb-1.5 flex overflow-hidden"
             >
               {/* Product Image */}
               <Link
                 href={`/product/${item.productId}`}
-                className="relative w-[180px] h-[180px] shrink-0"
+                className="relative w-45 h-45 shrink-0"
               >
                 {item.image ? (
                   <Image
@@ -136,16 +136,16 @@ const WishlistView = ({ userId }: Props) => {
                     alt={item.name}
                   />
                 ) : (
-                  <div className="bg-gray-100 w-full h-full flex items-center justify-center text-stone-400">
+                  <div className="bg-gray-100 dark:bg-white/2 w-full h-full flex items-center justify-center text-stone-400">
                     No Image
                   </div>
                 )}
               </Link>
 
               {/* Product Details */}
-              <div className="my-4 flex-1 text-stone-800 relative">
+              <div className="my-4 flex-1 text-stone-800 dark:text-white/90 relative">
                 <h2 className="font-semibold text-lg">{item.name}</h2>
-                <p className="text-sm lowercase text-stone-600">
+                <p className="text-sm lowercase dark:text-white/70 text-stone-600">
                   Size: {item.size}
                 </p>
                 <p className="text-2xl font-bold my-2">₹{item.price}</p>

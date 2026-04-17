@@ -41,10 +41,10 @@ export default function NotificationView({
   }, [dispatch]);
 
   return (
-    <div className="w-full bg-white px-5">
+    <div className="w-full bg-white dark:bg-white/1 px-5">
       <div className="flex items-center gap-2 mb-4">
         <Bell size={22} className="text-gray-700" />
-        <h1 className="text-xl font-bold font-garamond text-gray-800">
+        <h1 className="text-xl font-bold font-garamond dark:text-white/90 text-gray-800">
           Notifications
         </h1>
         {unreadCount > 0 && (

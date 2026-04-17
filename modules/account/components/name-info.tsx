@@ -24,7 +24,7 @@ const NameInfo = ({
   return (
     <>
       <div className="flex mb-8 items-end gap-8">
-        <p className="text-lg font-semibold text-stone-800">
+        <p className="text-lg font-semibold dark:text-white text-stone-800">
           Personal Information
         </p>
         {editSection === "personal" ? (
@@ -49,7 +49,7 @@ const NameInfo = ({
         <Input
           disabled={editSection !== "personal" && true}
           type="text"
-          className="w-[300px] font-semibold rounded-sm h-12 mb-4"
+          className="w-75 font-semibold rounded-sm h-12 mb-4"
           value={firstname}
           name="firstname"
           placeholder="First Name"
@@ -58,7 +58,7 @@ const NameInfo = ({
         <Input
           disabled={editSection !== "personal" && true}
           type="text"
-          className="w-[300px] font-semibold rounded-sm h-12 mb-4"
+          className="w-75 font-semibold dark:border-gray-600 rounded-sm h-12 mb-4"
           value={lastname}
           name="lastname"
           placeholder="Last Name"

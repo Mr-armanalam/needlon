@@ -37,17 +37,17 @@ const CartItems = ({
 
   return (
     <div
-      className={`border-y overflow-y-scroll no-scrollbar gap-x-8 border-stone-200 mb-1.5 flex`}
+      className={`border-y overflow-y-scroll no-scrollbar gap-x-8 dark:border-stone-900 border-stone-200 mb-1.5 flex`}
     >
       <Link
         href={`/product/${productId}`}
-        className="relative w-[180px] h-[180px]"
+        className="relative w-45 h-45"
       >
         <Image src={image ?? ""} fill alt="wishlist " />
       </Link>
-      <div className="my-4 relative flex-1 text-stone-800">
+      <div className="my-4 relative flex-1 dark:text-white/90 text-stone-800">
         <h1 className="font-semibold">{name}</h1>
-        <p className="text-sm pl-0.5 lowercase text-stone-600">Size: {size}</p>
+        <p className="text-sm pl-0.5 lowercase dark:text-white/70 text-stone-600">Size: {size}</p>
         <h2 className="text-2xl font-semibold my-2">₹{price}</h2>
         <p className="absolute bottom-0 right-4 text-stone-500 text-xs ">
           Item added {format(updatedAt, "dd MMMM yyyy")}

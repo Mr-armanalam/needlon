@@ -17,7 +17,7 @@ interface Props {
 const SearchOrder = ({ setSearchValue, searchValue, onSearch }: Props) => {
   return (
     <div className="flex  px-4 font-semibold justify-between">
-      <h1 className="text-3xl text-gray-800 font-garamond">Your Orders</h1>
+      <h1 className="text-3xl dark:text-white/90 text-gray-800 font-garamond">Your Orders</h1>
       <div className="flex gap-x-3">
         <InputGroup className="min-w-[320px]">
           <InputGroupInput
