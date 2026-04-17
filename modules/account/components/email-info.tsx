@@ -14,7 +14,7 @@ const Emailinfo = ({editSection, setEditSection, email, handleOnChange, handleSa
   return (
     <>
       <div className="flex mt-10 mb-8 items-end gap-8">
-        <p className="text-lg font-semibold text-stone-800">Email Address</p>
+        <p className="text-lg font-semibold dark:text-white text-stone-800">Email Address</p>
         {editSection === "email" ? (
           <button
             type="button"
@@ -37,7 +37,7 @@ const Emailinfo = ({editSection, setEditSection, email, handleOnChange, handleSa
       <div className="flex gap-6">
         <Input
           disabled={editSection !== "email" && true}
-          className="w-[300px] font-semibold rounded-sm h-12 mb-4"
+          className="w-75 font-semibold dark:border-gray-600 rounded-sm h-12 mb-4"
           type="email"
           value={email}
           placeholder="Email"

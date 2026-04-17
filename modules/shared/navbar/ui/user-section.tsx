@@ -56,7 +56,7 @@ const UserSection = ({ signOut }: Props) => {
       <Separator className="mt-3" />
       {UserSectionData.map(({ link, label, description, icon }, i) => (
         <div
-          className="hover:bg-stone-100 gap-4 flex px cursor-pointer px-4 py-5 font-semibold rounded-sm text-black/80 justify-start text-sm"
+          className="hover:bg-stone-100 group gap-4 flex px cursor-pointer px-4 py-5 font-semibold rounded-sm text-black/80 justify-start text-sm"
           key={i}
         >
           <div className="flex justify-center rounded-sm bg-zinc-200/70 px-2.5 items-center">
@@ -64,7 +64,7 @@ const UserSection = ({ signOut }: Props) => {
           </div>
           <div
             onClick={() => (link ? router.push(link) : signOut())}
-            className=""
+            className="dark:group-hover:text-black dark:text-white"
           >
             {label}
             <p className="text-xs text-gray-500 font-normal">{description}</p>

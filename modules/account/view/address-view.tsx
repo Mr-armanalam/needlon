@@ -64,7 +64,7 @@ const AddressView = () => {
 
   return (
     <div>
-      <h1 className="text-xl mb-6 text-stone-800 font-garamond font-semibold">
+      <h1 className="text-xl mb-6 text-stone-800 dark:text-white font-garamond font-semibold">
         Manage Address
       </h1>
 
@@ -102,10 +102,10 @@ const AddressView = () => {
         )}
 
         {!isLoading && addresses.length > 0 && (
-          <div className="border border-stone-200 rounded-xs">
+          <div className="border dark:border-stone-900 border-stone-200 rounded-xs">
             {addresses.map((addr) => (
               <div
-                className="border-b relative border-stone-200 rounded-xs py-5 px-8"
+                className="border-b relative dark:border-stone-900 border-stone-200 rounded-xs py-5 px-8"
                 key={addr.id}
               >
                 <HoverCard>

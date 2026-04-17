@@ -9,7 +9,7 @@ import WeddingTimeline from "../components/wedding-timeline";
 
 const TailoringViewWeddingOccation = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen dark:bg-transparent bg-white">
       <ServiceHeroSection
         image="https://images.unsplash.com/photo-1655490162630-175929877280?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwY291cGxlJTIwY2VsZWJyYXRpb258ZW58MXx8fHwxNzY3NjE1NzIzfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
         bespokeType="Wedding & Occasionwear"

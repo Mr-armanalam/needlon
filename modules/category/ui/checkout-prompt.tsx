@@ -31,7 +31,7 @@ const CheckoutPrompt = ({
   
 
   return (
-    <div className="fixed top-0 right-0 w-96 h-full bg-white shadow-lg p-4 overflow-y-auto">
+    <div className="fixed top-0 right-0 w-96 h-full bg-white dark:bg-black dark:border-l shadow-lg p-4 overflow-y-auto">
       <div className="flex justify-between items-center">
         <h2 className="font-bold font-garamond">CART ITEMS - {cart.length} </h2>
         <button className="cursor-pointer" onClick={() => setOpen(false)}>
@@ -43,9 +43,9 @@ const CheckoutPrompt = ({
         {cart.map((item) => (
           <div
             key={`${item.id}-${item.size}`}
-            className="flex border-y border-stone-300 bg-[#EAEAEA] p-8 gap-3 pb-2"
+            className="flex border-y border-stone-300 bg-[#EAEAEA] dark:border-gray-800 dark:bg-white/6 p-8 gap-3 pb-2"
           >
-            <div className="relative w-[60px] h-[100px]">
+            <div className="relative w-15 h-25">
               <Image
                 fill
                 src={item.image}
@@ -84,7 +84,7 @@ const CheckoutPrompt = ({
           <span>Subtotal</span>
           <span>${subtotal.toFixed(2)}</span>
         </p>
-        <Button onClick={() => router.push('/cart')} size={'lg'} className=" w-full cursor-pointer mt-4 rounded-xs py-4">
+        <Button onClick={() => router.push('/cart')} size={'lg'} className=" w-full cursor-pointer mt-4 dark:bg-yellow-700 dark:border dark:border-gray-800 dark:text-white rounded-xs py-4">
          <TiShoppingCart/> Proceed with cart 
         </Button>
       </div>

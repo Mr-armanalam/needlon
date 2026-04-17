@@ -35,10 +35,10 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
 
   return (
     <section>
-      <h1 className="py-4 font-garamond px-4 font-semibold text-lg text-gray-900 bg-white">
+      <h1 className="py-4 font-garamond px-4 font-semibold text-lg text-gray-900 dark:bg-white/6 dark:text-white/90 bg-white">
         Shopping Carts
       </h1>
-      <div className="flex justify-between items-center border-y py-4 mb-2 border-stone-200 bg-white px-4">
+      <div className="flex justify-between items-center border-y py-4 mb-2 border-stone-200 dark:border-stone-900 dark:bg-white/6 bg-white px-4">
         {loading ? (
           <div className="p-2 pr-4 flex-1 rounded-xl space-y-2">
             <Skeleton className="h-6 w-40" />
@@ -47,13 +47,13 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
         ) : ( 
           <Activity mode={currentAddress ? 'visible' : 'hidden'}>
             <div className=" flex-1">
-              <div className="mb-1 text-gray-950 flex gap-x-4 items-center">
+              <div className="mb-1 text-gray-950 dark:text-white/90 flex gap-x-4 items-center">
                 <p className="text-sm font-bold">Delivery To : </p>
                 <p className="font-semibold text-sm line-clamp-1  ">
                   {currentAddress?.name} {currentAddress?.pincode}
                 </p>
               </div>
-              <p className=" text-sm line-clamp-1 text-stone-500 ">
+              <p className=" text-sm line-clamp-1 text-stone-500 dark:text-white/50 ">
                 {currentAddress?.address}, {currentAddress?.phone},{" "}
                 {currentAddress?.landmark}, {currentAddress?.locality}{" "}
               </p>
@@ -69,7 +69,7 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
           }}
         />
       </div>
-      <div className="bg-white">
+      <div className="bg-white dark:bg-white/6">
         {cart?.length >= 0 &&
           cart?.map((item, i) => (
             <CartItems

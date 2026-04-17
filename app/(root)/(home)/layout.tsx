@@ -18,7 +18,7 @@ const Layout = ({
   return (
     <>
       {hero_section}
-      <div className="bg-gray-100 flex flex-col gap-y-2 p-2">
+      <div className="bg-gray-100 dark:bg-white/2 flex flex-col gap-y-2 p-2">
         {premium_section}
         {you_may_like_section}
         {season_section}

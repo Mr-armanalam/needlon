@@ -63,12 +63,12 @@ const OrderRating = ({
   const shouldShowForm = !existingReview;
 
   return (
-    <section className="m-4 p-4 flex flex-col gap-y-3 bg-stone-200 rounded-md">
+    <section className="m-4 p-4 flex flex-col gap-y-3 dark:bg-black bg-stone-200 rounded-md">
       {shouldShowForm ? (
         <>
           <div className="flex justify-between">
             <h1 className="font-semibold">Rate your experience</h1>
-            <div className="flex text-sm font-semibold border">
+            <div className="flex text-sm font-semibold dark:border-none border">
               <Button
                 size="sm"
                 type="button"
@@ -78,7 +78,7 @@ const OrderRating = ({
               >
                 Submit
               </Button>
-              <Separator orientation="vertical" className="bg-white max-h-6" />
+              <Separator orientation="vertical" className="bg-white max-h-4" />
               <Button
                 size="sm"
                 type="button"

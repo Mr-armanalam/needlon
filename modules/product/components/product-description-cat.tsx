@@ -23,15 +23,15 @@ const ProductDescriptionCat = ({
 
   return (
     <>
-      <h2 className="mt-4 ml-2 text-stone-700 font-garamond line-clamp-1">
+      <h2 className="mt-4 ml-2 text-stone-700 dark:text-gray-400 font-garamond line-clamp-1">
         {productItem.tagName}
       </h2>
 
-      <div className="flex w-full line-clamp-1 flex-wrap gap-x-6 ml-2 text-sm font-garamond text-gray-500 mt-2">
+      <div className="flex w-full line-clamp-1 flex-wrap gap-x-6 ml-2 text-sm font-garamond dark:text-gray-400 text-gray-500 mt-2">
         {filteredData.length > 0 &&
           filteredData.map((data, i) => (
             <p key={i}>
-              <span className="font-semibold capitalize  text-gray-600">
+              <span className="font-semibold capitalize dark:text-gray-200 text-gray-600">
                 {Object.keys(data)}:{" "}
               </span>
               {Object.values(data)}
@@ -40,9 +40,9 @@ const ProductDescriptionCat = ({
           ))}
       </div>
 
-      <div className="flex ml-2 text-sm mt-2 items-center text-gray-500 gap-x-1 ">
+      <div className="flex ml-2 text-sm mt-2 items-center dark:text-white text-gray-500 gap-x-1 ">
         <RatingDisplay size={12} avgRating={productItem.averageRating} />
-        <span className="ml-2 text-sm text-gray-700">
+        <span className="ml-2 text-sm dark:text-gray-400 text-gray-700">
           {productItem.averageRating} /{productItem.reviewCount}
         </span>
       </div>

@@ -22,7 +22,7 @@ const ServicePillarSection = ({servicePillars , heading, title, description}: Pr
               <div className="w-12 h-px bg-[#D4AF37]" />
             </div>
             <h2
-              className="text-[#1A1D2E] mb-4 text-4xl md:text-5xl"
+              className="text-[#1A1D2E] dark:text-white mb-4 text-4xl md:text-5xl"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {title}

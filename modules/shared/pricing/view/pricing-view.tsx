@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import HeadingPrice from "../ui/heading-price";
 import PricingDetails from "../ui/pricing-details";
 import { jsPDF } from "jspdf";
@@ -22,13 +22,13 @@ const PricingView = () => {
   const pdfWidth = pdf.internal.pageSize.getWidth();
   const pdfHeight = pdf.internal.pageSize.getHeight();
   
-  // 1. Define strict margins
+  // strict margins
   const marginTop = 15; 
   const marginBottom = 15;
   const marginLeft = 10;
   const marginRight = 10;
 
-  // 2. Calculate the printable area
+  // the printable area
   const printableWidth = pdfWidth - marginLeft - marginRight;
   const printableHeight = pdfHeight - marginTop - marginBottom;
 
@@ -57,10 +57,10 @@ const PricingView = () => {
     yOffset += printableHeight;
     firstPage = false;
 
-    // 3. Add a white rectangle to "mask" any bleed into the bottom margin
+    // a white rectangle to "mask" any bleed into the bottom margin
     pdf.setFillColor(255, 255, 255);
     pdf.rect(0, pdfHeight - marginBottom, pdfWidth, marginBottom, 'F');
-    // Also mask the top margin just in case
+    // mask the top margin just in case
     pdf.rect(0, 0, pdfWidth, marginTop, 'F');
   }
 
@@ -69,7 +69,7 @@ const PricingView = () => {
 };
 
   return (
-    <div ref={invoiceRef} className="bg-[#F5F3EF]">
+    <div ref={invoiceRef} className="bg-[#F5F3EF] dark:bg-transparent">
       <PriceListDownload isGenerating={isGenerating} handleDownload={handleGeneratePdf} />
       <HeadingPrice />
       <PricingDetails />

@@ -33,7 +33,7 @@ const ProductDescriptionn = ({
   }, [userId, dispatch]);
 
   return (
-    <div className="absolute p-6 top-16 border border-stone-100 bottom-16 rounded-sm right-10 left-123 bg-stone-50">
+    <div className="absolute p-6 top-16 border dark:bg-black dark:border-gray-600 border-stone-100 bottom-16 rounded-sm right-10 left-123 bg-stone-50">
       <ProductDescriptionHeading
         productItem={productData.product_items}
         CatType={productData?.product_category?.CatType!}

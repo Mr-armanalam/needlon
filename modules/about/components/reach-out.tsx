@@ -13,7 +13,7 @@ const ReachOut = ({
 
   return (
     <div className="flex gap-3 items-center">
-      <div className="bg-stone-900/30 p-3 rounded-xs text-stone-900">
+      <div className="bg-stone-900/30 dark:bg-white/5 dark:text-white p-3 rounded-xs text-stone-900">
         <Icon size={18} />
       </div>
       <div>

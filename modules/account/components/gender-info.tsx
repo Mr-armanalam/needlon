@@ -10,11 +10,11 @@ type props = {
 const GenderInfo = ({gender}: props) => {
   return (
     <>
-      <p className="text-sm ml-2 font-semibold text-stone-500">Your Gender</p>
+      <p className="text-sm ml-2 font-semibold dark:text-gray-400 text-stone-500">Your Gender</p>
 
       <div className="ml-2 mt-4">
         <RadioGroup
-          className="flex text-stone-600 gap-x-12"
+          className="flex text-stone-600 dark:text-gray-400 gap-x-12"
           defaultValue={gender ?? "male"}
         >
           <div className="flex items-center space-x-2">

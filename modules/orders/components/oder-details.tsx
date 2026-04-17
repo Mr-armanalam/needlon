@@ -26,13 +26,13 @@ const OrderDetails = ({
   noOfItem,
 }: props) => {
   return (
-    <div className="px-1 mb-4 text-gray-900">
+    <div className="px-1 mb-4 dark:text-white/70 text-gray-900">
       <div className="flex items-center text-sm gap-x-4">
         <p>Order placed {format(order_date, "dd MMMM yyyy")}</p>
         <div className="h-3.75 w-0.5 bg-gray-300 border-l" />
         <p>Order number {order_id}</p>
       </div>
-      <div className="flex border bg-gray-900 text-white rounded-md p-4 text-sm mt-2 gap-x-8 justify-between">
+      <div className="flex border bg-gray-900 dark:bg-stone-900 text-white rounded-md p-4 text-sm mt-2 gap-x-8 justify-between">
         <div className="flex-1/3 p-4">
           <h2 className="font-semibold mb-4">Ship to</h2>
           <p className="text-wrap text-xs leading-5">

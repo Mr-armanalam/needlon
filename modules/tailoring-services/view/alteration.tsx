@@ -10,7 +10,7 @@ import AlterationChooseUs from "../ui/altration-choose-us";
 
 const AlterationView = () => {
   return (
-    <div>
+    <>
       <ServiceHeroSection
         title="The Art of the Perfect Fit"
         description="Don't let a poor fit hide a great garment. We breathe new life into your wardrobe with master-level alterations and structural refinements."
@@ -43,7 +43,7 @@ const AlterationView = () => {
         image2="https://images.unsplash.com/photo-1591380816222-28cec94b49c8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjbG90aGluZyUyMGFsdGVyYXRpb25zJTIwc2V3aW5nfGVufDF8fHx8MTc2NzgzMDYwMXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
         image3="https://images.unsplash.com/photo-1522578755536-1e6830124399?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0YWlsb3IlMjB3b3Jrc3BhY2UlMjB0b29sc3xlbnwxfHx8fDE3Njc4MzA2MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
       />
-    </div>
+    </>
   );
 };
 

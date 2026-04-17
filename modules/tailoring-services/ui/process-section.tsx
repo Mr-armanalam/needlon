@@ -13,11 +13,11 @@ const ProcessSection = ({
   bg?: string;
 }) => {
   return (
-    <section id="process" className={`${bg ?? 'bg-white'} py-24 px-6 lg:px-8`}>
+    <section id="process" className={`${bg ?? 'bg-white'} dark:bg-white/2 py-24 px-6 lg:px-8`}>
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="text-[#1A1D2E] mb-4 text-4xl md:text-5xl"
+            className="text-[#1A1D2E] dark:text-white mb-4 text-4xl md:text-5xl"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
             {title}
@@ -37,7 +37,7 @@ const ProcessSection = ({
                 </span>
               </div>
               <h4
-                className="text-[#1A1D2E] mb-3"
+                className="text-[#1A1D2E] dark:text-white/60 mb-3"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 {item.name}

@@ -97,9 +97,9 @@ const CategoryView = () => {
       {open && <CheckoutPrompt setOpen={setOpen} />}
 
       <FilterDrawer
-        filterOpen={filterOpen}
+        isOpen={filterOpen}
         category={category}
-        setFilterOpen={setFilterOpen}
+        onClose={() => setFilterOpen(false)}
       />
     </div>
   );

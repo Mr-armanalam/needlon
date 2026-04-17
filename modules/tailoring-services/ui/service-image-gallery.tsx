@@ -11,7 +11,7 @@ const ServiceImageGallery = ({
   image3: string;
 }) => {
   return (
-    <section className="py-24 px-6 lg:px-8 bg-[#F5F3EF]">
+    <section className="py-24 px-6 lg:px-8 dark:bg-transparent bg-[#F5F3EF]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Large Image */}

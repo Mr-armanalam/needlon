@@ -15,7 +15,7 @@ const PhoneInfo = ({editSection, setEditSection, number, handleOnChange, handleS
   return (
     <>
       <div className="flex mt-8 mb-6 items-end gap-8">
-        <p className="text-lg font-semibold text-stone-800">Mobile Number</p>
+        <p className="text-lg font-semibold dark:text-white text-stone-800">Mobile Number</p>
         {editSection === "phone" ? (
           <button
             type="button"
@@ -39,7 +39,7 @@ const PhoneInfo = ({editSection, setEditSection, number, handleOnChange, handleS
         <Input
           disabled={editSection !== "phone" && true}
           type="text"
-          className="w-[300px] font-semibold rounded-sm h-12 mb-4"
+          className="w-75 font-semibold dark:border-gray-600 rounded-sm h-12 mb-4"
           value={number}
           name="number"
           placeholder="Number"

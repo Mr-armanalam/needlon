@@ -25,9 +25,9 @@ const CartView = ({ cart, userId }: CartViewProps) => {
 
   if (!cart || cart.length === 0) {
     return (
-      <main className="bg-white flex justify-between items-center mt-4 rounded-xs p-6 max-w-[70vw]">
+      <main className="bg-white dark:bg-black flex justify-between items-center mt-4 rounded-xs p-6 max-w-[70vw]">
         <div>
-          <h1 className="font-garamond font-semibold text-gray-800 text-2xl">
+          <h1 className="font-garamond font-semibold dark:text-white text-gray-800 text-2xl">
             Your Needlon Cart is Empty
           </h1>
           <p className="text-muted-foreground">Add Items to it now.</p>
@@ -35,7 +35,7 @@ const CartView = ({ cart, userId }: CartViewProps) => {
 
         <Link
           href={"/"}
-          className="cursor-pointer border rounded-md px-3.5 py-2 text-sm text-gray-700 font-semibold hover:bg-stone-100 border-stone-300"
+          className="cursor-pointer border rounded-md px-3.5 py-2 text-sm dark:text-white text-gray-700 font-semibold hover:bg-stone-100 border-stone-300"
         >
           Shop now
         </Link>
@@ -53,7 +53,7 @@ const CartView = ({ cart, userId }: CartViewProps) => {
         />
       </div>
 
-      <div className="col-span-1 h-fit rounded shadow-sm bg-white">
+      <div className="col-span-1 h-fit rounded shadow-sm dark:bg-black bg-white">
         <PriceDetails
           currentAddressId={currentAddress?.id}
           userId={userId}
