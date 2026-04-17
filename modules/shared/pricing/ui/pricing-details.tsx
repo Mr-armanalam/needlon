@@ -11,7 +11,7 @@ const PricingDetails = () => {
         {priceCategoryData.map((name, n) => (
           <div key={n}>
             <h2
-              className="text-[#1A1D2E] text-3xl md:text-4xl text-center mb-12"
+              className="text-[#1A1D2E] dark:text-gray-400 text-3xl md:text-4xl text-center mb-12"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               {name.itemCategory}

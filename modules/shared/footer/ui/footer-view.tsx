@@ -1,9 +1,8 @@
-import React from "react";
 import { FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
 const FooterView = () => {
   return (
-    <div className="h-full pt-24 grid grid-cols-4 bg-gray-950">
+    <div className="h-full pt-24 grid grid-cols-4 dark:bg-white/2 bg-gray-950">
       <div className="col-span-2 ml-20">
         <h1 className="text-6xl font-bold text-zinc-50">THANK YOU!</h1>
         <p className="text-sm text-zinc-500 ml-3 mt-4">
