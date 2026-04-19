@@ -76,6 +76,7 @@ const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
                       fill
                       src={item.image}
                       alt="offer item"
+                      priority
                     />
                   </div>
                 </CardContent>

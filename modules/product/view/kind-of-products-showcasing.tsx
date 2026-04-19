@@ -76,7 +76,7 @@ const KindOfProductShowcasing = () => {
     },
   });
 
-  console.log(data, 'data');
+  // console.log(data, 'data');
 
   return ( data &&
     <div className="px-6 py-8">

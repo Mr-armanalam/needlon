@@ -40,11 +40,11 @@ export const authOptions: NextAuthConfig = {
             throw new Error("No user found with this email.");
           }
 
-          console.log(email, password, 'auth-data1');
+          // console.log(email, password, 'auth-data1');
           
 
           const isPasswordValid = await bcryptCompare(password, user.password!);
-          console.log(isPasswordValid, 'auth-data2');
+          // console.log(isPasswordValid, 'auth-data2');
           
 
           if (!isPasswordValid) throw new Error("Invalid password.");
