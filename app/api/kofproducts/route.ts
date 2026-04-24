@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     const session = await auth();
     const userId = session?.user.id;
 
-    // 1. EXTRACT DYNAMIC PARAMS
+    //  EXTRACT DYNAMIC PARAMS
     const filterType = searchParams.get("filterType"); // e.g., 'item-for-men', 'priumproduct'
     const sort = searchParams.get("sort") || "featured";
 
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
     let productTagDes = { descriptiveContent: "", contentTag: "" };
 
     // ------------------------------------------------------------------
-    // 2. CORE LOGIC: DETERMINING THE DATA SOURCE
+    //  DETERMINING THE DATA SOURCE
     // ------------------------------------------------------------------
 
     if (filterType === "recom-product" || filterType === "you-may-like") {

@@ -28,7 +28,7 @@ export async function GET(req: Request) {
         sql`${clientInput} ILIKE '%' || ${productCategory.category} || '%'`,
       );
 
-    const cat_id = categoryId.categoryId;
+    const cat_id = categoryId?.categoryId ?? null;
 
     if (!cat_id) {
       return NextResponse.json(

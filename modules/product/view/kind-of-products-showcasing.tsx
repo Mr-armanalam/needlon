@@ -12,11 +12,14 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
 const KindOfProductShowcasing = () => {
+  
   const { categories } = useParams<{
     categories: string;
   }>();
 
   const searchParams = useSearchParams();
+  console.log(categories,'vas');
+  
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [open, setOpen] = useState(false);
@@ -39,7 +42,7 @@ const KindOfProductShowcasing = () => {
   const material = searchParams.get("material");
 
   /* ------------------------------------------------------------------
-     1. DYNAMIC PARAMETER COLLECTION
+      DYNAMIC PARAMETER COLLECTION
      This logic collects EVERYTHING in the URL bar and maps it to your 
      API requirements without hardcoding specific keys like 'color'.
   ------------------------------------------------------------------ */
@@ -76,7 +79,7 @@ const KindOfProductShowcasing = () => {
     },
   });
 
-  // console.log(data, 'data');
+  console.log(data, 'data');
 
   return ( data &&
     <div className="px-6 py-8">
@@ -85,6 +88,7 @@ const KindOfProductShowcasing = () => {
         sort={sort}
         category={categories}
         setFilterOpen={setFilterOpen}
+        isFilterHide={true}
       />
 
       {data?.productData?.length != 0 && (
@@ -95,12 +99,6 @@ const KindOfProductShowcasing = () => {
       )}
 
       {open && <CheckoutPrompt setOpen={setOpen} />}
-
-      {/*<FilterDrawer
-        isOpen={filterOpen}
-        category={category}
-        onClose={() => setFilterOpen(false)} 
-      /> */}
 
     </div>
   );

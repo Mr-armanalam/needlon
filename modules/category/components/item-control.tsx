@@ -14,9 +14,10 @@ type param = {
   sort: string;
   category: string;
   setFilterOpen: (data: boolean) => void;
+  isFilterHide?: boolean;
 };
 
-const ItemControl = ({ sort, category, setFilterOpen }: param) => {
+const ItemControl = ({ sort, category, setFilterOpen, isFilterHide }: param) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -107,13 +108,13 @@ const ItemControl = ({ sort, category, setFilterOpen }: param) => {
         </Select>
 
         {/* Filter Button */}
-        <Button
+        {!isFilterHide && <Button
           variant={"secondary"}
           onClick={() => setFilterOpen(true)}
           className="border bg-transparent min-h-10 shadow-none dark:border-gray-400 dark:text-gray-300 border-stone-300 px-4 py-2 rounded-xs text-sm"
         >
           Filter
-        </Button>
+        </Button>}
       </div>
     </div>
   );
