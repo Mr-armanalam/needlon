@@ -1,38 +1,42 @@
 "use client";
-import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { ClientProductItem, Product } from "@/types/product";
+import {
+  BestSellerResponse,
+  Product,
+} from "@/types/product";
 import Heading from "@/modules/category/section/heading";
 import HomePremRecomLike from "@/modules/home/ui/home-prem-recom-like";
+import { useQuery } from "@tanstack/react-query";
 
 const NewItemView = ({
-  premiumItems,
+  newSectionProducts,
 }: {
-  premiumItems: ClientProductItem[];
+  newSectionProducts: BestSellerResponse[];
 }) => {
   const { type } = useParams<{ type: string }>();
-  const [products, setProducts] = useState<Product>({
-    productData: [],
-    productTagDes: {
-      descriptiveContent: "",
-      contentTag: "",
+
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["get-new-products"],
+    queryFn: async (): Promise<Product> => {
+      const res = await fetch(`/api/new-products?category=${type}`, {
+        cache: "no-store",
+      });
+      return res.json();
     },
   });
 
-  const productData = useCallback(async () => {
-    await fetch(`/api/new-products?category=${type}`, { cache: "no-store" })
-      .then(async (res) => await res.json())
-      .then(setProducts);
-  }, [type]);
+   const grouped = newSectionProducts.reduce((acc, item) => {
+    const key = `${item.Category.categoryType}-${item.Category.categoryName}`.toLowerCase();
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(item.product);
+    return acc;
+  }, {} as Record<string, any[]>);
 
-  useEffect(() => {
-    productData();
-  }, [productData]);
 
   return (
     <>
       <div className="px-8 py-6">
-        <Heading productTagDes={products.productTagDes} />
+        <Heading productTagDes={products?.productTagDes!} />
       </div>
       <div className="bg-stone-100 dark:bg-white/2 flex flex-col gap-y-2 p-2">
         <div className="h-50 px-6 py-12 ">
@@ -42,16 +46,42 @@ const NewItemView = ({
             </h1>
           </div>
         </div>
-        <HomePremRecomLike navigateTo={`/product/new-in`} items={premiumItems} heading={"Men's formalwear"} />
-        <HomePremRecomLike navigateTo={`/product/new-in`} items={premiumItems} heading={"Men's Outerwear"} />
-        <HomePremRecomLike navigateTo={`/product/new-in`}
-          items={premiumItems}
-          heading={"Women's Formalwear"}
-        />
-        <HomePremRecomLike navigateTo={`/product/new-in`} items={premiumItems} heading={"Women's Outerwear"} />
+
+        {grouped["men-formal"] && (
+          <HomePremRecomLike
+            heading="Men's Formalwear"
+            items={grouped["men-formal"]}
+            navigateTo="/product/new-in"
+          />
+        )}
+
+        {grouped["men-outerwears"] && (
+          <HomePremRecomLike
+            heading="Men's Outerwear"
+            items={grouped["men-outerwears"]}
+            navigateTo="/product/new-in"
+          />
+        )}
+
+        {grouped["women-formal"] && (
+          <HomePremRecomLike
+            heading="Women's Formalwear"
+            items={grouped["women-formal"]}
+            navigateTo="/product/new-in"
+          />
+        )}
+        {grouped["women-outerwears"] && (
+          <HomePremRecomLike
+            heading="Women's Outerwear"
+            items={grouped["women-outerwears"]}
+            navigateTo="/product/new-in"
+          />
+        )}
       </div>
     </>
   );
 };
 
 export default NewItemView;
+
+

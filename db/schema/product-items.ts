@@ -11,6 +11,7 @@ import {
 import { relations } from "drizzle-orm";
 import { productCategory } from "./product-category";
 import { productFilterOptions } from "./product-filter-options";
+import { usersTable } from "./users";
 
 export const productItems = pgTable("product_items", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -34,6 +35,9 @@ export const productItems = pgTable("product_items", {
   averageRating: numeric("average_rating", { precision: 3, scale: 2 })
     .default("0.00")
     .notNull(),
+  
+  seller: uuid('seller').references(() => usersTable.id, {onDelete: 'cascade'}),
+  salesCount: integer("sales_count").default(0).notNull(),
 
   reviewCount: integer("review_count").default(0).notNull(),
   isPremium: boolean("is_premium").default(false).notNull(),

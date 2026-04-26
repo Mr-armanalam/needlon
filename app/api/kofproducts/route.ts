@@ -98,7 +98,7 @@ export async function GET(req: NextRequest) {
       };
     }
 
-    // 3. DATA TRANSFORMATION (Standardized Output)
+    // DATA TRANSFORMATION (Standardized Output)
     const productData = results.map((r) => ({
       id: r.product.id,
       name: r.product.name,

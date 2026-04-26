@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 
 const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:ClientProductItem[], navigateTo: string}) => {
   const router = useRouter();
+  // console.log(items, 'item');
+  
   return (
     <div className="bg-white dark:bg-black">
       <h1 className="pt-8 pl-8 text-3xl font-semibold font-garamond text-gray-950 dark:text-white">

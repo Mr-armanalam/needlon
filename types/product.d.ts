@@ -38,6 +38,34 @@ export interface ClientProductItem {
   seasonType?: string;
 }
 
+export interface BestSellerResponse {
+  product: {
+    id: string;
+    categoryId: string;
+    name: string;
+    tagName: string;
+    mrp_price: number;
+    price: number;
+    image: string;
+    modalImage: string[]; // Adjust type if it's an object array
+    sizes: string[];      // Adjust type if it's an object array
+    quantity: number;
+    averageRating: string;
+    seller: string | null;
+    salesCount: number;
+    reviewCount: number;
+    isPremium: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+  totalSales: string; // Aggregate counts often return as strings
+  Category: {
+    categoryName: string;
+    categoryType: string;
+  };
+}
+
+
 export interface OrderItemProp {
   orderDate: Date;
   orderId: string;

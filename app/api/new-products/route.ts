@@ -10,14 +10,25 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
   const categoryParam = searchParams.get("category"); 
-  const sort = searchParams.get("sort") || "featured";
+  // const sort = searchParams.get("sort") || "featured";
 
   const catslug = categoryParam?.toLowerCase() || "";
 
+  if (!catslug) {
+    return NextResponse.json({
+      productData: [],
+
+      productTagDes: {
+        descriptiveContent: "No products found for this category.",
+        contentTag: "cleanSubcat",
+      },
+    });
+  }
+
   try {
     let orderBy = desc(productItems.createdAt);
-    if (sort === "priceHigh") orderBy = desc(productItems.price);
-    else if (sort === "priceLow") orderBy = asc(productItems.price);
+    // if (sort === "priceHigh") orderBy = desc(productItems.price);
+    // else if (sort === "priceLow") orderBy = asc(productItems.price);
 
     const results = await db
       .select({
@@ -37,6 +48,9 @@ export async function GET(req: NextRequest) {
         )
       )
       .orderBy(orderBy);
+
+      console.log(results, 'resulrs new-p');
+      
 
     if (results.length === 0) {
       return NextResponse.json({
