@@ -1,9 +1,10 @@
 import NewItemView from "@/modules/new-in/view/new-item-view";
-import { getProductByType } from "@/modules/shared/product-items/server/get-product-by-type";
+import { getNewSectionProduct } from "@/modules/shared/product-items/server/get-new-section-products";
 
 const page = async() => {
-  const premiumItems = (await getProductByType({ type: "premium" })) || [];
-  return <NewItemView premiumItems={premiumItems} />;
+  const newSectionProducts = (await getNewSectionProduct({ type: "best-sellers" })) || [];
+  
+  return <NewItemView newSectionProducts={newSectionProducts} />;
 };
 
 export default page;
