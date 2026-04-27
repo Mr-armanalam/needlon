@@ -44,27 +44,26 @@ export interface BestSellerResponse {
     categoryId: string;
     name: string;
     tagName: string;
-    mrp_price: number;
+    mrp_price: number | null;
     price: number;
-    image: string;
-    modalImage: string[]; // Adjust type if it's an object array
-    sizes: string[];      // Adjust type if it's an object array
+    image: string | null;
+    modalImage: string[] | null;
+    sizes?: string[] | null;
     quantity: number;
     averageRating: string;
     seller: string | null;
     salesCount: number;
     reviewCount: number;
     isPremium: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Date | null;
+    updatedAt: Date | null;
   };
-  totalSales: string; // Aggregate counts often return as strings
+  totalSales?: string; // Aggregate counts often return as strings
   Category: {
     categoryName: string;
     categoryType: string;
-  };
+  } | null;
 }
-
 
 export interface OrderItemProp {
   orderDate: Date;

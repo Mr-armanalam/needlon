@@ -26,12 +26,14 @@ const NewItemView = ({
   });
 
    const grouped = newSectionProducts.reduce((acc, item) => {
-    const key = `${item.Category.categoryType}-${item.Category.categoryName}`.toLowerCase();
+    const key = `${item?.Category?.categoryType!}-${item?.Category?.categoryName!}`.toLowerCase();
     if (!acc[key]) acc[key] = [];
     acc[key].push(item.product);
     return acc;
   }, {} as Record<string, any[]>);
 
+  console.log(newSectionProducts);
+  
 
   return (
     <>
