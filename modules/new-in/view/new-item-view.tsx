@@ -31,8 +31,6 @@ const NewItemView = ({
     acc[key].push(item.product);
     return acc;
   }, {} as Record<string, any[]>);
-
-  console.log(newSectionProducts);
   
 
   return (
@@ -53,7 +51,7 @@ const NewItemView = ({
           <HomePremRecomLike
             heading="Men's Formalwear"
             items={grouped["men-formal"]}
-            navigateTo="/product/new-in"
+            navigateTo="/new-in"
           />
         )}
 
@@ -61,7 +59,7 @@ const NewItemView = ({
           <HomePremRecomLike
             heading="Men's Outerwear"
             items={grouped["men-outerwears"]}
-            navigateTo="/product/new-in"
+            navigateTo="/new-in"
           />
         )}
 
@@ -69,14 +67,14 @@ const NewItemView = ({
           <HomePremRecomLike
             heading="Women's Formalwear"
             items={grouped["women-formal"]}
-            navigateTo="/product/new-in"
+            navigateTo="/new-in"
           />
         )}
         {grouped["women-outerwears"] && (
           <HomePremRecomLike
             heading="Women's Outerwear"
             items={grouped["women-outerwears"]}
-            navigateTo="/product/new-in"
+            navigateTo="/new-in"
           />
         )}
       </div>

@@ -47,10 +47,7 @@ export async function GET(req: NextRequest) {
             : undefined,
         )
       )
-      .orderBy(orderBy);
-
-      console.log(results, 'resulrs new-p');
-      
+      .orderBy(orderBy);      
 
     if (results.length === 0) {
       return NextResponse.json({

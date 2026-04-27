@@ -16,7 +16,6 @@ const categoryMap: Record<string, string> = {
   "items-for-men": "men",
   "items-for-women": "women",
   "kids-wear": "kids",
-  // add more as business grows
 };
 
 export async function GET(req: NextRequest) {
@@ -27,7 +26,7 @@ export async function GET(req: NextRequest) {
 
     //  EXTRACT DYNAMIC PARAMS
     const filterType = searchParams.get("filterType"); // e.g., 'item-for-men', 'priumproduct'
-    const sort = searchParams.get("sort") || "featured";
+    // const sort = searchParams.get("sort") || "featured";
 
     const dynamicFilters: Record<string, string> = {};
     searchParams.forEach((value, key) => {
@@ -54,7 +53,12 @@ export async function GET(req: NextRequest) {
           eq(productItems.categoryId, productCategory.id),
         )
         .where(eq(productItems.isPremium, true));
-    } else if (filterType === "season-product") {
+    } else if (filterType === "new-in"){
+      // NEW IN LOGIC
+      results = await getNewArrivalsWithCategory();
+    }
+    
+    else if (filterType === "season-product") {
       // SEASON LOGIC
       const seasonProductData = await getSeasonProduct({
         seasonType: "winter",
@@ -174,7 +178,6 @@ async function applyAttributeFilters(
   baseQuery: any,
   filters: Record<string, string>,
 ) {
-  // Logic to join productFilterOptions dynamically
   // This allows filtering by 'season', 'material', etc., stored in the options table
   let query = baseQuery;
   for (const [key, value] of Object.entries(filters)) {
