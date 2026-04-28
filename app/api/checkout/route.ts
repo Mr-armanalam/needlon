@@ -5,51 +5,12 @@ import { db } from "@/db";
 import { orders } from "@/db/schema/orders";
 import { orderItems } from "@/db/schema/order-items";
 import { eq, sql } from "drizzle-orm";
+import { recalcAndStoreOrderTotal } from "@/modules/checkout/utils/recal-storeOrder";
+import { createStripeCoupon } from "@/modules/checkout/services/create-strip-coupon";
+import { mapCartToLineItems } from "@/modules/checkout/services/map-cart-to-line-items";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-async function computeOrderSums(orderId: string) {
-  const [result] = await db.execute(
-    sql`
-      SELECT
-        COALESCE(SUM(price_at_purchase * quantity), 0) AS items_total,
-        COALESCE(SUM(COALESCE(shipping_charge, 0)), 0) AS shipping_total
-      FROM order_items
-      WHERE order_id = ${orderId}
-    `
-  );
-
-  return {
-    itemsTotal: Number(result?.items_total || 0),
-    shippingTotal: Number(result?.shipping_total || 0),
-  };
-}
-
-async function recalcAndStoreOrderTotal(orderId: string, podCharge = 0, discountAmountRupees = 0, percentDiscount?: number) {
-  const { itemsTotal, shippingTotal } = await computeOrderSums(orderId);
-
-  const subtotal = itemsTotal + shippingTotal + Number(podCharge || 0);
-
-  let discountApplied = 0;
-  if (typeof percentDiscount === "number" && !Number.isNaN(percentDiscount) && percentDiscount > 0) {
-    discountApplied = Math.round((subtotal * percentDiscount) / 100);
-  } else if (discountAmountRupees && discountAmountRupees > 0) {
-    discountApplied = Math.round(Number(discountAmountRupees));
-  }
-
-  const total = Math.max(0, Math.round(subtotal - discountApplied));
-
-  await db
-    .update(orders)
-    .set({
-      total,
-      pod_charge: podCharge,
-      coupon_discount: discountApplied,
-    })
-    .where(eq(orders.id, orderId));
-
-  return { itemsTotal, shippingTotal, subtotal, discountApplied, total };
-}
 
 export async function POST(req: Request) {
   try {
@@ -104,64 +65,9 @@ export async function POST(req: Request) {
     
     const { itemsTotal, shippingTotal, subtotal, discountApplied, total } =
       await recalcAndStoreOrderTotal(order.id, podChargeForOrder, discountAmount ?? 0, percentDiscount);
-
-   
-    let stripeCouponId: string | undefined = undefined;
-    if (typeof percentDiscount === "number" && percentDiscount > 0) {
-      const coupon = await stripe.coupons.create({
-        percent_off: percentDiscount,
-        duration: "once",
-      });
-      stripeCouponId = coupon.id;
-    } else if (discountAmount && discountAmount > 0) {
-      const coupon = await stripe.coupons.create({
-        amount_off: Math.round(discountAmount * 100), // rupees -> paise
-        currency: "INR",
-        duration: "once",
-      });
-      stripeCouponId = coupon.id;
-    }
-    
   
-    const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
-
-  
-    for (const item of cartItems) {
-      line_items.push({
-        price_data: {
-          currency: "INR",
-          product_data: { name: item.name, images: item.image ? [item.image] : [] },
-          unit_amount: Math.round(item.price * 100), // rupees -> paise
-        },
-        quantity: item.quantity || 1,
-      });
-
-      
-      const shippingChargeForItem = Math.round(Number(item.shippingCharge || 0));
-      if (shippingChargeForItem > 0) {
-        line_items.push({
-          price_data: {
-            currency: "INR",
-            product_data: { name: `${item.name} - Shipping` },
-            unit_amount: shippingChargeForItem * 100,
-          },
-          quantity: 1,
-        });
-      }
-    }
-    
-    
-    if (podChargeForOrder > 0) {
-      line_items.push({
-        price_data: {
-          currency: "INR",
-          product_data: { name: "POD (Pay on Delivery) Charge" },
-          unit_amount: Math.round(podChargeForOrder * 100),
-        },
-        quantity: 1,
-      });
-    }
-
+    const stripeCouponId = await createStripeCoupon(percentDiscount, discountAmount);
+    const line_items = mapCartToLineItems(cartItems, podChargeForOrder);
     
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -174,7 +80,6 @@ export async function POST(req: Request) {
         orderId: String(order.id),
         userId: String(userId),
         couponId: couponId || "",
-        // store server-verified totals for cross-checks
         verified_items_total: String(itemsTotal),
         verified_shipping_total: String(shippingTotal),
         verified_pod_charge: String(podChargeForOrder),
