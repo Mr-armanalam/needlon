@@ -2,92 +2,47 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { orderItems } from "@/db/schema/order-items";
 import { orders } from "@/db/schema/orders";
-import { productItems } from "@/db/schema/product-items";
 import { productReview } from "@/db/schema/product-review";
-import { eq, sql } from "drizzle-orm";
+import { ReviewService } from "@/modules/orders/services/review-services";
+import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
+
 
 export const POST = async (req: NextRequest) => {
   try {
     const { orderItemId, productId, comment, rating } = await req.json();
-
-    if (!orderItemId || !productId || !rating) {
-      return NextResponse.json(
-        { error: "Unauthorized access" },
-        { status: 401 },
-      );
-    }
-
     const session = await auth();
 
-    if (!session?.user?.id) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    //  Guard: Authentication & Payload
+    if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!orderItemId || !productId || !rating) return NextResponse.json({ error: "Missing fields" }, { status: 400 });
 
-    const [checkValidOrder] = await db
-      .select({
-        rating: orderItems.rating,
-        paymentStatus: orders.status,
-      })
+    // Guard: Business Logic (Check if user is allowed to rate)
+    const [validOrder] = await db
+      .select({ rating: orderItems.rating, status: orders.status })
       .from(orderItems)
       .innerJoin(orders, eq(orderItems.orderId, orders.id))
-      .where(eq(orderItems.id, orderItemId));
+      .where(and(eq(orderItems.id, orderItemId), eq(orders.userId, session.user.id)));
 
-    if (
-      checkValidOrder.paymentStatus === "paid" &&
-      checkValidOrder.rating === null
-    ) {
-      const [createRating] = await db
-        .insert(productReview)
-        .values({
-          productId: productId,
-          userId: session.user.id,
-          userName: session.user.name ?? "",
-          rating,
-          comment,
-        })
-        .returning();
-
-      const [updateOrderItem] = await db
-        .update(orderItems)
-        .set({
-          rating: createRating.id,
-        })
-        .where(eq(orderItems.id, orderItemId))
-        .returning();
-
-      if (!updateOrderItem)
-        return NextResponse.json(
-          { error: "Failed to update order rating" },
-          { status: 500 },
-        );
-
-      const [updateProductItem] = await db
-        .update(productItems)
-        .set({
-          reviewCount: sql`${productItems.reviewCount} + 1`,
-          averageRating: sql`(${productItems.averageRating} * ${productItems.reviewCount} + ${rating}) / (${productItems.reviewCount} + 1)`,
-        })
-        .where(eq(productItems.id, productId))
-        .returning();
-
-      if (!updateProductItem)
-        return NextResponse.json(
-          { error: "Failed to update ProductItem review" },
-          { status: 500 },
-        );
-
-      return NextResponse.json(
-        { review: createRating, orderItemId },
-        { status: 200 },
-      );
+    if (!validOrder || validOrder.status !== "paid" || validOrder.rating !== null) {
+      return NextResponse.json({ error: "Action not permitted" }, { status: 403 });
     }
+
+    //  Execute Transaction via Service
+    const review = await ReviewService.createReview({
+      orderItemId,
+      productId,
+      userId: session.user.id,
+      userName: session.user.name ?? "Anonymous",
+      rating,
+      comment
+    });
+
+    return NextResponse.json({ review, orderItemId }, { status: 200 });
+
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { error: "something went wrong" },
-      { status: 500 },
-    );
+    console.error("REVIEW_POST_ERROR:", error);
+    return NextResponse.json({ error: "Failed to submit review" }, { status: 500 });
   }
 };
 
@@ -123,12 +78,3 @@ export async function GET() {
     );
   }
 }
-
-/*
-
-New average = ((current avg x current count) + new rating)/(current count + 1)
-
-
-
-
-*/

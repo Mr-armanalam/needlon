@@ -1,76 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { orders } from "@/db/schema/orders";
-import { orderItems } from "@/db/schema/order-items";
-import { productItems } from "@/db/schema/product-items";
-import { and, eq, ilike, sql } from "drizzle-orm";
-import { db } from "@/db";
+import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { GroupedOrder } from "@/types/order";
+import { OrderService } from "@/modules/orders/services/orderServices";
+import { groupOrderItems } from "@/modules/orders/services/orderTransformer";
+
 
 export async function GET(req: Request) {
   try {
+    //  Auth Check
     const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-    if (!session?.user?.id) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = session.user.id;
+    // Param Extraction
     const { searchParams } = new URL(req.url);
     const search = searchParams.get("search") ?? "";
 
-    // Filter orders only for the logged-in user
-    const data = await db
-      .select({
-        orderId: orders.id,
-        createdAt: orders.createdAt,
-        status: orders.status,
-        total: orders.total,
-        currency: orders.currency,
-        paymentId: orders.paymentId,
-        productName: productItems.name,
-        image: productItems.image,
-        price: orderItems.priceAtPurchase,
-        properties: orderItems.properties,
-      })
-      .from(orders)
-      .innerJoin(orderItems, eq(orders.id, orderItems.orderId))
-      .innerJoin(productItems, eq(orderItems.productId, productItems.id))
-      .where(
-        and(
-          eq(orders.userId, userId),
-          search ? ilike(productItems.name, `%${search}%`) : sql`TRUE`
-        )
-      )
-      .orderBy(orders.createdAt);
+    // Fetch & Transform
+    const rawOrders = await OrderService.getRawUserOrders(userId, search);
+    const groupedOrders = groupOrderItems(rawOrders);
 
-    const grouped = Object.values(
-      data.reduce((acc, row) => {
-        if (!acc[row.orderId]) {
-          acc[row.orderId] = {
-            orderId: row.orderId,
-            createdAt: row.createdAt,
-            status: row.status,
-            total: row.total,
-            currency: row.currency,
-            paymentId: row.paymentId,
-            items: [],
-          };
-        }
+    return NextResponse.json(groupedOrders, { status: 200 });
 
-        acc[row.orderId].items.push({
-          productName: row.productName,
-          image: row.image,
-          price: row.price,
-          properties: row.properties,
-        });
-
-        return acc;
-      }, {} as Record<string, GroupedOrder>)
-    );
-    return Response.json(grouped, { status: 200 });
   } catch (error) {
-    console.log(error);
-    return Response.json("Something Went Wrong", { status: 500 });
+    console.error("ORDER_GET_ERROR:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

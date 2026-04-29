@@ -1,10 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getCategoryFilters, getCategoryIdByName } from "@/modules/category/services/filterServices";
 import { NextResponse } from "next/server";
-import { db } from "@/db";
-import { filterOptions } from "@/db/schema/filter-options";
-import { eq, asc, inArray, sql } from "drizzle-orm";
-import { filterGroups } from "@/db/schema/filter-group";
-import { productCategory } from "@/db/schema/product-category";
 
 export async function GET(req: Request) {
   try {
@@ -12,90 +7,22 @@ export async function GET(req: Request) {
     const category = searchParams.get("category");
 
     if (!category) {
-      return NextResponse.json(
-        { message: "category is required" },
-        { status: 400 },
-      );
+      return NextResponse.json({ message: "Category is required" }, { status: 400 });
     }
 
-    const clientInput = category.toLowerCase();
-
-    const [categoryId] = await db
-      .select({ categoryId: productCategory.id })
-      .from(productCategory)
-      // Use sql template to check if the input contains the column value
-      .where(
-        sql`${clientInput} ILIKE '%' || ${productCategory.category} || '%'`,
-      );
-
-    const cat_id = categoryId?.categoryId ?? null;
-
-    if (!cat_id) {
-      return NextResponse.json(
-        { message: "something is wrong" },
-        { status: 501 },
-      );
+    // 1. Get Category ID
+    const catId = await getCategoryIdByName(category);
+    if (!catId) {
+      return NextResponse.json({ message: "Category not found" }, { status: 404 });
     }
 
-    // Fetch filter groups for category
-    const groups = await db
-      .select()
-      .from(filterGroups)
-      .where(eq(filterGroups.categoryId, cat_id))
-      .orderBy(asc(filterGroups.sortOrder));
+    // 2. Fetch and Format Filters
+    const filters = await getCategoryFilters(catId);
 
-    if (!groups.length) {
-      return NextResponse.json({
-        filters: [],
-      });
-    }
+    return NextResponse.json({ filters }, { status: 200 });
 
-    // Fetch filter options for those groups
-    const groupIds = groups.map((g) => g.id);
-    const allOptions = await db
-      .select()
-      .from(filterOptions)
-      .where(inArray(filterOptions.filterGroupId, groupIds))
-      .orderBy(asc(filterOptions.sortOrder));
-
-    // Map options under groups
-    const optionsByGroup = allOptions.reduce<Record<string, any[]>>(
-      (acc, opt) => {
-        acc[opt.filterGroupId] ??= [];
-        acc[opt.filterGroupId].push({
-          id: opt.id,
-          label: opt.value,
-          slug: opt.slug,
-        });
-        return acc;
-      },
-      {},
-    );
-
-    // Build response
-    const filters = groups.map((group) => ({
-      id: group.id,
-      name: group.name,
-      slug: group.slug,
-      options: optionsByGroup[group.id] ?? [],
-    }));
-
-    return NextResponse.json(
-      {
-        filters,
-      },
-      { status: 200 },
-    );
   } catch (error) {
-    console.error("FILTER API ERROR:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 },
-    );
+    console.error("FILTER_API_ERROR:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
-
-// const [{ categoryId }] = await db
-//   .select({ categoryId: productCategory.id })
-//   .from(productCategory)
-//   .where(eq(productCategory.category, category.toLowerCase()));
