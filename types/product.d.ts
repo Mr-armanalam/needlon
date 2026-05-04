@@ -148,3 +148,45 @@ interface individualProduct {
   } | null;
   productFilterData: { [x: string]: string }[];
 }
+
+
+export interface ProductAttributeMap {
+  Color?: string;
+  SIZE?: string;
+  Collar?: string;
+  'Sleeve length'?: string;
+  collection?: string;
+  [key: string]: string | undefined;
+}
+
+export interface DetailedCategory {
+  id: string;
+  category: string;
+  CatType: string;
+  SubCatType: string;
+  contentTag: string;
+  descriptiveContent: string;
+  createdAt: string; // ISO Date string from JSON
+}
+
+export interface DetailedProductResponse {
+  id: string;
+  categoryId: string;
+  name: string;
+  tagName: string;
+  mrp_price: number;
+  price: number;
+  image: string;
+  modalImage: string[];
+  sizes: string[];
+  quantity: number;
+  averageRating: string;
+  seller: string | null;
+  salesCount: number;
+  reviewCount: number;
+  isPremium: boolean;
+  createdAt: string; // ISO Date string
+  updatedAt: string; // ISO Date string
+  category: DetailedCategory;
+  attributes: ProductAttributeMap;
+}

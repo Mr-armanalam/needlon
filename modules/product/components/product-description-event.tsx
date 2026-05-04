@@ -1,17 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { addToCart, fetchCart } from "@/features/cart-slice";
 import { useAppSelector } from "@/store/store";
-import { ProductData } from "@/types/product";
-import React from "react";
+import { DetailedProductResponse } from "@/types/product";
 
-const ProductDescriptionEvent = ({dispatch, userId, productItem}:{dispatch: any, userId?: string, productItem: ProductData}) => {
+
+const ProductDescriptionEvent = ({dispatch, userId, productItem}:{dispatch: any, userId?: string, productItem: DetailedProductResponse}) => {
     const { cart } = useAppSelector((state) => state.cart);
 
-   const handleAddToCart = (product: ProductData, size: string) => {
+   const handleAddToCart = (product: DetailedProductResponse, size: string) => {
     dispatch(
       addToCart({
         userId,
-        product: { ...product, size, quantity: 1 },
+        product: { ...product, size, quantity: 1, updatedAt: new Date(product.updatedAt) },
         size,
       }),
     );

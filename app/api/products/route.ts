@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 import { NextRequest, NextResponse } from "next/server";
-import { eq, asc, desc, or, ilike, SQL, and, sql } from "drizzle-orm";
+import { ilike, and } from "drizzle-orm";
 import { productItems } from "@/db/schema/product-items";
 import { db } from "@/db";
 import { createClient } from "@supabase/supabase-js";
 import { productCategory } from "@/db/schema/product-category";
+import { ProductService } from "@/modules/product/services/product-services";
 
 
 const supabase = createClient(
@@ -13,76 +14,33 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_API_KEY!
 );
 
+
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-
-  const categoryParam = searchParams.get("category"); //  "items-for-men"
-  const subcategoryParam = searchParams.get("subcategory"); 
-  const sort = searchParams.get("sort") || "featured";
-  
-
-  const subcatSlug = subcategoryParam?.toLowerCase() || "";
-  const cleanCatType = categoryParam?.split("-").pop()?.toLowerCase();
-
   try {
-    let orderBy = desc(productItems.createdAt);
-    if (sort === "priceHigh") orderBy = desc(productItems.price);
-    else if (sort === "priceLow") orderBy = asc(productItems.price);
+    const { searchParams } = new URL(req.url);
+    const sort = searchParams.get("sort") || "featured";
+    const subcatSlug = searchParams.get("subcategory")?.toLowerCase();
+    
+    // Logic: items-for-men -> men
+    const categoryParam = searchParams.get("category");
+    const cleanCatType = categoryParam?.split("-").pop()?.toLowerCase();
 
-    const results = await db
-      .select({
-        product: productItems,
-        category: productCategory,
-      })
-      .from(productItems)
-      .innerJoin(
-        productCategory,
-        eq(productItems.categoryId, productCategory.id)
-      )
-      .where(
-        and(
-          cleanCatType
-            ? ilike(productCategory.CatType, cleanCatType)
-            : undefined,
-
-          subcatSlug
-            ? or(
-                sql`lower(${subcatSlug}) LIKE '%' || lower(${productCategory.SubCatType}) || '%'`,
-                sql`lower(${subcatSlug}) LIKE '%' || lower(${productCategory.category}) || '%'`,
-                ...(subcatSlug
-                  .split("-")
-                  .map((word) =>
-                    word.length > 3
-                      ? or(
-                          ilike(productCategory.SubCatType, `%${word}%`),
-                          ilike(productCategory.category, `%${word}%`)
-                        )
-                      : undefined
-                  )
-                  .filter(Boolean) as any)
-              )
-            : undefined
-        )
-      )
-      .orderBy(orderBy);
+    const results = await ProductService.getFilteredProducts(cleanCatType, subcatSlug, sort);
 
     if (results.length === 0) {
       return NextResponse.json({
         productData: [],
-        productTagDes: {
-          descriptiveContent: "No products found for this category.",
-          contentTag: "cleanSubcat",
-        },
+        productTagDes: { descriptiveContent: "No products found.", contentTag: "none" },
       });
     }
 
+    // Transformation Layer
     const productTagDes = {
       descriptiveContent: results[0].category.descriptiveContent || "",
-      contentTag:
-        results[0].category.contentTag || results[0].category.SubCatType || "",
+      contentTag: results[0].category.contentTag || results[0].category.SubCatType || "",
     };
 
-    const productData = results.map((r) => ({
+    const productData = results.map(r => ({
       id: r.product.id,
       name: r.product.name,
       price: Number(r.product.price),
@@ -94,12 +52,10 @@ export async function GET(req: NextRequest) {
     }));
 
     return NextResponse.json({ productData, productTagDes });
+
   } catch (error) {
-    console.error("Database Error:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("PRODUCT_QUERY_ERROR:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
 

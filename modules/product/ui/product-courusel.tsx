@@ -9,17 +9,27 @@ import {
 } from "@/components/ui/carousel";
 import Image from "next/image";
 import ProductDescriptionn from "./product-description";
-import { individualProduct } from "@/types/product";
+import { DetailedProductResponse } from "@/types/product";
 
 const ProductCourusel = ({
   productData: data,
 }: {
-  productData: individualProduct;
+  productData: DetailedProductResponse;
 }) => {
-  const corouselImages = [
-    data.product_items.image,
-    ...(data.product_items.modalImage ?? []),
-  ];
+
+  // const corouselImages = [
+  //   data.product_items.image,
+  //   ...(data.product_items.modalImage ?? []),
+  // ];
+  
+
+  console.log(data, 'cour');
+  
+
+  const mainImage = data?.image;
+  const additionalImages = data?.modalImage ?? [];
+
+  const corouselImages = [mainImage, ...additionalImages].filter(Boolean);
 
   return (
     <Carousel
