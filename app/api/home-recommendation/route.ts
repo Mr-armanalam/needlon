@@ -1,107 +1,42 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
-import { db } from "@/db";
-import { productItems } from "@/db/schema/product-items";
-import { orderItems } from "@/db/schema/order-items";
-import { eq, desc, inArray, sql } from "drizzle-orm";
-import { buildUserPreferenceVector } from "@/lib/recommendation-item";
 import { auth } from "@/auth";
+import * as recoService from "@/modules/home/services/recommendationServices";
+import { buildUserPreferenceVector } from "@/lib/recommendation-item";
 
-// Trending Products
-async function getTrendingProducts() {
-  const res = await db
-    .select({
-      product: productItems,
-      count: sql<number>`COUNT(${orderItems.productId})`,
-    })
-    .from(orderItems)
-    .innerJoin(productItems, eq(orderItems.productId, productItems.id))
-    .groupBy(productItems.id)
-    .orderBy(desc(sql`COUNT(${orderItems.productId})`))
-    .limit(10);
-
-  return res.map((p) => p.product);
-}
-
-// New Arrivals
-async function getNewArrivalProducts() {
-  return await db
-    .select()
-    .from(productItems)
-    .orderBy(desc(productItems.createdAt))
-    .limit(12);
-}
-
-// Top Rated Products
-async function getTopRatedProducts() {
-  return await db
-    .select()
-    .from(productItems)
-    .orderBy(desc(productItems.averageRating))
-    .limit(12);
-}
-
-// MAIN API ROUTE
 export async function GET() {
   try {
     const session = await auth();
     const userId = session?.user.id;
 
-    let recommended: any[] = [];
-    let youMayLike: any[] = [];
-
-    // IF USER IS NOT LOGGED IN return generic data
-
+    // SCENARIO 1: GUEST USER (Execute parallelly)
     if (!userId) {
-      return NextResponse.json({
-        recommended: await getTrendingProducts(),
-        youMayLike: await getNewArrivalProducts(),
-      });
+      const [recommended, youMayLike] = await Promise.all([
+        recoService.getTrendingProducts(),
+        recoService.getNewArrivals(),
+      ]);
+      return NextResponse.json({ recommended, youMayLike });
     }
 
-    // IF USER IS LOGGED IN → Personalized logic
-
+    // SCENARIO 2: LOGGED IN USER
     const prefs = await buildUserPreferenceVector(userId);
+    const hasPrefs = prefs.topCategories.length > 0;
 
-    // Recommended (PERSONALIZED)
-    if (prefs.topCategories.length > 0) {
-      recommended = await db
-        .select()
-        .from(productItems)
-        .where(inArray(productItems.categoryId, prefs.topCategories))
-        .orderBy(desc(productItems.averageRating))
-        .limit(10);
-    }
+    // Fetch data in parallel to save time
+    const [personalizedRecs, personalizedLike, trending, arrivals, topRated] = await Promise.all([
+      hasPrefs ? recoService.fetchProductsByCategory(prefs.topCategories, 10) : Promise.resolve([]),
+      hasPrefs ? recoService.fetchProductsByCategory(prefs.topCategories, 12) : Promise.resolve([]),
+      recoService.getTrendingProducts(),
+      recoService.getNewArrivals(),
+      recoService.getTopRated(),
+    ]);
 
-    // fallback
-    if (recommended.length === 0) {
-      recommended = await getTopRatedProducts();
-    }
+    return NextResponse.json({
+      recommended: personalizedRecs.length > 0 ? personalizedRecs : topRated,
+      youMayLike: personalizedLike.length > 0 ? personalizedLike : arrivals,
+    });
 
-    // You May Like (PERSONALIZED CATEGORY-WEIGHTED)
-    if (prefs.topCategories.length > 0) {
-      youMayLike = await db
-        .select()
-        .from(productItems)
-        .where(inArray(productItems.categoryId, prefs.topCategories))
-        .orderBy(desc(productItems.averageRating))
-        .limit(12);
-    }
-
-    // fallback
-    if (youMayLike.length === 0) {
-      youMayLike = await getNewArrivalProducts();
-    }
-
-    return NextResponse.json(
-      {
-        recommended,
-        youMayLike,
-      },
-      { status: 200 }
-    );
   } catch (error) {
-    console.log(error);
-    return NextResponse.json("Something went wrong", { status: 501 });
+    console.error("RECOMMENDATION_API_ERROR:", error);
+    return NextResponse.json({ error: "Failed to load recommendations" }, { status: 500 });
   }
 }

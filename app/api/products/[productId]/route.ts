@@ -1,67 +1,43 @@
-import { db } from "@/db";
-import { filterGroups } from "@/db/schema/filter-group";
-import { filterOptions } from "@/db/schema/filter-options";
-import { productCategory } from "@/db/schema/product-category";
-import { productFilterOptions } from "@/db/schema/product-filter-options";
-import { productItems } from "@/db/schema/product-items";
-import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
+import { ProductDetailService } from "@/modules/product/services/product-details-services";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
-  req: Request,
-  { params }: { params: Promise<{ productId: string }> },
+  req: NextRequest,
+  { params }: { params: Promise<{ productId: string }> }
 ) => {
   try {
     const { productId } = await params;
+    if (!productId) return NextResponse.json({ error: "Product ID required" }, { status: 400 });
 
-    if (!productId)
+    // Fetch Product
+    const productRecord = await ProductDetailService.getProductBase(productId);
+    
+    // Check existence immediately before proceeding to sub-queries
+    if (!productRecord) {
       return NextResponse.json({ productItem: null }, { status: 404 });
+    }
 
-    const [product] = await db
-      .select()
-      .from(productItems)
-      .where(eq(productItems.id, productId))
-      .leftJoin(
-        productCategory,
-        eq(productCategory.id, productItems.categoryId),
-      );
+    //  Fetch Filters
+    const rawFilters = await ProductDetailService.getProductFilters(productId);
 
-    const filter = await db
-      .select()
-      .from(productFilterOptions)
-      .where(eq(productFilterOptions.productId, product.product_items.id))
-      .innerJoin(
-        filterOptions,
-        eq(filterOptions.id, productFilterOptions.filterOptionId),
-      )
-      .innerJoin(
-        filterGroups,
-        eq(filterGroups.id, filterOptions.filterGroupId),
-      );
+    // Transformation: Convert array of pairs to a single clean object
+    // Result: { "Color": "Red", "Material": "Cotton" }
+    const productFilterData = rawFilters.reduce((acc, curr) => {
+      acc[curr.groupName] = curr.optionValue;
+      return acc;
+    }, {} as Record<string, string>);
 
-    const productFilterData = filter.map((data) => ({
-      [data.filter_groups.name]: data.filter_options.value,
-    }));
+    //  Final Response
+    return NextResponse.json({
+      productItem: {
+        ...productRecord.product_items,
+        category: productRecord.product_category,
+        attributes: productFilterData
+      }
+    }, { status: 200 });
 
-    // const productFilterData = filter.reduce((acc: Record<string, string>, data) => {
-    //   acc[data.filter_groups.name] = data.filter_options.value;
-    //   return acc;
-    // }, {});
-
-    // console.log(productFilterData, 'kjkjk');
-
-    if (!product)
-      return NextResponse.json({ productItem: null }, { status: 500 });
-
-    return NextResponse.json(
-      { productItem: { ...product, productFilterData } },
-      { status: 200 },
-    );
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { message: "Something went wrong" },
-      { status: 500 },
-    );
+    console.error("PRODUCT_DETAIL_ERROR:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 };

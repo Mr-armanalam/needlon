@@ -19,7 +19,7 @@ export async function POST(req: Request) {
 
     const supabase = supabaseServer();
 
-    // --- 1. Upload image to storage ---
+    // ---  Upload image to storage ---
     const fileExt = file.name.split(".").pop();
     const fileName = `${Date.now()}.${fileExt}`;
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
       data: { publicUrl },
     } = supabase.storage.from("hero-images").getPublicUrl(fileName);
 
-    // --- 2. Insert into heroItems table ---
+    // ---  Insert into heroItems table ---
     const { error: insertError } = await supabase.from("heroItems").insert({
       name,
       description,

@@ -1,5 +1,4 @@
 import ProductPage from "@/modules/product/view/product-page";
-import { individualProduct } from "@/types/product";
 import { notFound } from "next/navigation";
 
 const page = async ({ params }: { params: Promise<{ item: string }> }) => {
@@ -13,6 +12,7 @@ const page = async ({ params }: { params: Promise<{ item: string }> }) => {
   if (!productItem) {
     notFound();
   }
+    
 
   return <ProductPage productData={productItem} />;
 };

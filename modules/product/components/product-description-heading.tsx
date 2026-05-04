@@ -1,6 +1,6 @@
 import { toggleGuestWishlist, toggleWishlist } from "@/features/wishlist-slice";
 import { useAppSelector } from "@/store/store";
-import { productDataType } from "@/types/product";
+import { DetailedProductResponse, productDataType } from "@/types/product";
 import { Heart, Share2Icon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -12,7 +12,7 @@ const ProductDescriptionHeading = ({
   SubCatType,
   contentTag,
 }: {
-  productItem: productDataType;
+  productItem: DetailedProductResponse;
   CatType: string;
   SubCatType: string;
   userId?: string;
