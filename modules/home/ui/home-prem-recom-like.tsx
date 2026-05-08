@@ -13,11 +13,11 @@ const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:
   // console.log(items, 'item');
   
   return (
-    <div className="bg-white dark:bg-black">
-      <h1 className="pt-8 pl-8 text-3xl font-semibold font-garamond text-gray-950 dark:text-white">
+    <div className="bg-white px-4 dark:bg-black">
+      <h1 className="pt-6 px-2 text-5xl font-garamond text-gray-950/90 dark:text-white">
         {heading}
       </h1>
-      <div className="flex overflow-auto px-6 gap-x-4 py-8 rounded-sm no-scrollbar relative">
+      <div className="flex overflow-auto px-3 gap-x-4 py-8 rounded-sm no-scrollbar relative">
         {items?.length > 0 && items.map((i, k) => (
           <ProductCardPreview
             key={k}

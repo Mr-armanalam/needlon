@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  fetchWishlist,
+  initializeGuestWishlist,
+  toggleGuestWishlist,
+  toggleWishlist,
+} from "@/features/wishlist-slice";
+import RatingDisplay from "@/modules/shared/rating/ratingDisplay";
 /*
 
  > navigate the listed product to '/product/id'
@@ -8,24 +15,136 @@
 
 */
 
-import RatingDisplay from "@/modules/shared/rating/ratingDisplay";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { ClientProductItem } from "@/types/product";
+import { StarIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ProductCardPreview({
   item,
 }: {
   item: ClientProductItem;
 }) {
+  const { id, name, price, image, modalImage, sizes } = item;
+  const { wishlist, guestWishlist, loading } = useAppSelector(
+    (state) => state.wishlist,
+  );
+
+  const dispatch = useAppDispatch();
   const router = useRouter();
+  const { data: session } = useSession();
+  const userId = session?.user.id;
+
+  const wishlistItems = wishlist.length > 0 ? wishlist : guestWishlist;
+
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, width } = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - left;
+
+    if (x < width / 2) {
+      setHoverSide("left");
+    } else {
+      setHoverSide("right");
+    }
+  };
+
+  const handleToggleWishlist = (
+    productId: string,
+    image: string,
+    price: number,
+    name: string,
+    size?: string,
+  ) => {
+    if (userId) {
+      const exists = wishlist.some(
+        (item) => item.productId === productId && item.size === size,
+      );
+      dispatch(toggleWishlist({ userId, productId, size, exists }));
+    } else {
+      dispatch(
+        toggleGuestWishlist({
+          productId: productId,
+          name,
+          price: Number(price),
+          image: image,
+          size: size,
+        }),
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchWishlist(userId));
+    } else {
+      // Load from localStorage for guests
+      const local = localStorage.getItem("wishlist");
+      if (local) {
+        dispatch(initializeGuestWishlist());
+      }
+    }
+  }, [userId, dispatch]);
 
   return (
-    <div
-      onClick={() => router.push(`/product/${item.id}`)}
-      className="h-fit cursor-pointer transition hover:transition-discrete hover:-translate-1 bg-linear-to-br from-stone-100 to-stone-200 dark:from-black dark:to-white/4 hover:from-stone-100 hover:to-stone-50 min-w-85 rounded-lg p-6 shadow-xl border border-gray-100 dark:border-gray-700 relative overflow-hidden flex flex-col md:flex-row gap-2"
-    >
-      <div className="flex-1 mt-3">
+    <div key={id} className="cursor-pointer">
+      <div
+        onMouseEnter={() => setHoveredId(id)}
+        onMouseLeave={() => {
+          setHoveredId(null);
+          setHoverSide(null);
+        }}
+        onMouseMove={handleMouseMove}
+        className="bg-[#EAEAEA] group relative w-70 "
+      >
+        <div
+          onClick={() => router.push(`/product/${id}`)}
+          className="aspect-11/16 w-full relative "
+        >
+          <Image
+            src={
+              hoveredId
+                ? hoverSide === "left"
+                  ? (modalImage?.[0] ?? image ?? "/placeholder.png")
+                  : (modalImage?.[1] ?? image ?? "/placeholder.png")
+                : (image ?? "/placeholder.png")
+            }
+            alt={name}
+            fill
+            className="object-fill "
+          />
+        </div>
+
+        <button
+          onClick={() =>
+            handleToggleWishlist(id, image!, Number(price), name, sizes?.at(0))
+          }
+          aria-label="Toggle wishlist"
+          className={`hidden group-hover:flex absolute right-6 top-6 text-white rounded-full hover:bg-black p-2 ${
+            wishlistItems?.some((w) => w.productId === id)
+              ? "bg-black"
+              : "bg-zinc-400"
+          }`}
+        >
+          <StarIcon
+            size={16}
+            className={
+              wishlistItems.some((w) => w.productId === id)
+                ? "fill-orange-400 text-orange-400"
+                : ""
+            }
+          />
+        </button>
+      </div>
+<p className="mt-2 px-1 text-xl text-zinc-600 dark:text-gray-100 font-garamond">
+        {name}
+      </p>
+      <div className="flex-1 ml-2 mt-1">
         <div className="text-[10px] text-gray-600">
           <div className="flex gap-x-1 items-center font-semibold">
             <span className="mb-px">{item.averageRating}</span>
@@ -40,43 +159,9 @@ export default function ProductCardPreview({
             {item.reviewCount} reviews
           </div>
         </div>
-
-        <h2 className="mt-1 text-lg line-clamp-2 leading-6 font-garamond font-bold dark:text-gray-400 text-gray-900">
-          {item.name}
-        </h2>
-
-        <p className="mt-1 font-garamond text-xl font-semibold text-gray-900 dark:text-gray-400">
-          {Math.ceil(Number(item.price))}{" "}
-          <span className="text-xl font-semibold">₹</span>
-        </p>
-
-        <p className="mt-1 text-[10px] font-semibold text-gray-500 leading-4">
-          {item.tagName}
-        </p>
-
-        <div className="mt-2 items-center gap-x-2 flex">
-          <div className="flex items-center gap-1">
-            <span className="size-2.5 rounded-full bg-black border border-gray-300" />
-            <span className="size-2.5 rounded-full bg-blue-300 border border-gray-300" />
-          </div>
-          <p className="text-[10px] text-gray-600 font-medium">Black Work</p>
-        </div>
-
-        <p className="text-sm font-semibold text-gray-700">
-          {item.sizes?.toString()}
-        </p>
       </div>
 
-      <div className="flex-1  w-full flex justify-center relative">
-        <div className="relative rounded-2xl border w-35 h-42.5 flex items-center justify-center">
-          <Image
-            fill
-            src={item.image ?? "/images/image6.png"}
-            alt="Denim Jacket"
-            className="object-fill rounded-2xl max-h-full w-full"
-          />
-        </div>
-      </div>
+      
     </div>
   );
 }
