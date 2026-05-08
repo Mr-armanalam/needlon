@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function PremiumItemSkeleton() {
   return (
-    <div className="w-[450px] flex rounded-xl border bg-white shadow-sm p-4 h-fit gap-x-3">
+    <div className="w-112.5 flex rounded-xl border bg-white shadow-sm p-4 h-fit gap-x-3">
       {/* Rating & reviews */}
       <div className="flex gap-y-3 flex-col">
         <div className="flex flex-col gap-1">
