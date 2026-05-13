@@ -53,6 +53,6 @@ export async function getProductByType({
     return data;
   } catch (error) {
     console.error("Error fetching premium products:", error);
-    throw new Error("Could not fetch premium products.");
+    // throw new Error("Could not fetch premium products.");
   }
 }
