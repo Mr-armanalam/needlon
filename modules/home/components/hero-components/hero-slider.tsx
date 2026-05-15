@@ -53,24 +53,24 @@ const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
             stopOnInteraction: false, // autoplay continues after swipe
           }),
         ]}
-        className="min-w-[95vw] bg-linear-to-r from-stone-950 to-stone-800 dark:border dark:from-stone-950/30 dark:to-stone-800/30 rounded-sm flex relative h-100 mt-10 max-w-xs"
+        className="min-w-[95vw] bg-linear-to-r from-stone-950 to-stone-800 dark:border dark:from-stone-950/30 dark:to-stone-800/30 rounded-sm flex relative h-fit xl:h-100 mt-10 max-w-xs"
       >
         <CarouselContent>
           {tailoringServices.map((item, index) => (
-            <CarouselItem className="flex justify-center pr-1" key={index}>
-              <Card className="w-[90vw] rounded-none shadow-none border-none bg-gray-90">
-                <CardContent onClick={() => router.push(`/product/${item.id}`)} className=" flex gap-x-36 aspect-auto text-white w-full items-center px-28 py-6">
+            <CarouselItem className="flex justify-center xl:pr-1" key={index}>
+              <Card className="xl:w-[90vw] max-sm:w-full rounded-none shadow-none border-none bg-gray-90">
+                <CardContent onClick={() => router.push(`/product/${item.id}`)} className=" flex xl:gap-x-36 gap-x-4 aspect-auto text-white w-full items-center xl:px-28 xl:py-6">
                   <div className="flex-1">
-                    <h1 className="text-6xl font-garamond">{item.name}</h1>
-                    <p className="text-sm mt-8 pl-3 text-white/70">
+                    <h1 className="text-6xl max-sm:text-xl font-garamond">{item.name}</h1>
+                    <p className="text-sm mt-4 xl:mt-8 xl:pl-3 max-sm:text-[10px] text-white/70">
                       {item.description}
                     </p>
-                    <div className="mt-8 flex items-center ml-3 px-4 text-xs text-black font-bold rounded-sm py-2.5 w-fit bg-stone-200">
+                    <div className="xl:mt-8 max-sm:hidden flex items-center ml-3 px-4 text-xs text-black font-bold rounded-sm xl:py-2.5 w-fit bg-stone-200">
                       <LucideTag size={16} className="mr-1.5 text-red-700 " />
                       {item?.offer ?? "no offer"}
                     </div>
                   </div>
-                  <div className="w-75 rounded-t-full rounded-b-3xl h-75 flex justify-center relative text-white">
+                  <div className="xl:w-75 max-sm:w-30 rounded-t-full rounded-b-3xl xl:h-75 max-sm:h-40 flex justify-center relative text-white">
                     <Image
                       className="z-50 absolute"
                       fill
@@ -84,8 +84,8 @@ const HeroSlider = ({tailoringServices}:{tailoringServices: heroProps[]}) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="absolute border-none rounded-l-none text-gray-950 bg-zinc-100 rounded-r-sm h-25 left-0 dark:text-white dark:border cursor-pointer" />
-        <CarouselNext className="absolute border-none rounded-r-none text-gray-950 rounded-l-sm bg-zinc-100 h-25 right-0 dark:text-white dark:border cursor-pointer" />
+        <CarouselPrevious className="absolute max-sm:hidden border-none rounded-l-none text-gray-950 bg-zinc-100 rounded-r-sm h-25 left-0 dark:text-white dark:border cursor-pointer" />
+        <CarouselNext className="absolute max-sm:hidden border-none rounded-r-none text-gray-950 rounded-l-sm bg-zinc-100 h-25 right-0 dark:text-white dark:border cursor-pointer" />
       </Carousel>
 
       {/* Dots indicator */}

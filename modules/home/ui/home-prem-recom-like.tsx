@@ -13,11 +13,11 @@ const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:
   // console.log(items, 'item');
   
   return (
-    <div className="bg-white px-4 dark:bg-black">
-      <h1 className="pt-6 px-2 text-5xl font-garamond text-gray-950/90 dark:text-white">
+    <div className="bg-white px-0.5 xl:px-4 dark:bg-black">
+      <h1 className="pt-6 px-2 text-2xl xl:text-5xl font-garamond text-gray-950/90 dark:text-white">
         {heading}
       </h1>
-      <div className="flex overflow-auto px-3 gap-x-4 py-8 rounded-sm no-scrollbar relative">
+      <div className="flex max-sm:flex-wrap overflow-auto px-3 gap-2 xl:gap-x-4 py-8 rounded-sm no-scrollbar relative">
         {items?.length > 0 && items.map((i, k) => (
           <ProductCardPreview
             key={k}
@@ -27,7 +27,7 @@ const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:
         <Button
           type="button"
           onClick={() => router.push(navigateTo) }
-          className="my-auto -right-6 sticky text-2xl px-2.5 rounded-r-none dark:bg-zinc-900/70  dark:border dark:text-white cursor-pointer h-30"
+          className="my-auto -right-6 sticky text-2xl px-2.5 xl:rounded-r-none max-sm:bg-none max-sm:border dark:bg-zinc-900/70  dark:border dark:text-white cursor-pointer max-sm:w-30 xl:w-11 xl:h-30"
         >
           &gt;
         </Button>

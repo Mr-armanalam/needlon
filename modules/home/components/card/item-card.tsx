@@ -100,7 +100,7 @@ export default function ProductCardPreview({
           setHoverSide(null);
         }}
         onMouseMove={handleMouseMove}
-        className="bg-[#EAEAEA] group relative w-70 "
+        className="bg-[#EAEAEA] group relative w-40 xl:w-70 "
       >
         <div
           onClick={() => router.push(`/product/${id}`)}
@@ -141,7 +141,7 @@ export default function ProductCardPreview({
           />
         </button>
       </div>
-<p className="mt-2 px-1 text-xl text-zinc-600 dark:text-gray-100 font-garamond">
+      <p className="mt-2 px-1 xl:text-xl text-sm text-zinc-600 dark:text-gray-100 font-garamond">
         {name}
       </p>
       <div className="flex-1 ml-2 mt-1">
@@ -160,8 +160,6 @@ export default function ProductCardPreview({
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 }
