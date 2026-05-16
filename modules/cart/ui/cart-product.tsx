@@ -48,12 +48,12 @@ const CartProduct = ({ cart, currentAddress, setCurrentAddress }: props) => {
           <Activity mode={currentAddress ? 'visible' : 'hidden'}>
             <div className=" flex-1">
               <div className="mb-1 text-gray-950 dark:text-white/90 flex gap-x-4 items-center">
-                <p className="text-sm font-bold">Delivery To : </p>
-                <p className="font-semibold text-sm line-clamp-1  ">
+                <p className="xl:text-sm text-xs font-bold">Delivery To : </p>
+                <p className="font-semibold text-xs xl:text-sm line-clamp-1  ">
                   {currentAddress?.name} {currentAddress?.pincode}
                 </p>
               </div>
-              <p className=" text-sm line-clamp-1 text-stone-500 dark:text-white/50 ">
+              <p className="text-xs xl:text-sm line-clamp-1 text-stone-500 dark:text-white/50 ">
                 {currentAddress?.address}, {currentAddress?.phone},{" "}
                 {currentAddress?.landmark}, {currentAddress?.locality}{" "}
               </p>

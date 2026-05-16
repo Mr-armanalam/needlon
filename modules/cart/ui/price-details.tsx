@@ -75,7 +75,7 @@ const PriceDetails = ({
       </h1>
       <div className="mx-4">
         <table className="w-full border-separate border-spacing-y-4 dark:text-white text-stone-600 font-roboto-sans">
-          <tbody className="">
+          <tbody>
             <tr className="my-3">
               <td>Price ({cart.length ?? 0} item)</td>
               <td className="text-right">₹ {mrp_price}</td>

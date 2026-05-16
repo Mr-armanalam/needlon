@@ -44,7 +44,7 @@ const CartView = ({ cart, userId }: CartViewProps) => {
   }
 
   return (
-    <main className="grid gap-4 my-6 grid-cols-3">
+    <main className="grid gap-4 my-6 xl:grid-cols-3">
       <div className="col-span-2 h-fit rounded shadow-sm">
         <CartProduct
           cart={cart}
@@ -53,7 +53,7 @@ const CartView = ({ cart, userId }: CartViewProps) => {
         />
       </div>
 
-      <div className="col-span-1 h-fit rounded shadow-sm dark:bg-black bg-white">
+      <div className="xl:col-span-1 max-sm:flex max-sm:ml-1 max-sm:w-85 xl:mx-2 h-fit rounded shadow-sm dark:bg-black bg-white">
         <PriceDetails
           currentAddressId={currentAddress?.id}
           userId={userId}
