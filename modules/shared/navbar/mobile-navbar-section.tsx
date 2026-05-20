@@ -11,7 +11,7 @@ const MobileNavbarSection = () => {
       {mobileNavData.map((item, index) => (
         <Link href={`${item.link}`} key={index} className='flex items-center flex-col'>
           {pathname === item.link ?  
-          <item.activeIcon size={item.label === 'Account' ? 28 : 30 } />:
+          <item.activeIcon className='text-blue-600' size={item.label === 'Account' ? 28 : 30 } />:
           <item.icon size={item.label === 'Account' ? 28 : 30 } />}
           <p className='text-xs'>{item.label}</p>
         </Link>
