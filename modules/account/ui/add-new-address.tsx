@@ -251,7 +251,7 @@ const AddNewAddress = ({
                   </FormItem>
                 )}
               />
-
+              <br className="md:hidden"/>
               <div className="col-span-1 flex gap-x-4">
                 <Button
                   className="rounded-xs cursor-pointer w-fit"

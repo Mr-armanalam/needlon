@@ -4,11 +4,11 @@ import React, { ReactNode } from "react";
 
 const layout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="max-w-screen bg-zinc-100 dark:bg-black flex gap-4 pl-8 py-2 pr-12 flex-1">
-      <div className="flex-[25%] ">
+    <div className="max-w-screen lg:bg-zinc-100 lg:dark:bg-black flex gap-4 lg:pl-8 py-2 lg:pr-12 lg:flex-1">
+      <div className="lg:flex-[25%] max-md:hidden ">
         <AccountNav />
       </div>
-      <ScrollArea nonce="" className="flex-[75%] h-[98vh] py-8 shadow-sm shadow-stone-100 rounded-xs dark:bg-black dark:shadow-none bg-white">
+      <ScrollArea className="max-md:flex lg:flex-[75%] h-[98vh] py-8 shadow-sm shadow-stone-100 rounded-xs dark:bg-black dark:shadow-none bg-white">
         {children}
       </ScrollArea>
     </div>

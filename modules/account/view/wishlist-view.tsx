@@ -18,6 +18,7 @@ import NoUserAddress from "../shared/no-user-address";
 import { WishlistItemSkeleton } from "@/app/(root)/(account)/account/wishlist/wishlist_skeleton";
 import { WishlistItem } from "@/types/wishlist";
 import Link from "next/link";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Props {
   userId?: string;
@@ -39,20 +40,21 @@ const normalizeItem = (item: any): WishlistItem => ({
 
 const WishlistView = ({ userId }: Props) => {
   const dispatch = useAppDispatch();
+   const isMobile = useIsMobile();
   const { wishlist, guestWishlist, loading } = useAppSelector(
     (state) => state.wishlist,
   );
   const { cart } = useAppSelector((state) => state.cart);
 
-  //  Data Merging Logic
+  //  Data Merging
   const displayList = useMemo(() => {
     const sourceList = userId ? wishlist : guestWishlist;
     return (sourceList || []).map(normalizeItem);
   }, [userId, wishlist, guestWishlist]);
 
-  // Initialization & Sync Logic
+  // Initialization & Sync 
   useEffect(() => {
-    // Always load guest items from localStorage on mount
+    // load guest items from localStorage on mount
     dispatch(initializeGuestWishlist());
 
     if (userId) {
@@ -121,12 +123,12 @@ const WishlistView = ({ userId }: Props) => {
           {displayList.map((item) => (
             <div
               key={`${item.productId}-${item.size}`}
-              className="border-y gap-x-8 border-stone-200 dark:border-stone-900 mb-1.5 flex overflow-hidden"
+              className="border-y gap-x-6 lg:gap-x-8 border-stone-200 dark:border-stone-900 mb-1.5 flex overflow-hidden"
             >
               {/* Product Image */}
               <Link
                 href={`/product/${item.productId}`}
-                className="relative w-45 h-45 shrink-0"
+                className="relative w-32 h-40 lg:w-45 lg:h-45 lg:shrink-0"
               >
                 {item.image ? (
                   <Image
@@ -144,30 +146,32 @@ const WishlistView = ({ userId }: Props) => {
 
               {/* Product Details */}
               <div className="my-4 flex-1 text-stone-800 dark:text-white/90 relative">
-                <h2 className="font-semibold text-lg">{item.name}</h2>
+                <h2 className="font-semibold max-sm:text-lg max-sm:line-clamp-1 lg:text-lg">{item.name}</h2>
                 <p className="text-sm lowercase dark:text-white/70 text-stone-600">
                   Size: {item.size}
                 </p>
-                <p className="text-2xl font-bold my-2">₹{item.price}</p>
+                <p className="text-2xl font-bold mt-1 lg:my-2">₹{item.price}</p>
 
-                <div className="flex gap-x-3 mt-4">
+                <div className="flex max-sm:items-center lg:gap-x-3 lg:mt-4">
                   <Button
                     disabled={
                       !!cart.find(
                         (cartItem) => cartItem.productId === item.productId,
                       )
                     }
+                    variant={isMobile? 'link': 'default'}
                     onClick={() => handleAddToCart(item)}
-                    className="rounded-full px-6"
+                    className="rounded-full max-sm:px-0 max-sm:mr-2 lg:px-6"
                   >
                     Add to Cart
                   </Button>
+                  {isMobile && <div className="bg-black flex h-4 w-px" />}
                   <Button
                     onClick={() => handleToggleWishlist(item)}
-                    variant="outline"
+                    variant={isMobile ? 'link':"outline"}
                     className="rounded-full aspect-square p-2"
                   >
-                    <Trash2Icon className="w-4 h-4" />
+                   {isMobile ? 'Remove' : <Trash2Icon className="w-4 h-4" />}
                   </Button>
                 </div>
 

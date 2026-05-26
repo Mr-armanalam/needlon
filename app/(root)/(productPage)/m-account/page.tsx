@@ -57,7 +57,7 @@ const page = () => {
           mAccountData.map((item, index) => (
             <div className=" bg-zinc-200 rounded-md px-4 py-2" key={index}>
               <h1 className="text-2xl font-garamond">{item.name}</h1>
-              <div className="flex flex-col gap-y-1 text-sm mt-1.5">
+              <div className="flex flex-col gap-y-1 text-sm font-garamond mt-1.5">
                 {item.navigator.length > 0 &&
                   item?.navigator?.map((item, i) => (
                     <Link
