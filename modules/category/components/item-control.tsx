@@ -44,7 +44,7 @@ const ItemControl = ({ sort, category, setFilterOpen, isFilterHide }: param) => 
   };
 
   return (
-    <div className="flex justify-between items-center mb-6">
+    <div className="flex justify-between items-center max-md:mt-6 mb-6">
       <div className="flex gap-4">
         {Object.entries(params)
           .flatMap(([type, values]) => values.map((value) => ({ type, value })))

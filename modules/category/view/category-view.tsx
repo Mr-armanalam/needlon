@@ -63,7 +63,7 @@ const CategoryView = () => {
   }, [category, sort, productData]);
 
   return (
-    <div className="px-6 py-8">
+    <div className="md:px-6 px-3 py-8">
       <Heading productTagDes={products.productTagDes} />
       <ItemControl
         sort={sort}

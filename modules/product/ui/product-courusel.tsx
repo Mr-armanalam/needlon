@@ -23,7 +23,7 @@ const ProductCourusel = ({
   // ];
   
 
-  console.log(data, 'cour');
+  // console.log(data, 'cour');
   
 
   const mainImage = data?.image;
