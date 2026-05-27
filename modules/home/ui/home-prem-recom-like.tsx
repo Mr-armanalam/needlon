@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import ProductCardPreview from "../components/card/item-card";
 import { ClientProductItem } from "@/types/product";
 import { useRouter } from "next/navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 
 const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:ClientProductItem[], navigateTo: string}) => {
   const router = useRouter();
+  const isMobile = useIsMobile();
   // console.log(items, 'item');
   
   return (
@@ -26,10 +28,11 @@ const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:
         ))}
         <Button
           type="button"
+          variant={isMobile ? 'outline': 'default'}
           onClick={() => router.push(navigateTo) }
-          className="my-auto -right-6 sticky text-2xl px-2.5 xl:rounded-r-none max-sm:bg-none max-sm:border dark:bg-zinc-900/70  dark:border dark:text-white cursor-pointer max-sm:w-30 xl:w-11 xl:h-30"
+          className="my-auto -right-6 sticky max-md:text-xs md:text-2xl px-2.5 xl:rounded-r-none max-sm:bg-none max-sm:border dark:bg-zinc-900/70  dark:border dark:text-white cursor-pointer max-sm:w-30 xl:w-11 xl:h-30"
         >
-          &gt;
+          {isMobile ? "Explore more" : ">"}
         </Button>
       </div>
     </div>

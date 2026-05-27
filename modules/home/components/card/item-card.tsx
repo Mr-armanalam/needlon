@@ -100,7 +100,7 @@ export default function ProductCardPreview({
           setHoverSide(null);
         }}
         onMouseMove={handleMouseMove}
-        className="bg-[#EAEAEA] group relative w-40 xl:w-70 "
+        className="bg-[#EAEAEA] group relative min-w-38 xl:w-70 "
       >
         <div
           onClick={() => router.push(`/product/${id}`)}
