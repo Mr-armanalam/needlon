@@ -7,7 +7,7 @@ const ProductDetails = ({ productData }: { productData: DetailedProductResponse 
   const { category, attributes = {} } = productData;
 
   return (
-    <section className="min-h-100 grid grid-cols-1 md:grid-cols-2 gap-8 items-center rounded p-8 bg-white dark:bg-stone-950">
+    <section className="min-h-100 grid grid-cols-1 md:grid-cols-2 gap-8 items-center rounded px-1 py-8 md:p-8 bg-white dark:bg-stone-950">
       {/* Left Column: Descriptive Content */}
       <div>
         <h1 className="text-3xl font-garamond font-semibold mb-6 dark:text-white text-gray-900">

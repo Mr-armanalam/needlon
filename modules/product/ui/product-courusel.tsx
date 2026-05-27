@@ -39,14 +39,14 @@ const ProductCourusel = ({
         skipSnaps: false,
         containScroll: false,
       }}
-      className="h-150 relative"
+      className="md:h-150 h-120 relative"
     >
       <CarouselContent className="pl-1 ">
         {corouselImages.length !== 0 &&
           corouselImages.map((image, index) => (
-            <CarouselItem key={index} className="basis-1/3 pl-4 ol-1">
+            <CarouselItem key={index} className="md:basis-1/3 pl-4 ol-1">
               <Card className="rounded-xs bg-[#eaeaea] dark:bg-white/6 py-0 border-0">
-                <CardContent className="flex relative mt-auto h-150 items-center justify-center">
+                <CardContent className="flex relative mt-auto h-120 md:h-150 items-center justify-center">
                   <Image
                     src={image ?? "/images/image1.png"}
                     alt="product image"
@@ -63,7 +63,7 @@ const ProductCourusel = ({
       />
       <CarouselNext
         size={"xl"}
-        className=" left-98 dark:bg-black cursor-pointer border-none shadow-lg"
+        className=" md:left-98 max-md:right-2 dark:bg-black cursor-pointer border-none shadow-lg"
       />
       {data && <ProductDescriptionn productData={data} />}
     </Carousel>
