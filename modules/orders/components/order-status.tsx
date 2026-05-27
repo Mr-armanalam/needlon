@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import OrderRating from "../ui/order-rating";
 import Link from "next/link";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type props = {
   image?: string;
@@ -35,6 +36,7 @@ const OrderStatus = ({
   orderItemId,
 }: props) => {
   const router = useRouter();
+  const isMobile = useIsMobile();
   return (
     <div className="border dark:bg-white/6 bg-white rounded-sm mt-0.5 mx-1">
       <div className="m-4 flex gap-x-4 ">
@@ -61,16 +63,17 @@ const OrderStatus = ({
             {size && `size: ${size}`} {properties}
           </p>
           <p className="font-medium dark:text-white/70 text-stone-700 mt-2">₹ {itemPrice}</p>
-          <div className="flex gap-x-6">
+          <div className="flex max-md:items-center md:gap-x-6">
             <Button
               onClick={() => router.push(`/product/${productId}`)}
-              variant={"outline"}
-              className="rounded-full text-xs mt-4 cursor-pointer"
+              variant={isMobile ? "link" : "outline"}
+              className="rounded-full max-md:pl-0 max-md:hover:underline text-xs md:mt-4 cursor-pointer"
             >
-              View product
+              {isMobile ? "🔺Product" :"View product"}
             </Button>
-            <Button className="rounded-full text-xs mt-4 cursor-pointer">
-              write a product review
+            <div className="w-px h-4 md:hidden bg-stone-700" />
+            <Button variant={isMobile ? "link" : "default"} className="rounded-full text-xs md:mt-4 cursor-pointer">
+              {isMobile ? "🖋️ Review" : "write a product review"}
             </Button>
           </div>
         </div>
@@ -94,7 +97,7 @@ const OrderStatus = ({
       </div>
       <Separator orientation="horizontal" className="bg-gray-100 dark:bg-gray-800" />
 
-      <OrderRating orderItemId={orderItemId} productId={productId} />
+      <OrderRating isMobile={isMobile} orderItemId={orderItemId} productId={productId} />
     </div>
   );
 };
