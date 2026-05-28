@@ -21,9 +21,11 @@ import { RootState, AppDispatch } from "@/store/store";
 type Props = {
   orderItemId: string;
   productId: string;
+  isMobile: boolean;
 };
 
 const OrderRating = ({
+  isMobile,
   orderItemId,
   productId,
 }: Props) => {
@@ -66,8 +68,8 @@ const OrderRating = ({
     <section className="m-4 p-4 flex flex-col gap-y-3 dark:bg-black bg-stone-200 rounded-md">
       {shouldShowForm ? (
         <>
-          <div className="flex justify-between">
-            <h1 className="font-semibold">Rate your experience</h1>
+          <div className="flex max-md:items-center justify-between">
+            <h1 className="font-semibold">{isMobile ? "🫠" : "Rate your experience"}</h1>
             <div className="flex text-sm font-semibold dark:border-none border">
               <Button
                 size="sm"
@@ -92,7 +94,7 @@ const OrderRating = ({
           </div>
 
           {/* Stars */}
-          <div className="flex rounded-full mt-3 py-2.5 px-3 text-stone-200 bg-gray-900 w-fit gap-x-1">
+          <div className="flex rounded-full md:mt-3 py-2.5 px-3 text-stone-200 bg-gray-900 w-fit gap-x-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}

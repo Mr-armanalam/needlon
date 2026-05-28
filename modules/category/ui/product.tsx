@@ -19,7 +19,7 @@ type ProductGridProps = {
 
 const Products = ({ onAddToCart, productData }: ProductGridProps) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-y-16 gap-x-0.5">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 md:gap-y-16 gap-x-0.5">
       {productData.map((product, i) => (
         <ProductCard onAddToCart={onAddToCart} key={i} {...product} />
       ))}

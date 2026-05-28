@@ -18,7 +18,7 @@ const KindOfProductShowcasing = () => {
   }>();
 
   const searchParams = useSearchParams();
-  console.log(categories,'vas');
+  // console.log(categories,'vas');
   
 
   const [filterOpen, setFilterOpen] = useState(false);
@@ -79,7 +79,7 @@ const KindOfProductShowcasing = () => {
     },
   });
 
-  console.log(data, 'data');
+  // console.log(data, 'data');
 
   return ( data &&
     <div className="px-6 py-8">

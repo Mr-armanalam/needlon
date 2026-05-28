@@ -19,7 +19,7 @@ const DisplayOrders = ({ loading, orders }: props) => {
       {loading ? (
         <p className="px-6">Loading orders...</p>
       ) : orders.length ? (
-        <div className="overflow-y-scroll no-scrollbar ">
+        <div className="overflow-y-scroll max-md:px-2 no-scrollbar ">
           {orders.length != 0 &&
             orders?.map((order, index) => (
               <Link
@@ -27,7 +27,7 @@ const DisplayOrders = ({ loading, orders }: props) => {
                 key={index}
                 className={`border-y hover:shadow-md cursor-pointer dark:border-stone-900 border-stone-200 mb-1.5 hover:mb-2.5 flex`}
               >
-                <div className="relative w-47.5 h-47.5">
+                <div className="relative md:w-47.5 max-md:w-40 max-md:h-40 md:h-47.5">
                   <Image
                     src={order.items[0].image ?? ""}
                     fill
@@ -50,7 +50,7 @@ const DisplayOrders = ({ loading, orders }: props) => {
                 </div>
 
                 <div className="relative w-full">
-                  <div className="my-6 ml-6 flex-1 dark:text-white/90 text-stone-800">
+                  <div className="md:my-6 max-md:my-3 ml-6 flex-1 dark:text-white/90 text-stone-800">
                     <h1 className="font-semibold">
                       {order.items[0].productName}
                     </h1>
@@ -60,7 +60,7 @@ const DisplayOrders = ({ loading, orders }: props) => {
                     <h2 className="text-2xl font-semibold my-2">
                       ₹{order.total}
                     </h2>
-                    <div className="flex gap-x-6">
+                    <div className="flex max-md:hidden gap-x-6">
                       <Button className="text-xs rounded-full mt-3">
                         Order placed
                       </Button>
@@ -71,7 +71,10 @@ const DisplayOrders = ({ loading, orders }: props) => {
                         Prepaid
                       </Button>
                     </div>
-                    <p className="absolute bottom-6 right-4 text-stone-500 text-xs ">
+                    <div className="md:hidden text-sm" >
+                      <p>Placed | Prepaid</p>
+                    </div>
+                    <p className="absolute md:bottom-6 md:right-4 text-stone-500 text-xs ">
                       Delivery expected on{" "}
                       {format(String(order.createdAt), "dd MMMM")}
                     </p>

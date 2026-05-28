@@ -11,7 +11,7 @@ const IndividualOrder = ({
   const firstOrder = orderItem?.[0];
 
   return (
-    <div className="px-6 overflow-y-scroll no-scrollbar">
+    <div className="md:px-6 max-md:max-w-[100vw] px-3 overflow-y-scroll no-scrollbar">
       <h1 className="text-3xl mb-2 font-garamond font-semibold dark:text-white text-gray-900">
         Order Details
       </h1>
@@ -30,7 +30,7 @@ const IndividualOrder = ({
             couponDiscount={firstOrder.couponDiscount}
           />
 
-          {orderItem?.map((order, index) => (
+           {orderItem?.map((order, index) => (
             <OrderStatus
               key={index}
               productId={order.productId}
@@ -40,7 +40,7 @@ const IndividualOrder = ({
               properties={order?.orderProperties}
               orderItemId={order.orderId}
             />
-          ))}
+          ))} 
         </>
       )}
     </div>

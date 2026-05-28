@@ -5,6 +5,7 @@ import {
   toggleGuestWishlist,
   toggleWishlist,
 } from "@/features/wishlist-slice";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { StarIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -53,6 +54,7 @@ const ProductCard = ({
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [hoverSide, setHoverSide] = useState<"left" | "right" | null>(null);
+  const isMobile = useIsMobile();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { left, width } = e.currentTarget.getBoundingClientRect();
@@ -115,7 +117,7 @@ const ProductCard = ({
       >
         <div
           onClick={() => router.push(`/product/${id}`)}
-          className="relative w-full h-100"
+          className="relative w-full h-60 xl:h-100"
         >
           <Image
             src={
@@ -127,7 +129,7 @@ const ProductCard = ({
             }
             alt={name}
             fill
-            sizes="(min-width: 768px) 25vw, 50vw"
+            sizes={isMobile ? "" : "(min-width: 768px) 25vw, 50vw"}
             className="object-fill"
           />
         </div>
@@ -175,10 +177,10 @@ const ProductCard = ({
         </button>
       </div>
 
-      <p className="mt-4 px-4 text-xl text-zinc-600 dark:text-gray-100 font-garamond font-semibold">
+      <p className="mt-4 md:px-4 md:text-xl text-zinc-600 dark:text-gray-100 font-garamond font-semibold">
         {name}
       </p>
-      <p className="font-semibold text-gray-500 px-4">${price}</p>
+      <p className="font-semibold text-gray-500 md:px-4">${price}</p>
     </div>
   );
 };

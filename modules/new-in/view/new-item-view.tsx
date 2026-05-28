@@ -39,9 +39,9 @@ const NewItemView = ({
         <Heading productTagDes={products?.productTagDes!} />
       </div>
       <div className="bg-stone-100 dark:bg-white/2 flex flex-col gap-y-2 p-2">
-        <div className="h-50 px-6 py-12 ">
-          <div className="rounded-full border-white shadow-sm px-12 flex items-center bg-white dark:bg-white/5 dark:text-white w-full h-full">
-            <h1 className="text-stone-600 dark:text-white text-xl font-garamond font-bold">
+        <div className="md:h-50 h-fit md:px-6 md:py-12 ">
+          <div className="rounded-full border-white shadow-sm md:px-12 px-6 flex items-center bg-white dark:bg-white/5 dark:text-white w-full h-full">
+            <h1 className="text-stone-600 max-md:py-2 max-md:line-clamp-2 dark:text-white md:text-xl font-garamond font-bold">
               Select an Items which reperesent your choice !
             </h1>
           </div>

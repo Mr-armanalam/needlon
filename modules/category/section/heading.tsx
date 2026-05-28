@@ -18,11 +18,11 @@ const Heading = ({
 
   return (
     <div className="my-2">
-      <h1 className="text-5xl font-garamond font-semibold uppercase">
+      <h1 className="md:text-5xl text-4xl font-garamond font-semibold uppercase">
         {productTagDes?.contentTag ?? data.name}
       </h1>
       <p
-        className={`text-gray-500 transition-all duration-300 font-roboto-sans max-w-[70vw] mt-4 ${
+        className={`text-gray-500 max-md:text-sm transition-all duration-300 font-roboto-sans md:max-w-[70vw] mt-4 ${
           expanded ? "line-clamp-none" : "line-clamp-2"
         }`}
       >

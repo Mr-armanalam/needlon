@@ -45,7 +45,7 @@ const NameInfo = ({
           </button>
         )}
       </div>
-      <div className="flex gap-6">
+      <div className="flex max-md:flex-col lg:gap-6">
         <Input
           disabled={editSection !== "personal" && true}
           type="text"
@@ -58,7 +58,7 @@ const NameInfo = ({
         <Input
           disabled={editSection !== "personal" && true}
           type="text"
-          className="w-75 font-semibold dark:border-gray-600 rounded-sm h-12 mb-4"
+          className="w-75 font-semibold dark:border-gray-600 rounded-sm h-12 max-sm:mb-12 lg:mb-4"
           value={lastname}
           name="lastname"
           placeholder="Last Name"

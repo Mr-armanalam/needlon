@@ -22,11 +22,11 @@ export function ChooseAddress({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="cursor-pointer">
+        <Button variant="outline" className="cursor-pointer max-sm:text-xs">
           Change
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="center" className="w-105">
+      <PopoverContent align="center" className="xl:w-105 max-sm:mx-3 max-sm:w-83">
         <RadioGroup
           value={currentAddressId}
           className="flex flex-col gap-y-4"
@@ -48,10 +48,10 @@ export function ChooseAddress({
                   htmlFor={item.id}
                   className="flex flex-col cursor-pointer items-start"
                 >
-                  <p className="font-semibold dark:text-white text-gray-950">
+                  <p className="font-semibold max-sm:text-sm dark:text-white text-gray-950">
                     {`${item.name}, ${item.pincode}`}
                   </p>
-                  <p className="text-sm text-stone-600 line-clamp-1">
+                  <p className="md:text-sm max-sm:text-xs text-stone-600 line-clamp-1">
                     {`${item.address},${item.phone}, ${item.landmark},${" "}
                     ${item.locality}`}
                   </p>

@@ -35,7 +35,7 @@ const page = async() => {
   
   
   return (
-    <section className="px-8 mb-16 w-full">
+    <section className="xl:px-8 max-md:px-3 max-md:pt-3 mb-8 xl:mb-16 w-full">
       <SubcatSearch subCatSearchesItem={subCatSearches} />
       <HeroSlider tailoringServices={tailoringServices} />
     </section>

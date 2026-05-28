@@ -3,7 +3,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='px-8'>
+    <div className='md:px-8 max-md:px-3'>
       <AddressView />
     </div>
   )

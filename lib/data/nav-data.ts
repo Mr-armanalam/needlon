@@ -1,3 +1,11 @@
+import { GoHome } from "react-icons/go";
+import { PiSquaresFour, PiSquaresFourFill } from "react-icons/pi";
+import { FaRegUser } from "react-icons/fa";
+import { BsCart2 } from "react-icons/bs";
+import { GoHomeFill } from "react-icons/go";
+import { FaUser } from "react-icons/fa";
+import { BsCartFill } from "react-icons/bs";
+
 export const items = [
   {
     name: "New In",
@@ -99,26 +107,33 @@ export const items = [
       },
     ],
   },
-  //  {
-  //   name: "Our World",
-  //   link: "/our-world",
-  //   subNevigator: [
-  //     {
-  //       name: "Sustainability",
-  //       description: "Our commitment to sustainable fashion",
-  //       link: "/our-world/sustainability",
-  //     },
-  //     {
-  //       name: "Our Story",
-  //       description: "The art of our story and craftsmanship",
-  //       link: "/our-world/craftsmanship",
-  //     },
-  //     {
-  //       name: "Heritage",
-  //       description: "Our brand's heritage and story",
-  //       link: "/our-world/heritage",
-  //     },
-  //   ],
-  // },
   { name: "About", link: "/about" },
 ];
+
+
+export const mobileNavData = [
+  {
+    label: 'Home',
+    icon: GoHome,
+    activeIcon: GoHomeFill,
+    link: '/'
+  },
+  {
+    label: 'Categories',
+    icon: PiSquaresFour,
+    activeIcon: PiSquaresFourFill,
+    link: '/m-categories'
+  },
+  {
+    label: 'Account',
+    icon: FaRegUser,
+    activeIcon: FaUser,
+    link: '/m-account'
+  },
+  {
+    label: 'Cart',
+    icon: BsCart2,
+    activeIcon: BsCartFill,
+    link: '/cart'
+  },
+]
