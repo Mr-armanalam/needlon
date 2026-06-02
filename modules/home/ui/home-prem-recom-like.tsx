@@ -19,7 +19,7 @@ const HomePremRecomLike = ({heading, items, navigateTo}:{heading: string, items:
       <h1 className="pt-6 px-2 text-2xl xl:text-5xl font-garamond text-gray-950/90 dark:text-white">
         {heading}
       </h1>
-      <div className="flex max-sm:flex-wrap overflow-auto px-3 gap-2 xl:gap-x-4 py-8 rounded-sm no-scrollbar relative">
+      <div className="xl:flex max-sm:grid max-sm:grid-cols-2 xl:overflow-auto px-3 gap-2 xl:gap-x-4 py-8 rounded-sm no-scrollbar relative">
         {items?.length > 0 && items.map((i, k) => (
           <ProductCardPreview
             key={k}

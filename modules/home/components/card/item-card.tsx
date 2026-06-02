@@ -92,7 +92,7 @@ export default function ProductCardPreview({
   }, [userId, dispatch]);
 
   return (
-    <div key={id} className="cursor-pointer">
+    <div key={id} className="cursor-pointer ">
       <div
         onMouseEnter={() => setHoveredId(id)}
         onMouseLeave={() => {
@@ -100,11 +100,11 @@ export default function ProductCardPreview({
           setHoverSide(null);
         }}
         onMouseMove={handleMouseMove}
-        className="bg-[#EAEAEA] group relative min-w-38 xl:w-70 "
+        className="bg-[#EAEAEA] group relative xl:w-70 "
       >
         <div
           onClick={() => router.push(`/product/${id}`)}
-          className="aspect-11/16 w-full relative "
+          className="xl:aspect-11/16 max-sm:h-60 w-full relative "
         >
           <Image
             src={
