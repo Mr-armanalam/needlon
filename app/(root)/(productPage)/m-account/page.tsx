@@ -1,7 +1,8 @@
-'use client'
-import { signOut } from "next-auth/react";
+"use client";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import SignIn from "../../auth/signin/page";
 
 export const mAccountData = [
   {
@@ -50,7 +51,8 @@ export const mAccountData = [
 ];
 
 const page = () => {
-  return (
+  const { data: session } = useSession();
+  return session?.user.id ? (
     <section className="px-2 w-full">
       <div className="mt-4 flex flex-col gap-y-3 px-1">
         {mAccountData.length > 0 &&
@@ -75,7 +77,7 @@ const page = () => {
             </div>
           ))}
         <button
-          onClick={()=> signOut({redirectTo: '/'})}
+          onClick={() => signOut({ redirectTo: "/" })}
           type="button"
           className="cursor-pointer bg-zinc-200 rounded-md px-4 py-2 text-2xl font-garamond"
         >
@@ -83,6 +85,8 @@ const page = () => {
         </button>
       </div>
     </section>
+  ) : (
+    <SignIn />
   );
 };
 

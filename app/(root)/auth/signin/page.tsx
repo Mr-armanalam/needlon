@@ -99,6 +99,7 @@ const SignIn = () => {
         form.setError("email", {
           message: error?.message || "Failed to send OTP",
         });
+        setIsloading(false);
         return;
       }
     }
@@ -158,7 +159,7 @@ const SignIn = () => {
 
   return (
     <div className=" flex justify-center items-center h-[80vh] max-md:px-4 md:px-12 ">
-      <div className="grid border shadow-inne shadow-[12px_12px_35px_rgba(0,0,0,0.25)] h-fit w-full grid-cols-2 rounded-3xl bg-white max-sm:grid-cols-1 max-sm:p-10 sm:p-16 lg:w-[72vw]">
+      <div className="grid border shadow-inne shadow-[12px_12px_35px_rgba(0,0,0,0.25)] h-fit w-full grid-cols-2 rounded-3xl bg-white max-sm:grid-cols-1 max-sm:p-6 sm:p-16 lg:w-[72vw]">
         <SwitchSignup
           setIsOtp={setIsOtp}
           isSignUp={isSignUp}

@@ -15,11 +15,11 @@ const AuthProviderButton = ({
     setIsLoading(false);
   };
   return (
-    <div className="flex mt-3 text-gray-800 justify-between">
+    <div className="flex mt-3 max-sm:gap-2 text-gray-800 justify-between">
       <Button
         variant={"outline"}
         disabled={loading}
-        className="hover:bg-transparent cursor-pointer"
+        className="hover:bg-transparent max-sm:text-xs cursor-pointer"
         onClick={() => handleSignIn("google")}
       >
         <FaGoogle className="w-4 h-4" />
@@ -28,7 +28,7 @@ const AuthProviderButton = ({
       <Button
         variant={"outline"}
         disabled={loading}
-        className="hover:bg-transparent cursor-pointer"
+        className="hover:bg-transparent max-sm:text-xs cursor-pointer"
         onClick={() => handleSignIn("facebook")}
       >
         <FaFacebook className="w-4 h-4 " />
