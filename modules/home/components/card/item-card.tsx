@@ -104,7 +104,7 @@ export default function ProductCardPreview({
       >
         <div
           onClick={() => router.push(`/product/${id}`)}
-          className="xl:aspect-11/16 max-sm:h-60 w-full relative "
+          className="xl:aspect-11/16 max-sm:h-70 w-full relative "
         >
           <Image
             src={

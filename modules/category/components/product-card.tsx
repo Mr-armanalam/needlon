@@ -117,7 +117,7 @@ const ProductCard = ({
       >
         <div
           onClick={() => router.push(`/product/${id}`)}
-          className="relative w-full h-60 xl:h-100"
+          className="relative w-full h-70 xl:h-100"
         >
           <Image
             src={
