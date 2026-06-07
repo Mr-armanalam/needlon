@@ -9,7 +9,7 @@ const page = async() => {
   const seasonProduct = seasonProductData?.map(item => item.seasonProduct) ?? [];
   
   return (
-    <section>
+    <section className='px-2'>
       <SeasonSection navigateTo='/season-product' seasonData = {seasonProduct} />
     </section>
   )
