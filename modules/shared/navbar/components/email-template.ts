@@ -70,7 +70,7 @@ export async function sendStyledOtpEmail(email: string) {
   `;
 
   const mailOptions = {
-    from: `"Your App" <${process.env.EMAIL_SERVER_USER}>`,
+    from: `"Needlon" <${process.env.EMAIL_SERVER_USER}>`,
     to: email,
     subject: "Verify your identity – OTP Code",
     html: htmlContent,

@@ -13,6 +13,7 @@ import * as productItems from './schema/product-items';
 import * as userAddress from './schema/user-address';
 import * as usersTable from './schema/users';
 import * as wishListItems from './schema/wishlist-items';
+import * as passwordResetToken from './schema/password-reset-tokens';
 
 export const schema = {
   cartItems: cartItems.cartItems,
@@ -22,6 +23,7 @@ export const schema = {
   userAddress: userAddress.userAddress,
   users: usersTable.usersTable,
   wishlistItems: wishListItems.wishListItems,
+  passwordResetToken: passwordResetToken.passwordResetTokens,
 };
 
 const client = postgres(process.env.DATABASE_URL!);
